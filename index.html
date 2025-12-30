@@ -11,6 +11,10 @@
 
 <body>
 
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <aside class="sidebar">
         <div class="logo-area">
             <div class="logo-icon"><i class="fas fa-church"></i></div>
@@ -50,14 +54,12 @@
                     <div>S</div>
                     <div>S</div>
                 </div>
-                <div class="days-grid" id="daysContainer">
-                </div>
+                <div class="days-grid" id="daysContainer"></div>
             </div>
 
             <div class="card">
                 <h3 class="card-title">Próximos Eventos</h3>
-                <div id="eventsList" class="events-container">
-                </div>
+                <div id="eventsList" class="events-container"></div>
             </div>
         </div>
 
@@ -67,18 +69,9 @@
                 <div class="admin-header">
                     <h3><i class="fas fa-lock"></i> Acesso Restrito</h3>
                 </div>
-                <div class="admin-header">
-                    <h3><i class="fas fa-lock"></i> Acesso Restrito</h3>
-                </div>
-                <div class="admin-form" style="text-align: center; display: block;">
-                    <p style="margin-bottom: 20px; color: var(--text-secondary);">
-                        Acesso exclusivo para a liderança cadastrada.
-                    </p>
-                    <button id="btnLoginGoogle" class="btn-add" style="background: #4285F4; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;">
-        <i class="fab fa-google"></i> Entrar com Google
-    </button>
-                </div>
-                <div class="admin-form" style="grid-template-columns: 1fr 1fr auto;">
+
+                <div class="admin-form" style="display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto;">
+
                     <div class="input-group">
                         <label>E-mail</label>
                         <input type="email" id="loginEmail" placeholder="admin@adeb.com">
@@ -87,17 +80,29 @@
                         <label>Senha</label>
                         <input type="password" id="loginPass" placeholder="******">
                     </div>
-                    <button class="btn-add" id="btnLoginAction">Entrar</button>
+                    <button class="btn-add" id="btnLoginPass">Entrar</button>
+
+                    <p id="loginError" style="color: #ff3b30; font-size: 0.8rem; display: none; text-align: center;"></p>
+
+                    <div style="display: flex; align-items: center; gap: 10px; color: var(--text-secondary); font-size: 0.8rem;">
+                        <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
+                        <span>OU</span>
+                        <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
+                    </div>
+
+                    <button id="btnLoginGoogle" class="btn-add" style="background: white; color: #1e293b; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G" style="width: 18px;">
+                        Entrar com Google
+                    </button>
                 </div>
-                <p id="loginError" style="color: red; font-size: 0.8rem; margin-top: 10px; display: none;"></p>
             </div>
 
             <div id="event-form-container" style="display: none;">
                 <div class="admin-header">
                     <h3><i class="fas fa-plus-circle"></i> Adicionar Novo Evento</h3>
                     <div style="display: flex; gap: 10px; align-items: center;">
-                        <span class="badge-admin">Logado</span>
-                        <button id="btnLogout" style="background:none; border:none; color: red; cursor:pointer; font-size: 0.8rem;">(Sair)</button>
+                        <span class="badge-admin" style="background: #dcfce7; color: #166534;">Logado</span>
+                        <button id="btnLogout" style="background:none; border:none; color: #ef4444; cursor:pointer; font-size: 0.85rem; font-weight: 600;">Sair</button>
                     </div>
                 </div>
 
@@ -117,9 +122,9 @@
                     <button class="btn-add" id="btnSaveEvent">Salvar Evento</button>
                 </div>
             </div>
-
         </section>
     </main>
+
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/app.js"></script>
     <script type="module" src="js/admin.js"></script>

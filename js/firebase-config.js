@@ -1,11 +1,9 @@
-// js/firebase-config.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-// ADICIONADO: GoogleAuthProvider e signInWithPopup
-import { getAuth, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCmM0pqJ1szKIHYM-TLSJfJouD8CQjs0Wk", // Suas chaves continuam as mesmas
+    apiKey: "AIzaSyCmM0pqJ1szKIHYM-TLSJfJouD8CQjs0Wk",
     authDomain: "adeb-setor5.firebaseapp.com",
     projectId: "adeb-setor5",
     storageBucket: "adeb-setor5.firebasestorage.app",
@@ -31,5 +29,6 @@ export {
     signOut,
     onAuthStateChanged,
     provider,
-    signInWithPopup // Exporta as novas funções
+    signInWithPopup,
+    signInWithEmailAndPassword
 };
