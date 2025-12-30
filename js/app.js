@@ -1,34 +1,32 @@
 import { db, collection, onSnapshot, query, orderBy } from './firebase-config.js';
 
-// MUDANÇA AQUI: Começa com array vazio, sem dados falsos
+// Estado Global
 let eventsData = [];
+let currentDate = new Date(); // Começa hoje
 
-// MUDANÇA AQUI: Começa na data atual real
-let currentDate = new Date();
-
+// Elementos do DOM
 const monthYearEl = document.getElementById('monthYear');
-// ... resto do código continua igual ...
 const daysContainer = document.getElementById('daysContainer');
 const eventsListEl = document.getElementById('eventsList');
 
-// --- 1. CONEXÃO COM O BANCO DE DADOS ---
-// Essa função "escuta" o banco. Se alguém adicionar algo, o site atualiza sozinho.
+// --- 1. CONEXÃO COM O BANCO DE DADOS (Tempo Real) ---
 function initRealtimeListener() {
+    // Busca eventos ordenados por data
     const q = query(collection(db, "eventos"), orderBy("date"));
-
+    
     onSnapshot(q, (snapshot) => {
-        eventsData = []; // Limpa lista antiga
+        eventsData = [];
         snapshot.forEach((doc) => {
-            eventsData.push(doc.data());
+            // Salva o ID do documento para podermos apagar depois
+            eventsData.push({ id: doc.id, ...doc.data() });
         });
-
-        // Atualiza a tela com os novos dados
+        
         renderCalendar();
-        renderEvents();
+        renderEvents(); 
     });
 }
 
-// --- 2. LÓGICA DO CALENDÁRIO (Igual ao anterior) ---
+// --- 2. LÓGICA DO CALENDÁRIO ---
 function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -37,46 +35,50 @@ function renderCalendar() {
     const lastDate = new Date(year, month + 1, 0).getDate();
 
     const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-    monthYearEl.innerText = `${monthNames[month]} ${year}`;
+    if(monthYearEl) monthYearEl.innerText = `${monthNames[month]} ${year}`;
 
-    daysContainer.innerHTML = "";
+    if(daysContainer) {
+        daysContainer.innerHTML = "";
 
-    // Dias vazios
-    for (let i = 0; i < firstDay; i++) {
-        daysContainer.innerHTML += `<div class="day empty"></div>`;
-    }
+        // Dias vazios (padding inicial)
+        for (let i = 0; i < firstDay; i++) {
+            daysContainer.innerHTML += `<div class="day empty"></div>`;
+        }
 
-    // Dias do mês
-    for (let i = 1; i <= lastDate; i++) {
-        const checkDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+        // Dias do mês
+        for (let i = 1; i <= lastDate; i++) {
+            const checkDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+            
+            // Verifica se tem evento nesse dia
+            const hasEvent = eventsData.some(e => e.date === checkDate);
+            
+            const div = document.createElement('div');
+            div.className = `day ${hasEvent ? 'has-event' : ''}`;
+            div.innerText = i;
+            
+            div.addEventListener('click', () => {
+                document.querySelectorAll('.day').forEach(d => d.classList.remove('active'));
+                div.classList.add('active');
+                renderEvents(checkDate);
+            });
 
-        // Verifica se tem evento na lista carregada do Firebase
-        const hasEvent = eventsData.some(e => e.date === checkDate);
-
-        const div = document.createElement('div');
-        div.className = `day ${hasEvent ? 'has-event' : ''}`;
-        div.innerText = i;
-
-        div.addEventListener('click', () => {
-            document.querySelectorAll('.day').forEach(d => d.classList.remove('active'));
-            div.classList.add('active');
-            renderEvents(checkDate);
-        });
-
-        daysContainer.appendChild(div);
+            daysContainer.appendChild(div);
+        }
     }
 }
 
+// --- 3. LÓGICA DA LISTA DE EVENTOS ---
 function renderEvents(filterDate = null) {
+    if(!eventsListEl) return;
     eventsListEl.innerHTML = "";
-
-    // Filtra para mostrar apenas eventos futuros ou do dia selecionado
+    
     let filtered = eventsData;
 
     if (filterDate) {
+        // Se selecionou um dia, mostra só ele
         filtered = eventsData.filter(e => e.date === filterDate);
     } else {
-        // Se não tiver filtro, mostra apenas eventos futuros (a partir de hoje)
+        // Se não, mostra futuros (a partir de hoje)
         const hoje = new Date().toISOString().split('T')[0];
         filtered = eventsData.filter(e => e.date >= hoje);
     }
@@ -87,13 +89,16 @@ function renderEvents(filterDate = null) {
     }
 
     filtered.forEach(ev => {
-        // Ajuste de fuso horário simples
-        const d = new Date(ev.date + 'T12:00:00');
+        // Ajuste de Data para evitar bug de fuso horário
+        const d = new Date(ev.date + 'T12:00:00'); 
         const day = d.getDate();
-        const month = d.toLocaleString('pt-BR', { month: 'short' }).replace('.', '');
+        const month = d.toLocaleString('pt-BR', { month: 'short' }).replace('.','');
 
+        // Renderiza o Card
+        // NOTA: O botão de excluir começa com style="display:none".
+        // O admin.js vai torná-lo visível se o usuário for líder.
         eventsListEl.innerHTML += `
-            <div class="event-item">
+            <div class="event-item" data-id="${ev.id}">
                 <div class="date-badge">
                     <span class="d-num">${day}</span>
                     <span class="d-month">${month}</span>
@@ -105,24 +110,37 @@ function renderEvents(filterDate = null) {
                         <span><i class="fas fa-map-marker-alt"></i> ${ev.location || 'Sede'}</span>
                     </div>
                 </div>
+                
+                <button class="btn-delete-event" 
+                        style="display:none; margin-left:auto; background:none; border:none; color:#ef4444; cursor:pointer; padding:10px;" 
+                        onclick="window.deleteEvent('${ev.id}')"
+                        title="Excluir Evento">
+                    <i class="fas fa-trash"></i>
+                </button>
             </div>
         `;
     });
 }
 
-// Navegação
-document.getElementById('prevMonth').addEventListener('click', () => {
+// --- 4. NAVEGAÇÃO E MOBILE ---
+const btnPrev = document.getElementById('prevMonth');
+const btnNext = document.getElementById('nextMonth');
+
+if(btnPrev) btnPrev.addEventListener('click', () => {
     currentDate.setMonth(currentDate.getMonth() - 1);
     renderCalendar();
 });
-document.getElementById('nextMonth').addEventListener('click', () => {
+
+if(btnNext) btnNext.addEventListener('click', () => {
     currentDate.setMonth(currentDate.getMonth() + 1);
     renderCalendar();
 });
 
-// Inicia tudo
-initRealtimeListener();
-// Função Global para Mobile
+// Função para abrir menu no celular (chamada pelo HTML)
 window.toggleSidebar = function() {
-    document.querySelector('.sidebar').classList.toggle('open');
+    const sidebar = document.querySelector('.sidebar');
+    if(sidebar) sidebar.classList.toggle('open');
 }
+
+// Inicia
+initRealtimeListener();
