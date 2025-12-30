@@ -2,6 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getAuth, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+// Suas chaves de configuração
 const firebaseConfig = {
     apiKey: "AIzaSyCmM0pqJ1szKIHYM-TLSJfJouD8CQjs0Wk",
     authDomain: "adeb-setor5.firebaseapp.com",
@@ -11,10 +12,11 @@ const firebaseConfig = {
     appId: "1:175849481012:web:b9a883c161e2172653fb61"
 };
 
+// Inicializa o Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
-const provider = new GoogleAuthProvider(); // Configura o Google
+const provider = new GoogleAuthProvider(); // Essencial para o Login Google funcionar
 
 export {
     db,

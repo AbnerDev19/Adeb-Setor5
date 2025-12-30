@@ -7,6 +7,22 @@
     <title>Agenda ADEB Missão</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Estilo para deixar os selects bonitos igual aos inputs */
+        .input-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            outline: none;
+            background-color: white;
+            font-family: inherit;
+            color: #1e293b;
+        }
+        .input-group select:focus {
+            border-color: var(--accent-color);
+        }
+    </style>
 </head>
 
 <body>
@@ -71,7 +87,6 @@
                 </div>
 
                 <div class="admin-form">
-
                     <div class="input-group">
                         <label>E-mail</label>
                         <input type="email" id="loginEmail" placeholder="admin@adeb.com">
@@ -108,18 +123,48 @@
                 </div>
 
                 <div class="admin-form">
+                    
+                    <div class="input-group">
+                        <label for="tipoEvento">Tipo de Evento:</label>
+                        <select id="tipoEvento"> 
+                            <option value="local">Local (Igreja Local)</option>
+                            <option value="setorial">Setorial (Setor 05)</option>
+                            <option value="geral">Geral</option>
+                            <option value="outra">Outra</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group" id="divSelectIgreja">
+                        <label for="selectIgreja">Local (Igreja):</label>
+                        <select id="selectIgreja">
+                            <option value="">Selecione a Igreja...</option>
+                            <option value="Sede do Setor 05">Sede do Setor 05 (Núcleo Bandeirante)</option>
+                            <option value="GUARÁ II - QE 40">GUARÁ II - QE 40</option>
+                            <option value="GUARÁ I - QE 11">GUARÁ I - QE 11</option>
+                            <option value="LÚCIO COSTA">LÚCIO COSTA</option>
+                            <option value="VILA CAHUY">VILA CAHUY</option>
+                            <option value="VARGEM BONITA - PARK WAY">VARGEM BONITA - PARK WAY</option>
+                            <option value="QUADRA 13 - PARK WAY">QUADRA 13 - PARK WAY</option>
+                            <option value="VEREDA GRANDE">VEREDA GRANDE</option>
+                            <option value="CANDANGOLÂNDIA - QD 05">CANDANGOLÂNDIA - QD 05</option>
+                        </select>
+                    </div>
+
                     <div class="input-group">
                         <label>Título do Evento</label>
                         <input type="text" id="evtTitle" placeholder="Ex: Santa Ceia">
                     </div>
+                    
                     <div class="input-group">
                         <label>Data</label>
                         <input type="date" id="evtDate">
                     </div>
+                    
                     <div class="input-group">
-                        <label>Local / Horário</label>
-                        <input type="text" id="evtLoc" placeholder="Ex: Sede às 19h30">
+                        <label>Local / Horário (Final)</label>
+                        <input type="text" id="evtLoc" placeholder="Digite o local e horário...">
                     </div>
+                    
                     <button class="btn-add" id="btnSaveEvent">Salvar Evento</button>
                 </div>
             </div>
@@ -129,6 +174,45 @@
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/app.js"></script>
     <script type="module" src="js/admin.js"></script>
+
+    <script>
+        const selectTipo = document.getElementById('tipoEvento');
+        const divIgreja = document.getElementById('divSelectIgreja');
+        const selectIgreja = document.getElementById('selectIgreja');
+        const inputLoc = document.getElementById('evtLoc');
+
+        // Função para mostrar/esconder o campo de igreja
+        function verificarTipo() {
+            const tipo = selectTipo.value;
+            
+            // Se for Geral ou Outra, esconde a lista de igrejas
+            if (tipo === 'geral' || tipo === 'outra') {
+                divIgreja.style.display = 'none';
+                selectIgreja.value = ""; // Limpa a seleção
+                if(tipo === 'geral') inputLoc.placeholder = "Ex: Ginásio, Templo Sede Geral, etc...";
+            } else {
+                // Se for Local ou Setorial, mostra a lista
+                divIgreja.style.display = 'block';
+                inputLoc.placeholder = "Selecione a igreja acima ou digite...";
+            }
+        }
+
+        // 1. Escuta mudanças no TIPO
+        if(selectTipo) {
+            selectTipo.addEventListener('change', verificarTipo);
+            verificarTipo(); // Roda ao carregar para garantir o estado certo
+        }
+
+        // 2. Escuta mudanças na IGREJA (Preenche o texto automaticamente)
+        if(selectIgreja && inputLoc) {
+            selectIgreja.addEventListener('change', () => {
+                const igrejaSelecionada = selectIgreja.value;
+                if(igrejaSelecionada) {
+                    inputLoc.value = `${igrejaSelecionada} às 19h30`;
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

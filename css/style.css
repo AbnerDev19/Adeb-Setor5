@@ -53,10 +53,8 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* NOVA LOGO DE IMAGEM */
 .sidebar-logo {
     height: 55px;
-    /* Ajuste a altura conforme necessário */
     width: auto;
     object-fit: contain;
 }
@@ -214,19 +212,43 @@ body {
     color: white;
 }
 
+/* --- LÓGICA DOS PONTINHOS COLORIDOS --- */
+
+/* Base do Pontinho */
 .day.has-event::after {
     content: '';
     position: absolute;
     bottom: 6px;
-    width: 5px;
-    height: 5px;
-    background-color: var(--accent-color);
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
+    /* Cor padrão se não tiver tipo */
+    background-color: var(--accent-color);
 }
 
-.day.active.has-event::after {
-    background-color: white;
+/* Cores específicas por Tipo (Só aplica quando NÃO está ativo/selecionado) */
+.day.has-event.type-local:not(.active)::after {
+    background-color: #007bff;
 }
+
+.day.has-event.type-setorial:not(.active)::after {
+    background-color: #6f42c1;
+}
+
+.day.has-event.type-geral:not(.active)::after {
+    background-color: #d4ac0d;
+}
+
+.day.has-event.type-outra:not(.active)::after {
+    background-color: #6c757d;
+}
+
+/* Se o dia estiver selecionado (Ativo), o ponto fica branco para contraste */
+.day.active.has-event::after {
+    background-color: white !important;
+}
+
+/* --- FIM LÓGICA PONTINHOS --- */
 
 /* LISTA DE EVENTOS */
 .events-container {
@@ -379,7 +401,6 @@ body {
     transform: translateY(-2px);
 }
 
-/* --- CORREÇÃO E MELHORIA DO LOGIN --- */
 #login-form-container {
     display: flex;
     flex-direction: column;
@@ -408,7 +429,6 @@ body {
     justify-content: center;
 }
 
-/* Separador "OU" centralizado */
 .login-separator {
     display: flex;
     align-items: center;
@@ -420,7 +440,6 @@ body {
     margin: 10px 0;
 }
 
-/* Botão Google específico */
 .btn-google {
     background: white;
     color: #1e293b;
@@ -444,8 +463,7 @@ body {
     transform: scale(0.98);
 }
 
-
-/* --- RESPONSIVIDADE (Mobile) --- */
+/* RESPONSIVIDADE */
 .mobile-toggle {
     display: none;
     position: fixed;
@@ -502,4 +520,25 @@ body {
     .admin-header h3 {
         font-size: 1.1rem;
     }
+}
+
+/* Cores das Categorias (Tags e Labels) */
+.tag-local {
+    background-color: #007bff;
+    color: white;
+}
+
+.tag-setorial {
+    background-color: #6f42c1;
+    color: white;
+}
+
+.tag-geral {
+    background-color: #d4ac0d;
+    color: black;
+}
+
+.tag-outra {
+    background-color: #6c757d;
+    color: white;
 }
