@@ -4,29 +4,33 @@ import { db, collection, onSnapshot, query, orderBy } from './firebase-config.js
 let eventsData = [];
 let currentDate = new Date(); // Começa hoje
 
-// Elementos do DOM
+// Elementos
 const monthYearEl = document.getElementById('monthYear');
 const daysContainer = document.getElementById('daysContainer');
 const eventsListEl = document.getElementById('eventsList');
 
-// --- 1. CONEXÃO COM O BANCO DE DADOS (Tempo Real) ---
+// 1. CONEXÃO FIREBASE
 function initRealtimeListener() {
-    // Busca eventos ordenados por data
     const q = query(collection(db, "eventos"), orderBy("date"));
     
     onSnapshot(q, (snapshot) => {
         eventsData = [];
         snapshot.forEach((doc) => {
-            // Salva o ID do documento para podermos apagar depois
             eventsData.push({ id: doc.id, ...doc.data() });
         });
         
-        renderCalendar();
-        renderEvents(); 
+        // Atualiza tudo quando chegam dados novos
+        updateInterface(); 
     });
 }
 
-// --- 2. LÓGICA DO CALENDÁRIO ---
+// Função central que atualiza Calendário E Lista ao mesmo tempo
+function updateInterface() {
+    renderCalendar();
+    renderEventsForCurrentMonth();
+}
+
+// 2. CALENDÁRIO
 function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -40,7 +44,7 @@ function renderCalendar() {
     if(daysContainer) {
         daysContainer.innerHTML = "";
 
-        // Dias vazios (padding inicial)
+        // Dias vazios
         for (let i = 0; i < firstDay; i++) {
             daysContainer.innerHTML += `<div class="day empty"></div>`;
         }
@@ -48,18 +52,17 @@ function renderCalendar() {
         // Dias do mês
         for (let i = 1; i <= lastDate; i++) {
             const checkDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-            
-            // Verifica se tem evento nesse dia
             const hasEvent = eventsData.some(e => e.date === checkDate);
             
             const div = document.createElement('div');
             div.className = `day ${hasEvent ? 'has-event' : ''}`;
             div.innerText = i;
             
+            // Ao clicar, filtra só aquele dia
             div.addEventListener('click', () => {
                 document.querySelectorAll('.day').forEach(d => d.classList.remove('active'));
                 div.classList.add('active');
-                renderEvents(checkDate);
+                renderEventsByDay(checkDate);
             });
 
             daysContainer.appendChild(div);
@@ -67,41 +70,56 @@ function renderCalendar() {
     }
 }
 
-// --- 3. LÓGICA DA LISTA DE EVENTOS ---
-function renderEvents(filterDate = null) {
+// 3. LISTA DE EVENTOS (Lógica Nova: Filtra pelo Mês Atual)
+function renderEventsForCurrentMonth() {
     if(!eventsListEl) return;
     eventsListEl.innerHTML = "";
     
-    let filtered = eventsData;
+    // Pega o ano e mês atuais da visualização
+    const viewYear = currentDate.getFullYear();
+    const viewMonth = currentDate.getMonth(); // 0 a 11
 
-    if (filterDate) {
-        // Se selecionou um dia, mostra só ele
-        filtered = eventsData.filter(e => e.date === filterDate);
-    } else {
-        // Se não, mostra futuros (a partir de hoje)
-        const hoje = new Date().toISOString().split('T')[0];
-        filtered = eventsData.filter(e => e.date >= hoje);
-    }
+    // Filtra: Ano e Mês precisam bater com a visualização atual
+    const filtered = eventsData.filter(ev => {
+        // Converte a string "YYYY-MM-DD" para data segura (evita bug de fuso -3h)
+        const [ano, mes, dia] = ev.date.split('-').map(Number); 
+        // Nota: no JS, mês no construtor começa em 0 (Jan=0), mas no split vem 1. Ajustamos.
+        return ano === viewYear && (mes - 1) === viewMonth;
+    });
 
-    if (filtered.length === 0) {
-        eventsListEl.innerHTML = `<div style="text-align:center; padding: 20px; color: var(--text-secondary);">Nenhum evento encontrado.</div>`;
+    renderListHTML(filtered, `Eventos de ${monthYearEl.innerText}`);
+}
+
+// Mostra eventos de um dia específico (ao clicar na bolinha)
+function renderEventsByDay(dateString) {
+    const filtered = eventsData.filter(e => e.date === dateString);
+    const [ano, mes, dia] = dateString.split('-');
+    renderListHTML(filtered, `Eventos do dia ${dia}/${mes}`);
+}
+
+// Gera o HTML da lista
+function renderListHTML(list, titleOverride = null) {
+    eventsListEl.innerHTML = "";
+
+    // Se quiser, pode mudar o título do card para indicar o filtro
+    const cardTitle = document.querySelector('.card-title');
+    if(cardTitle && titleOverride) cardTitle.innerText = titleOverride;
+
+    if (list.length === 0) {
+        eventsListEl.innerHTML = `<div style="text-align:center; padding: 30px; color: var(--text-secondary); font-style: italic;">Nenhum evento neste período.</div>`;
         return;
     }
 
-    filtered.forEach(ev => {
-        // Ajuste de Data para evitar bug de fuso horário
-        const d = new Date(ev.date + 'T12:00:00'); 
-        const day = d.getDate();
-        const month = d.toLocaleString('pt-BR', { month: 'short' }).replace('.','');
+    list.forEach(ev => {
+        const [ano, mes, dia] = ev.date.split('-');
+        const dateObj = new Date(ano, mes - 1, dia);
+        const monthShort = dateObj.toLocaleString('pt-BR', { month: 'short' }).replace('.','');
 
-        // Renderiza o Card
-        // NOTA: O botão de excluir começa com style="display:none".
-        // O admin.js vai torná-lo visível se o usuário for líder.
         eventsListEl.innerHTML += `
             <div class="event-item" data-id="${ev.id}">
                 <div class="date-badge">
-                    <span class="d-num">${day}</span>
-                    <span class="d-month">${month}</span>
+                    <span class="d-num">${dia}</span>
+                    <span class="d-month">${monthShort}</span>
                 </div>
                 <div class="event-info">
                     <h4>${ev.title}</h4>
@@ -110,11 +128,9 @@ function renderEvents(filterDate = null) {
                         <span><i class="fas fa-map-marker-alt"></i> ${ev.location || 'Sede'}</span>
                     </div>
                 </div>
-                
                 <button class="btn-delete-event" 
                         style="display:none; margin-left:auto; background:none; border:none; color:#ef4444; cursor:pointer; padding:10px;" 
-                        onclick="window.deleteEvent('${ev.id}')"
-                        title="Excluir Evento">
+                        onclick="window.deleteEvent('${ev.id}')">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
@@ -122,21 +138,21 @@ function renderEvents(filterDate = null) {
     });
 }
 
-// --- 4. NAVEGAÇÃO E MOBILE ---
+// 4. BOTÕES DE NAVEGAÇÃO (Avançar/Voltar Mês)
 const btnPrev = document.getElementById('prevMonth');
 const btnNext = document.getElementById('nextMonth');
 
 if(btnPrev) btnPrev.addEventListener('click', () => {
     currentDate.setMonth(currentDate.getMonth() - 1);
-    renderCalendar();
+    updateInterface(); // Atualiza calendário E lista
 });
 
 if(btnNext) btnNext.addEventListener('click', () => {
     currentDate.setMonth(currentDate.getMonth() + 1);
-    renderCalendar();
+    updateInterface(); // Atualiza calendário E lista
 });
 
-// Função para abrir menu no celular (chamada pelo HTML)
+// Mobile
 window.toggleSidebar = function() {
     const sidebar = document.querySelector('.sidebar');
     if(sidebar) sidebar.classList.toggle('open');

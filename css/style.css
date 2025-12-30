@@ -28,9 +28,7 @@ body {
     overflow-x: hidden;
 }
 
-
 /* SIDEBAR */
-
 .sidebar {
     width: 260px;
     background-color: var(--sidebar-bg);
@@ -55,16 +53,12 @@ body {
     letter-spacing: 0.5px;
 }
 
-.logo-icon {
-    width: 40px;
-    height: 40px;
-    background: var(--accent-color);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1.2rem;
+/* NOVA LOGO DE IMAGEM */
+.sidebar-logo {
+    height: 55px;
+    /* Ajuste a altura conforme necessário */
+    width: auto;
+    object-fit: contain;
 }
 
 .nav-menu {
@@ -109,9 +103,7 @@ body {
     border-color: var(--accent-color);
 }
 
-
 /* CONTEÚDO PRINCIPAL */
-
 .main-content {
     margin-left: 260px;
     padding: 40px 50px;
@@ -130,9 +122,7 @@ body {
     color: var(--text-secondary);
 }
 
-
 /* GRID */
-
 .dashboard-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -157,9 +147,7 @@ body {
     color: var(--accent-color);
 }
 
-
 /* CALENDÁRIO */
-
 .calendar-header {
     display: flex;
     justify-content: space-between;
@@ -240,9 +228,7 @@ body {
     background-color: white;
 }
 
-
 /* LISTA DE EVENTOS */
-
 .events-container {
     display: flex;
     flex-direction: column;
@@ -270,6 +256,7 @@ body {
     border: 1px solid #f1f5f9;
     transition: 0.2s;
     align-items: center;
+    position: relative;
 }
 
 .event-item:hover {
@@ -317,9 +304,7 @@ body {
     gap: 15px;
 }
 
-
 /* ADMIN PAINEL */
-
 #admin-section {
     display: none;
     background: var(--card-bg);
@@ -336,6 +321,7 @@ body {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -354,13 +340,6 @@ body {
     background: #e2e8f0;
     padding: 5px 10px;
     border-radius: 20px;
-}
-
-.admin-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr auto;
-    gap: 20px;
-    align-items: end;
 }
 
 .input-group label {
@@ -400,50 +379,75 @@ body {
     transform: translateY(-2px);
 }
 
+/* --- CORREÇÃO E MELHORIA DO LOGIN --- */
+#login-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+}
 
-/* MOBILE */
+.admin-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
 
-@media (max-width: 900px) {
-    body {
-        flex-direction: column;
-    }
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        padding: 20px;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .main-content {
-        margin-left: 0;
-        width: 100%;
-        padding: 20px;
-    }
-    .nav-menu {
-        display: none;
-    }
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-    }
-    .admin-form {
-        grid-template-columns: 1fr;
-    }
-    .card {
-        min-height: auto;
-    }
+.input-group {
+    width: 100%;
+    text-align: left;
+}
+
+.btn-add {
+    width: 100%;
+    justify-content: center;
+}
+
+/* Separador "OU" centralizado */
+.login-separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    width: 100%;
+    margin: 10px 0;
+}
+
+/* Botão Google específico */
+.btn-google {
+    background: white;
+    color: #1e293b;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-google img {
+    width: 18px;
+    height: 18px;
+}
+
+.btn-google:hover {
+    background: #f8fafc;
+}
+
+.btn-google:active {
+    transform: scale(0.98);
 }
 
 
-/* --- ESTILOS MOBILE (Responsividade) --- */
-
-
-/* Botão do Menu (Só aparece no mobile) */
-
+/* --- RESPONSIVIDADE (Mobile) --- */
 .mobile-toggle {
     display: none;
-    /* Escondido no PC */
     position: fixed;
     top: 20px;
     right: 20px;
@@ -460,62 +464,42 @@ body {
 }
 
 @media (max-width: 900px) {
-    /* Ajuste Geral */
     .main-content {
         margin-left: 0;
         width: 100%;
-        padding: 80px 20px 20px 20px;
-        /* Topo maior por causa do botão */
+        padding: 80px 20px 40px 20px;
     }
+
     .mobile-toggle {
         display: block;
     }
-    /* Sidebar vira um Menu "Gaveta" */
+
     .sidebar {
         width: 280px;
         transform: translateX(-100%);
-        /* Escondido na esquerda */
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: 5px 0 25px rgba(0, 0, 0, 0.2);
     }
+
     .sidebar.open {
         transform: translateX(0);
-        /* Aparece ao abrir */
     }
-    /* Grid vira Coluna Única */
+
     .dashboard-grid {
         grid-template-columns: 1fr;
-        /* Um card embaixo do outro */
         gap: 20px;
     }
-    /* Ajustes nos Cards */
+
     .card {
-        min-height: auto;
         padding: 20px;
+        min-height: auto;
     }
-    /* Calendário mais compacto */
-    .day {
-        font-size: 0.8rem;
-        border-radius: 8px;
-    }
-    /* Lista de Eventos */
-    .events-container {
-        max-height: 400px;
-        /* Menor no celular */
-    }
-    /* Títulos menores */
+
     .header-title h1 {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
     }
-    .header-title p {
-        font-size: 0.9rem;
-    }
-    /* Formulário Admin Responsivo */
-    .admin-form {
-        grid-template-columns: 1fr !important;
-        /* Inputs empilhados */
-    }
-    .btn-add {
-        width: 100%;
+
+    .admin-header h3 {
+        font-size: 1.1rem;
     }
 }

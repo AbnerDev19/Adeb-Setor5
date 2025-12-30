@@ -17,7 +17,7 @@
 
     <aside class="sidebar">
         <div class="logo-area">
-            <div class="logo-icon"><i class="fas fa-church"></i></div>
+            <img src="fotos/logo1.png" alt="Logo ADEB" class="sidebar-logo">
             <span>ADEB MISSÃO</span>
         </div>
 
@@ -70,7 +70,7 @@
                     <h3><i class="fas fa-lock"></i> Acesso Restrito</h3>
                 </div>
 
-                <div class="admin-form" style="display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto;">
+                <div class="admin-form">
 
                     <div class="input-group">
                         <label>E-mail</label>
@@ -82,16 +82,16 @@
                     </div>
                     <button class="btn-add" id="btnLoginPass">Entrar</button>
 
-                    <p id="loginError" style="color: #ff3b30; font-size: 0.8rem; display: none; text-align: center;"></p>
+                    <p id="loginError" style="color: #ff3b30; font-size: 0.8rem; display: none;"></p>
 
-                    <div style="display: flex; align-items: center; gap: 10px; color: var(--text-secondary); font-size: 0.8rem;">
+                    <div class="login-separator">
                         <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
                         <span>OU</span>
                         <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
                     </div>
 
-                    <button id="btnLoginGoogle" class="btn-add" style="background: white; color: #1e293b; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G" style="width: 18px;">
+                    <button id="btnLoginGoogle" class="btn-add btn-google">
+                        <img src="fotos/logo2.png" alt="G">
                         Entrar com Google
                     </button>
                 </div>
@@ -102,7 +102,8 @@
                     <h3><i class="fas fa-plus-circle"></i> Adicionar Novo Evento</h3>
                     <div style="display: flex; gap: 10px; align-items: center;">
                         <span class="badge-admin" style="background: #dcfce7; color: #166534;">Logado</span>
-                        <button id="btnLogout" style="background:none; border:none; color: #ef4444; cursor:pointer; font-size: 0.85rem; font-weight: 600;">Sair</button>
+                        <button id="btnLogout"
+                            style="background:none; border:none; color: #ef4444; cursor:pointer; font-size: 0.85rem; font-weight: 600;">Sair</button>
                     </div>
                 </div>
 
