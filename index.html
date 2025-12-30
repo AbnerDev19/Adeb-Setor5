@@ -62,26 +62,62 @@
         </div>
 
         <section id="admin-section">
-            <div class="admin-header">
-                <h3><i class="fas fa-plus-circle"></i> Adicionar Novo Evento</h3>
-                <span class="badge-admin">Logado como: Liderança</span>
+
+            <div id="login-form-container">
+                <div class="admin-header">
+                    <h3><i class="fas fa-lock"></i> Acesso Restrito</h3>
+                </div>
+                <div class="admin-header">
+                    <h3><i class="fas fa-lock"></i> Acesso Restrito</h3>
+                </div>
+                <div class="admin-form" style="text-align: center; display: block;">
+                    <p style="margin-bottom: 20px; color: var(--text-secondary);">
+                        Acesso exclusivo para a liderança cadastrada.
+                    </p>
+                    <button id="btnLoginGoogle" class="btn-add" style="background: #4285F4; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;">
+        <i class="fab fa-google"></i> Entrar com Google
+    </button>
+                </div>
+                <div class="admin-form" style="grid-template-columns: 1fr 1fr auto;">
+                    <div class="input-group">
+                        <label>E-mail</label>
+                        <input type="email" id="loginEmail" placeholder="admin@adeb.com">
+                    </div>
+                    <div class="input-group">
+                        <label>Senha</label>
+                        <input type="password" id="loginPass" placeholder="******">
+                    </div>
+                    <button class="btn-add" id="btnLoginAction">Entrar</button>
+                </div>
+                <p id="loginError" style="color: red; font-size: 0.8rem; margin-top: 10px; display: none;"></p>
             </div>
 
-            <div class="admin-form">
-                <div class="input-group">
-                    <label>Título do Evento</label>
-                    <input type="text" id="evtTitle" placeholder="Ex: Santa Ceia">
+            <div id="event-form-container" style="display: none;">
+                <div class="admin-header">
+                    <h3><i class="fas fa-plus-circle"></i> Adicionar Novo Evento</h3>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <span class="badge-admin">Logado</span>
+                        <button id="btnLogout" style="background:none; border:none; color: red; cursor:pointer; font-size: 0.8rem;">(Sair)</button>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label>Data</label>
-                    <input type="date" id="evtDate">
+
+                <div class="admin-form">
+                    <div class="input-group">
+                        <label>Título do Evento</label>
+                        <input type="text" id="evtTitle" placeholder="Ex: Santa Ceia">
+                    </div>
+                    <div class="input-group">
+                        <label>Data</label>
+                        <input type="date" id="evtDate">
+                    </div>
+                    <div class="input-group">
+                        <label>Local / Horário</label>
+                        <input type="text" id="evtLoc" placeholder="Ex: Sede às 19h30">
+                    </div>
+                    <button class="btn-add" id="btnSaveEvent">Salvar Evento</button>
                 </div>
-                <div class="input-group">
-                    <label>Local / Horário</label>
-                    <input type="text" id="evtLoc" placeholder="Ex: Sede às 19h30">
-                </div>
-                <button class="btn-add" id="btnSaveEvent">Salvar Evento</button>
             </div>
+
         </section>
     </main>
     <script type="module" src="js/firebase-config.js"></script>

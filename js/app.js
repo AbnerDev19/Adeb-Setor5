@@ -1,8 +1,13 @@
 import { db, collection, onSnapshot, query, orderBy } from './firebase-config.js';
 
+// MUDANÇA AQUI: Começa com array vazio, sem dados falsos
 let eventsData = [];
-let currentDate = new Date(); // Começa na data de hoje
+
+// MUDANÇA AQUI: Começa na data atual real
+let currentDate = new Date();
+
 const monthYearEl = document.getElementById('monthYear');
+// ... resto do código continua igual ...
 const daysContainer = document.getElementById('daysContainer');
 const eventsListEl = document.getElementById('eventsList');
 
@@ -117,3 +122,7 @@ document.getElementById('nextMonth').addEventListener('click', () => {
 
 // Inicia tudo
 initRealtimeListener();
+// Função Global para Mobile
+window.toggleSidebar = function() {
+    document.querySelector('.sidebar').classList.toggle('open');
+}

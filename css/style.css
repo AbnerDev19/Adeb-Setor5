@@ -434,3 +434,88 @@ body {
         min-height: auto;
     }
 }
+
+
+/* --- ESTILOS MOBILE (Responsividade) --- */
+
+
+/* Botão do Menu (Só aparece no mobile) */
+
+.mobile-toggle {
+    display: none;
+    /* Escondido no PC */
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 200;
+    background: var(--card-bg);
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    /* Ajuste Geral */
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 80px 20px 20px 20px;
+        /* Topo maior por causa do botão */
+    }
+    .mobile-toggle {
+        display: block;
+    }
+    /* Sidebar vira um Menu "Gaveta" */
+    .sidebar {
+        width: 280px;
+        transform: translateX(-100%);
+        /* Escondido na esquerda */
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 5px 0 25px rgba(0, 0, 0, 0.2);
+    }
+    .sidebar.open {
+        transform: translateX(0);
+        /* Aparece ao abrir */
+    }
+    /* Grid vira Coluna Única */
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        /* Um card embaixo do outro */
+        gap: 20px;
+    }
+    /* Ajustes nos Cards */
+    .card {
+        min-height: auto;
+        padding: 20px;
+    }
+    /* Calendário mais compacto */
+    .day {
+        font-size: 0.8rem;
+        border-radius: 8px;
+    }
+    /* Lista de Eventos */
+    .events-container {
+        max-height: 400px;
+        /* Menor no celular */
+    }
+    /* Títulos menores */
+    .header-title h1 {
+        font-size: 1.5rem;
+    }
+    .header-title p {
+        font-size: 0.9rem;
+    }
+    /* Formulário Admin Responsivo */
+    .admin-form {
+        grid-template-columns: 1fr !important;
+        /* Inputs empilhados */
+    }
+    .btn-add {
+        width: 100%;
+    }
+}
