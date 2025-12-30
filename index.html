@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda ADEB Missão</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="logo-area">
+            <div class="logo-icon"><i class="fas fa-church"></i></div>
+            <span>ADEB MISSÃO</span>
+        </div>
+
+        <nav class="nav-menu">
+            <a href="#" class="nav-item active">
+                <i class="fas fa-calendar-alt"></i> Calendário
+            </a>
+        </nav>
+
+        <button class="login-btn" id="btnLogin">
+            <i class="fas fa-user-shield"></i> <span id="loginText">Área do Líder</span>
+        </button>
+    </aside>
+
+    <main class="main-content">
+        <div class="header-title">
+            <h1>Agenda 2026</h1>
+            <p>Acompanhe os próximos cultos e eventos do ministério.</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <div class="calendar-header">
+                    <button class="nav-arrow" id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+                    <h2 id="monthYear">Janeiro 2026</h2>
+                    <button class="nav-arrow" id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="weekdays">
+                    <div>D</div>
+                    <div>S</div>
+                    <div>T</div>
+                    <div>Q</div>
+                    <div>Q</div>
+                    <div>S</div>
+                    <div>S</div>
+                </div>
+                <div class="days-grid" id="daysContainer">
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Próximos Eventos</h3>
+                <div id="eventsList" class="events-container">
+                </div>
+            </div>
+        </div>
+
+        <section id="admin-section">
+            <div class="admin-header">
+                <h3><i class="fas fa-plus-circle"></i> Adicionar Novo Evento</h3>
+                <span class="badge-admin">Logado como: Liderança</span>
+            </div>
+
+            <div class="admin-form">
+                <div class="input-group">
+                    <label>Título do Evento</label>
+                    <input type="text" id="evtTitle" placeholder="Ex: Santa Ceia">
+                </div>
+                <div class="input-group">
+                    <label>Data</label>
+                    <input type="date" id="evtDate">
+                </div>
+                <div class="input-group">
+                    <label>Local / Horário</label>
+                    <input type="text" id="evtLoc" placeholder="Ex: Sede às 19h30">
+                </div>
+                <button class="btn-add" id="btnSaveEvent">Salvar Evento</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/app.js"></script>
+    <script src="js/admin.js"></script>
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/admin.js"></script>
+</body>
+
+</html>
