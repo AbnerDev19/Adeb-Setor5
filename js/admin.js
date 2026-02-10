@@ -1,50 +1,57 @@
 import { db, collection, addDoc, deleteDoc, doc, auth, provider, signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged } from './firebase-config.js';
 
-// --- 1. LISTA DE ADMINS (Para criar eventos no calendário principal) ---
+// --- 1. LISTA DE ADMINS (Apenas estes podem CRIAR/EXCLUIR na Agenda Geral) ---
 const GMAIL_PERMITIDOS = [
     "abneroliveira19072004@gmail.com",
     "geo.eraldo@gmail.com"
 ];
 
-// Elementos do DOM
+// Elementos do DOM (Painéis)
 const adminSection = document.getElementById('admin-section');
 const btnLoginToggle = document.getElementById('btnLogin');
 const loginText = document.getElementById('loginText');
 const loginContainer = document.getElementById('login-form-container');
 const eventContainer = document.getElementById('event-form-container');
 const loginError = document.getElementById('loginError');
-const linkJovens = document.getElementById('linkJovens'); // O Botão da Sidebar
 
-// --- 2. MONITOR DE LOGIN ---
+// --- 2. MONITOR DE LOGIN (O Coração da Lógica) ---
 onAuthStateChanged(auth, async(user) => {
+    // Pegamos o elemento AQUI dentro para garantir que ele existe
+    const linkJovens = document.getElementById('linkJovens');
+
     if (user) {
+        console.log("Usuário logado:", user.email); // Para você ver no Console (F12)
+
         // ============================================================
-        // USUÁRIO LOGADO
+        // 1. REGRA VISUAL: Se tá logado, MOSTRA o botão de Jovens
         // ============================================================
-        
-        // 1. MOSTRAR O LINK DE JOVENS (Isso atende ao seu pedido)
         if (linkJovens) {
-            linkJovens.style.display = "flex";
+            linkJovens.style.display = "flex"; 
+            console.log("Botão Jovens: Exibido");
+        } else {
+            console.warn("Aviso: Botão 'linkJovens' não encontrado no HTML.");
         }
 
-        // 2. VERIFICAR PERMISSÕES DE ADMIN (Apenas para o painel do Index)
+        // ============================================================
+        // 2. REGRA DE PERMISSÃO: Verifica se é Admin ou Líder Comum
+        // ============================================================
         let isGoogle = false;
         if (user.providerData && user.providerData.length > 0) {
             isGoogle = user.providerData.some(p => p.providerId === 'google.com');
         }
 
-        // Regra: Se é login Google e não está na lista, NÃO é admin global.
+        // Se é Google e não está na lista, é apenas líder (vê botão, mas não edita agenda geral)
         const isAdmin = !isGoogle || GMAIL_PERMITIDOS.includes(user.email);
 
-        // Ajustes visuais da área de login
-        if (loginContainer) loginContainer.style.display = "none"; // Esconde formulário de senha
+        // Esconde form de login (pois já entrou)
+        if (loginContainer) loginContainer.style.display = "none";
         
         if (isAdmin) {
-            // Se for Admin: Mostra o formulário de adicionar eventos
+            // ADMIN: Vê painel de criar eventos
             if (eventContainer) eventContainer.style.display = "block";
             if (loginText) loginText.innerText = "Painel (Admin)";
             
-            // Ativa estilo do botão excluir
+            // Ativa botão de excluir (CSS Injetado)
             if (!document.getElementById('admin-styles')) {
                 const style = document.createElement('style');
                 style.id = 'admin-styles';
@@ -52,8 +59,7 @@ onAuthStateChanged(auth, async(user) => {
                 document.head.appendChild(style);
             }
         } else {
-            // Se NÃO for Admin:
-            // Esconde o formulário de eventos, MAS MANTÉM LOGADO para ver o botão de Jovens
+            // LÍDER COMUM: Não vê painel de criar, mas continua logado
             if (eventContainer) eventContainer.style.display = "none";
             if (loginText) loginText.innerText = "Líder Logado";
             
@@ -63,16 +69,16 @@ onAuthStateChanged(auth, async(user) => {
         }
 
     } else {
+        console.log("Usuário desconectado.");
+
         // ============================================================
-        // USUÁRIO DESLOGADO
+        // USUÁRIO DESLOGADO: Esconde botão e mostra login
         // ============================================================
         
-        // 1. ESCONDER O LINK DE JOVENS
         if (linkJovens) {
             linkJovens.style.display = "none";
         }
 
-        // Restaura painel de login
         if (loginContainer) loginContainer.style.display = "block";
         if (eventContainer) eventContainer.style.display = "none";
         if (loginText) loginText.innerText = "Área do Líder";
@@ -82,24 +88,21 @@ onAuthStateChanged(auth, async(user) => {
     }
 });
 
-// --- 3. FUNCIONALIDADES DO PAINEL (Toggle, Login, Logout, Salvar) ---
+// --- 3. FUNCIONALIDADES DOS BOTÕES ---
 
-// Abrir/Fechar Painel
+// Toggle do Painel (Abrir/Fechar ao clicar em "Área do Líder")
 if (btnLoginToggle) {
     btnLoginToggle.addEventListener('click', () => {
-        // Se a seção admin existir (estamos no index.html)
         if (adminSection) {
             const isHidden = window.getComputedStyle(adminSection).display === "none";
             adminSection.style.display = isHidden ? "block" : "none";
+            // Scroll suave até o painel
             if (isHidden) setTimeout(() => adminSection.scrollIntoView({ behavior: 'smooth' }), 100);
-        } else {
-            // Se estivermos em outra página (ex: jovens.html), talvez queira voltar ou fazer nada
-            // Por enquanto, não faz nada se não achar a section
         }
     });
 }
 
-// Login Google
+// Botão Login Google
 const btnGoogle = document.getElementById('btnLoginGoogle');
 if (btnGoogle) {
     btnGoogle.addEventListener('click', async() => {
@@ -107,11 +110,12 @@ if (btnGoogle) {
             await signInWithPopup(auth, provider);
         } catch (error) {
             console.error("Erro Google:", error);
+            alert("Erro ao conectar com Google. Veja o console.");
         }
     });
 }
 
-// Login Senha
+// Botão Login Senha
 const btnPass = document.getElementById('btnLoginPass');
 if (btnPass) {
     btnPass.addEventListener('click', async() => {
@@ -130,13 +134,13 @@ if (btnPass) {
     });
 }
 
-// Logout
+// Botão Sair
 const btnLogout = document.getElementById('btnLogout');
 if (btnLogout) {
     btnLogout.addEventListener('click', async() => await signOut(auth));
 }
 
-// Salvar Evento (Apenas Admin)
+// Botão Salvar Evento (Apenas Admin)
 const btnSave = document.getElementById('btnSaveEvent');
 if (btnSave) {
     btnSave.addEventListener('click', async() => {
@@ -148,16 +152,14 @@ if (btnSave) {
 
         if (!title || !date) return alert('Preencha título e data.');
         
-        // Verificação extra de segurança ao clicar
+        // Segurança Extra
         if (!auth.currentUser) return alert("Erro: Não logado.");
-        
-        // Verifica se é admin antes de salvar
         const user = auth.currentUser;
         let isGoogle = false;
         if (user.providerData && user.providerData.length > 0) isGoogle = true;
         
         if (isGoogle && !GMAIL_PERMITIDOS.includes(user.email)) {
-            return alert("Você não tem permissão para salvar na agenda geral.");
+            return alert("Sem permissão para alterar a agenda principal.");
         }
 
         btnSave.innerText = "Salvando...";
@@ -173,7 +175,6 @@ if (btnSave) {
                 createdBy: auth.currentUser.email
             });
             alert('Evento salvo!');
-            // Limpa campos
             document.getElementById('evtTitle').value = '';
             document.getElementById('evtDate').value = '';
         } catch (e) {
@@ -185,17 +186,16 @@ if (btnSave) {
     });
 }
 
-// Excluir Evento (Apenas Admin) - Global
+// Função Global de Excluir
 window.deleteEvent = async function(id) {
     if (!auth.currentUser) return alert("Você precisa estar logado.");
     
-    // Verifica permissão
     const user = auth.currentUser;
     let isGoogle = false;
     if (user.providerData && user.providerData.length > 0) isGoogle = true;
     
     if (isGoogle && !GMAIL_PERMITIDOS.includes(user.email)) {
-        return alert("Você não tem permissão para excluir.");
+        return alert("Sem permissão para excluir.");
     }
 
     if (!confirm("Tem certeza que deseja EXCLUIR este evento?")) return;

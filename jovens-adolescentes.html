@@ -9,225 +9,263 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/jovens-adolescentes.css">
     <link rel="icon" type="image/png" href="fotos/logo1.png" />
+    
+    <style>
+        /* Estilo para a tela de carregamento */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            color: #0f4c81;
+            font-family: sans-serif;
+        }
+        .loader {
+            border: 5px solid #e2e8f0;
+            border-top: 5px solid #0f4c81;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
 </head>
 
-<body style="display:none;" id="bodyPage">
+<body>
 
-    <button class="mobile-toggle" onclick="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-    </button>
+    <div id="loading-screen">
+        <div class="loader"></div>
+        <h3>Verificando permissão de acesso...</h3>
+        <p>Aguarde um momento.</p>
+    </div>
 
-    <aside class="sidebar">
-        <div class="logo-area">
-            <img src="fotos/logo1.png" alt="Logo" class="sidebar-logo">
-            <span>ADEB GESTÃO</span>
-        </div>
+    <div id="app-content" style="display: none;">
 
-        <nav class="nav-menu">
-            <a href="index.html" class="nav-item">
-                <i class="fas fa-arrow-left"></i> Voltar ao Calendário
-            </a>
-            <a href="#" class="nav-item active">
-                <i class="fas fa-users"></i> Jovens e Adolescentes
-            </a>
+        <button class="mobile-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
 
-            <div style="margin-top: auto; padding: 20px;">
-                <small style="color: #64748b;">Logado como:</small><br>
-                <span id="userEmailDisplay" style="color: white; font-size: 0.8rem;">...</span>
+        <aside class="sidebar">
+            <div class="logo-area">
+                <img src="fotos/logo1.png" alt="Logo" class="sidebar-logo">
+                <span>ADEB GESTÃO</span>
             </div>
-        </nav>
-    </aside>
 
-    <main class="main-content">
-        <div class="header-title">
-            <h1>Área de Liderança</h1>
-            <p>Gestão de Departamentos: Jovens e Adolescentes</p>
-        </div>
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-arrow-left"></i> Voltar ao Calendário
+                </a>
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-users"></i> Jovens e Adolescentes
+                </a>
 
-        <div class="tabs-container">
-            <button class="tab-btn active" onclick="openTab(event, 'membros')"><i class="fas fa-user-plus"></i> Membros</button>
-            <button class="tab-btn" onclick="openTab(event, 'chamada')"><i class="fas fa-clipboard-check"></i> Chamada</button>
-            <button class="tab-btn" onclick="openTab(event, 'escalas')"><i class="fas fa-tasks"></i> Escalas</button>
-            <button class="tab-btn" onclick="openTab(event, 'eventos')"><i class="fas fa-ticket-alt"></i> Eventos & Inscrições</button>
-        </div>
-
-        <div id="membros" class="tab-content active">
-            <div class="card">
-                <div class="admin-header">
-                    <h3>Cadastro de Membros</h3>
-                    <button class="btn-add" onclick="toggleForm('formMember')"><i class="fas fa-plus"></i> Novo Membro</button>
+                <div style="margin-top: auto; padding: 20px;">
+                    <small style="color: #64748b;">Logado como:</small><br>
+                    <span id="userEmailDisplay" style="color: white; font-size: 0.8rem;">...</span>
                 </div>
+            </nav>
+        </aside>
 
-                <div id="formMember" class="admin-form" style="display:none; margin-bottom: 20px; background:#f8fafc; padding:20px; border-radius:15px;">
-                    <div class="dashboard-grid">
-                        <div class="input-group">
-                            <label>Nome Completo</label>
-                            <input type="text" id="memNome">
-                        </div>
-                        <div class="input-group">
-                            <label>Data Nascimento</label>
-                            <input type="date" id="memNasc">
-                        </div>
-                        <div class="input-group">
-                            <label>Contato (WhatsApp)</label>
-                            <input type="text" id="memContato" placeholder="(61) 9...">
-                        </div>
-                        <div class="input-group">
-                            <label>Departamento</label>
-                            <select id="memDept">
-                                <option value="Jovens">Jovens</option>
-                                <option value="Adolescentes">Adolescentes</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label>Congregação</label>
-                            <select id="memIgreja">
-                                <option value="Sede Setor 05">Sede Setor 05</option>
-                                <option value="Candangolândia">Candangolândia</option>
-                                <option value="Guará I">Guará I</option>
-                                <option value="Guará II">Guará II</option>
-                                <option value="Outra">Outra</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label>Responsável (Se menor)</label>
-                            <input type="text" id="memResp">
-                        </div>
-                    </div>
-                    <button class="btn-add" id="btnSaveMember" style="margin-top: 15px;">Salvar Membro</button>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Idade</th>
-                                <th>Depto</th>
-                                <th>Status</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="listaMembros"></tbody>
-                    </table>
-                </div>
+        <main class="main-content">
+            <div class="header-title">
+                <h1>Área de Liderança</h1>
+                <p>Gestão de Departamentos: Jovens e Adolescentes</p>
             </div>
-        </div>
 
-        <div id="chamada" class="tab-content">
-            <div class="card">
-                <h3>Controle de Presença</h3>
-                <div class="filters-bar" style="margin-top: 15px;">
-                    <div class="input-group">
-                        <label>Data</label>
-                        <input type="date" id="chamadaData">
-                    </div>
-                    <div class="input-group">
-                        <label>Tipo de Evento</label>
-                        <select id="chamadaTipo">
-                            <option value="EBD">EBD</option>
-                            <option value="Culto">Culto</option>
-                            <option value="Ensaio">Ensaio</option>
-                            <option value="Evento">Evento Extra</option>
-                        </select>
-                    </div>
-                    <button class="btn-add" id="btnLoadChamada">Carregar Lista</button>
-                </div>
+            <div class="tabs-container">
+                <button class="tab-btn active" onclick="openTab(event, 'membros')"><i class="fas fa-user-plus"></i> Membros</button>
+                <button class="tab-btn" onclick="openTab(event, 'chamada')"><i class="fas fa-clipboard-check"></i> Chamada</button>
+                <button class="tab-btn" onclick="openTab(event, 'escalas')"><i class="fas fa-tasks"></i> Escalas</button>
+                <button class="tab-btn" onclick="openTab(event, 'eventos')"><i class="fas fa-ticket-alt"></i> Eventos & Inscrições</button>
+            </div>
 
-                <div id="chamadaArea" style="margin-top: 20px; display:none;">
+            <div id="membros" class="tab-content active">
+                <div class="card">
+                    <div class="admin-header">
+                        <h3>Cadastro de Membros</h3>
+                        <button class="btn-add" onclick="toggleForm('formMember')"><i class="fas fa-plus"></i> Novo Membro</button>
+                    </div>
+
+                    <div id="formMember" class="admin-form" style="display:none; margin-bottom: 20px; background:#f8fafc; padding:20px; border-radius:15px;">
+                        <div class="dashboard-grid">
+                            <div class="input-group">
+                                <label>Nome Completo</label>
+                                <input type="text" id="memNome">
+                            </div>
+                            <div class="input-group">
+                                <label>Data Nascimento</label>
+                                <input type="date" id="memNasc">
+                            </div>
+                            <div class="input-group">
+                                <label>Contato (WhatsApp)</label>
+                                <input type="text" id="memContato" placeholder="(61) 9...">
+                            </div>
+                            <div class="input-group">
+                                <label>Departamento</label>
+                                <select id="memDept">
+                                    <option value="Jovens">Jovens</option>
+                                    <option value="Adolescentes">Adolescentes</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Congregação</label>
+                                <select id="memIgreja">
+                                    <option value="Sede Setor 05">Sede Setor 05</option>
+                                    <option value="Candangolândia">Candangolândia</option>
+                                    <option value="Guará I">Guará I</option>
+                                    <option value="Guará II">Guará II</option>
+                                    <option value="Outra">Outra</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Responsável (Se menor)</label>
+                                <input type="text" id="memResp">
+                            </div>
+                        </div>
+                        <button class="btn-add" id="btnSaveMember" style="margin-top: 15px;">Salvar Membro</button>
+                    </div>
+
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
                                 <tr>
                                     <th>Nome</th>
+                                    <th>Idade</th>
+                                    <th>Depto</th>
                                     <th>Status</th>
-                                    <th>Presença</th>
+                                    <th>Ações</th>
                                 </tr>
                             </thead>
-                            <tbody id="listaChamada"></tbody>
+                            <tbody id="listaMembros"></tbody>
                         </table>
                     </div>
-                    <button class="btn-add" id="btnSaveChamada" style="margin-top: 20px; background-color: #16a34a;">Salvar Chamada</button>
                 </div>
             </div>
-        </div>
 
-        <div id="escalas" class="tab-content">
-            <div class="card">
-                <div class="admin-header">
-                    <h3>Escalas de Culto</h3>
-                    <button class="btn-add" onclick="toggleForm('formEscala')"><i class="fas fa-plus"></i> Nova Escala</button>
-                </div>
-
-                <div id="formEscala" class="admin-form" style="display:none; background:#f8fafc; padding:20px; border-radius:15px; margin-bottom:20px;">
-                    <div class="dashboard-grid">
+            <div id="chamada" class="tab-content">
+                <div class="card">
+                    <h3>Controle de Presença</h3>
+                    <div class="filters-bar" style="margin-top: 15px;">
                         <div class="input-group">
                             <label>Data</label>
-                            <input type="date" id="escData">
+                            <input type="date" id="chamadaData">
                         </div>
                         <div class="input-group">
-                            <label>Função</label>
-                            <select id="escFuncao">
-                                <option value="Louvor">Louvor</option>
-                                <option value="Recepção">Recepção</option>
-                                <option value="Mídia">Mídia / Projetor</option>
-                                <option value="Palavra">Palavra / Oportunidade</option>
-                                <option value="Oração">Oração</option>
+                            <label>Tipo de Evento</label>
+                            <select id="chamadaTipo">
+                                <option value="EBD">EBD</option>
+                                <option value="Culto">Culto</option>
+                                <option value="Ensaio">Ensaio</option>
+                                <option value="Evento">Evento Extra</option>
                             </select>
                         </div>
-                        <div class="input-group" style="grid-column: span 2;">
-                            <label>Responsáveis (Nomes)</label>
-                            <input type="text" id="escNomes" placeholder="Ex: João, Maria...">
-                        </div>
+                        <button class="btn-add" id="btnLoadChamada">Carregar Lista</button>
                     </div>
-                    <button class="btn-add" id="btnSaveEscala" style="margin-top:15px;">Salvar Escala</button>
-                </div>
 
-                <div class="table-responsive">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Data</th>
-                                <th>Função</th>
-                                <th>Responsáveis</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="listaEscalas"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="eventos" class="tab-content">
-            <div class="card">
-                <h3>Próximos Eventos</h3>
-                <p style="color:var(--text-secondary); margin-bottom:20px;">Eventos de Jovens e Adolescentes.</p>
-
-                <div id="listaEventosDept" class="events-grid-dept">
+                    <div id="chamadaArea" style="margin-top: 20px; display:none;">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Status</th>
+                                        <th>Presença</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaChamada"></tbody>
+                            </table>
+                        </div>
+                        <button class="btn-add" id="btnSaveChamada" style="margin-top: 20px; background-color: #16a34a;">Salvar Chamada</button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="modalInscricao" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
-            <div style="background:white; padding:30px; border-radius:15px; width:90%; max-width:500px; max-height:80vh; overflow-y:auto;">
-                <h3 id="modalTitle">Inscrições</h3>
-                <p id="modalSub" style="color:gray; margin-bottom:15px;"></p>
-                <div style="margin-top:15px;">
-                    <table class="data-table">
-                        <tbody id="listaInscricaoModal"></tbody>
-                    </table>
-                </div>
-                <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:10px;">
-                    <button onclick="document.getElementById('modalInscricao').style.display='none'" style="padding:10px 20px; border:none; background:#e2e8f0; border-radius:8px; cursor:pointer;">Fechar</button>
+            <div id="escalas" class="tab-content">
+                <div class="card">
+                    <div class="admin-header">
+                        <h3>Escalas de Culto</h3>
+                        <button class="btn-add" onclick="toggleForm('formEscala')"><i class="fas fa-plus"></i> Nova Escala</button>
+                    </div>
+
+                    <div id="formEscala" class="admin-form" style="display:none; background:#f8fafc; padding:20px; border-radius:15px; margin-bottom:20px;">
+                        <div class="dashboard-grid">
+                            <div class="input-group">
+                                <label>Data</label>
+                                <input type="date" id="escData">
+                            </div>
+                            <div class="input-group">
+                                <label>Função</label>
+                                <select id="escFuncao">
+                                    <option value="Louvor">Louvor</option>
+                                    <option value="Recepção">Recepção</option>
+                                    <option value="Mídia">Mídia / Projetor</option>
+                                    <option value="Palavra">Palavra / Oportunidade</option>
+                                    <option value="Oração">Oração</option>
+                                </select>
+                            </div>
+                            <div class="input-group" style="grid-column: span 2;">
+                                <label>Responsáveis (Nomes)</label>
+                                <input type="text" id="escNomes" placeholder="Ex: João, Maria...">
+                            </div>
+                        </div>
+                        <button class="btn-add" id="btnSaveEscala" style="margin-top:15px;">Salvar Escala</button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Função</th>
+                                    <th>Responsáveis</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listaEscalas"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </main>
+            <div id="eventos" class="tab-content">
+                <div class="card">
+                    <h3>Próximos Eventos</h3>
+                    <p style="color:var(--text-secondary); margin-bottom:20px;">Eventos de Jovens e Adolescentes.</p>
+
+                    <div id="listaEventosDept" class="events-grid-dept">
+                    </div>
+                </div>
+            </div>
+
+            <div id="modalInscricao" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+                <div style="background:white; padding:30px; border-radius:15px; width:90%; max-width:500px; max-height:80vh; overflow-y:auto;">
+                    <h3 id="modalTitle">Inscrições</h3>
+                    <p id="modalSub" style="color:gray; margin-bottom:15px;"></p>
+                    <div style="margin-top:15px;">
+                        <table class="data-table">
+                            <tbody id="listaInscricaoModal"></tbody>
+                        </table>
+                    </div>
+                    <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:10px;">
+                        <button onclick="document.getElementById('modalInscricao').style.display='none'" style="padding:10px 20px; border:none; background:#e2e8f0; border-radius:8px; cursor:pointer;">Fechar</button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
 
     <script>
-        // 4. FUNÇÕES GLOBAIS PARA MÓDULOS
+        // FUNÇÕES GLOBAIS DE UI
         window.openTab = function(evt, tabName) {
             document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));

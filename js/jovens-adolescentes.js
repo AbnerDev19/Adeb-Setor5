@@ -6,15 +6,24 @@ window.toggleSidebar = function() {
     if (sidebar) sidebar.classList.toggle('open');
 }
 
-// 1. SEGURANÇA (Redireciona para index se não logado)
+// 1. SEGURANÇA (Verifica login e controla exibição)
 onAuthStateChanged(auth, (user) => {
+    const loadingScreen = document.getElementById('loading-screen');
+    const appContent = document.getElementById('app-content');
+
     if (!user) {
-        window.location.href = "index.html";
+        // Se NÃO estiver logado
+        alert("Acesso Negado: Você precisa estar logado para acessar esta página.");
+        window.location.href = "index.html"; 
     } else {
-        document.getElementById('bodyPage').style.display = 'block';
+        // Se ESTIVER logado: Esconde o loading e mostra o conteúdo
+        if(loadingScreen) loadingScreen.style.display = 'none';
+        if(appContent) appContent.style.display = 'block';
+
         const userDisplay = document.getElementById('userEmailDisplay');
         if (userDisplay) userDisplay.innerText = user.email;
 
+        // Inicia o carregamento dos dados
         initMembersListener();
         initEscalasListener();
         initEventosDeptListener();
@@ -60,6 +69,7 @@ if (btnSaveMember) {
 function initMembersListener() {
     const q = query(collection(db, "membros_dept"), orderBy("nome"));
     onSnapshot(q, (snap) => {
+        if(!listaMembros) return; // Segurança
         listaMembros.innerHTML = "";
         snap.forEach(d => {
             const m = d.data();
@@ -112,6 +122,7 @@ if (btnSaveEscala) {
 function initEscalasListener() {
     const q = query(collection(db, "escalas_dept"), orderBy("data"));
     onSnapshot(q, (snap) => {
+        if(!listaEscalas) return; // Segurança
         listaEscalas.innerHTML = "";
         if (snap.empty) {
             listaEscalas.innerHTML = "<tr><td colspan='4'>Nenhuma escala.</td></tr>";
@@ -136,8 +147,11 @@ function initEventosDeptListener() {
     const q = query(collection(db, "eventos"), orderBy("date"));
 
     onSnapshot(q, (snap) => {
+        if(!listaEventos) return; // Segurança
         listaEventos.innerHTML = "";
         const hoje = new Date().toISOString().split('T')[0];
+
+        let encontrou = false;
 
         snap.forEach(docSnap => {
             const ev = docSnap.data();
@@ -148,6 +162,7 @@ function initEventosDeptListener() {
             const ehAdol = deptLower.includes('adolescente');
 
             if ((ehJovens || ehAdol) && ev.date >= hoje) {
+                encontrou = true;
 
                 let tagHTML = "";
                 const typeLower = (ev.type || "").toLowerCase();
@@ -185,7 +200,7 @@ function initEventosDeptListener() {
             }
         });
 
-        if (listaEventos.innerHTML === "") listaEventos.innerHTML = "<p>Nenhum evento futuro encontrado.</p>";
+        if (!encontrou) listaEventos.innerHTML = "<p>Nenhum evento futuro encontrado.</p>";
     });
 }
 
