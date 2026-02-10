@@ -7,6 +7,7 @@
     <title>Agenda ADEB Missão</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="fotos/logo1.png" />
     <style>
         .input-group select {
             width: 100%;
@@ -18,7 +19,7 @@
             font-family: inherit;
             color: #1e293b;
         }
-        
+
         .input-group select:focus {
             border-color: var(--accent-color);
         }
@@ -145,7 +146,8 @@
                     <h3><i class="fas fa-plus-circle"></i> Adicionar Novo Evento</h3>
                     <div style="display: flex; gap: 10px; align-items: center;">
                         <span class="badge-admin" style="background: #dcfce7; color: #166534;">Logado</span>
-                        <button id="btnLogout" style="background:none; border:none; color: #ef4444; cursor:pointer; font-size: 0.85rem; font-weight: 600;">Sair</button>
+                        <button id="btnLogout"
+                            style="background:none; border:none; color: #ef4444; cursor:pointer; font-size: 0.85rem; font-weight: 600;">Sair</button>
                     </div>
                 </div>
 
@@ -163,7 +165,7 @@
                     </div>
                     <div class="input-group">
                         <label for="tipoEvento">Tipo de Evento:</label>
-                        <select id="tipoEvento"> 
+                        <select id="tipoEvento">
                             <option value="local">Local (Igreja Local)</option>
                             <option value="setorial">Setorial (Setor 05)</option>
                             <option value="geral">Geral</option>
