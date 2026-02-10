@@ -28,7 +28,9 @@ body {
     overflow-x: hidden;
 }
 
+
 /* SIDEBAR */
+
 .sidebar {
     width: 260px;
     background-color: var(--sidebar-bg);
@@ -101,7 +103,9 @@ body {
     border-color: var(--accent-color);
 }
 
+
 /* CONTEÚDO PRINCIPAL */
+
 .main-content {
     margin-left: 260px;
     padding: 40px 50px;
@@ -120,7 +124,9 @@ body {
     color: var(--text-secondary);
 }
 
+
 /* GRID */
+
 .dashboard-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -145,7 +151,9 @@ body {
     color: var(--accent-color);
 }
 
+
 /* CALENDÁRIO */
+
 .calendar-header {
     display: flex;
     justify-content: space-between;
@@ -212,9 +220,12 @@ body {
     color: white;
 }
 
+
 /* --- LÓGICA DOS PONTINHOS COLORIDOS --- */
 
+
 /* Base do Pontinho */
+
 .day.has-event::after {
     content: '';
     position: absolute;
@@ -226,7 +237,9 @@ body {
     background-color: var(--accent-color);
 }
 
+
 /* Cores específicas por Tipo (Só aplica quando NÃO está ativo/selecionado) */
+
 .day.has-event.type-local:not(.active)::after {
     background-color: #007bff;
 }
@@ -243,14 +256,19 @@ body {
     background-color: #6c757d;
 }
 
+
 /* Se o dia estiver selecionado (Ativo), o ponto fica branco para contraste */
+
 .day.active.has-event::after {
     background-color: white !important;
 }
 
+
 /* --- FIM LÓGICA PONTINHOS --- */
 
+
 /* LISTA DE EVENTOS */
+
 .events-container {
     display: flex;
     flex-direction: column;
@@ -326,7 +344,9 @@ body {
     gap: 15px;
 }
 
+
 /* ADMIN PAINEL */
+
 #admin-section {
     display: none;
     background: var(--card-bg);
@@ -343,7 +363,6 @@ body {
         opacity: 0;
         transform: translateY(20px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
@@ -463,7 +482,9 @@ body {
     transform: scale(0.98);
 }
 
+
 /* RESPONSIVIDADE */
+
 .mobile-toggle {
     display: none;
     position: fixed;
@@ -487,42 +508,37 @@ body {
         width: 100%;
         padding: 80px 20px 40px 20px;
     }
-
     .mobile-toggle {
         display: block;
     }
-
     .sidebar {
         width: 280px;
         transform: translateX(-100%);
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: 5px 0 25px rgba(0, 0, 0, 0.2);
     }
-
     .sidebar.open {
         transform: translateX(0);
     }
-
     .dashboard-grid {
         grid-template-columns: 1fr;
         gap: 20px;
     }
-
     .card {
         padding: 20px;
         min-height: auto;
     }
-
     .header-title h1 {
         font-size: 1.6rem;
     }
-
     .admin-header h3 {
         font-size: 1.1rem;
     }
 }
 
+
 /* Cores das Categorias (Tags e Labels) */
+
 .tag-local {
     background-color: #007bff;
     color: white;
@@ -541,4 +557,175 @@ body {
 .tag-outra {
     background-color: #6c757d;
     color: white;
+}
+
+
+/* --- BARRA DE FILTROS --- */
+
+.filters-bar {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    /* Importante para responsividade */
+    margin-bottom: 20px;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.filter-select {
+    padding: 10px 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    outline: none;
+    color: var(--text-primary);
+    background: #f8fafc;
+    cursor: pointer;
+    flex: 1;
+    /* Cresce para ocupar espaço no mobile */
+    min-width: 150px;
+}
+
+.filter-select:focus {
+    border-color: var(--accent-color);
+    background: white;
+}
+
+.btn-clear {
+    padding: 10px 15px;
+    background: #fee2e2;
+    color: #ef4444;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-clear:hover {
+    background: #fecaca;
+}
+
+
+/* --- NOVAS TAGS DE DEPARTAMENTOS --- */
+
+.tag-dept {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+.dept-jovens {
+    background-color: #f97316;
+    color: white;
+}
+
+
+/* Laranja */
+
+.dept-adolescentes {
+    background-color: #14b8a6;
+    color: white;
+}
+
+
+/* Turquesa */
+
+.dept-varoes {
+    background-color: #3b82f6;
+    color: white;
+}
+
+
+/* Azul */
+
+.dept-irmas {
+    background-color: #ec4899;
+    color: white;
+}
+
+
+/* Rosa */
+
+.dept-criancas {
+    background-color: #8b5cf6;
+    color: white;
+}
+
+
+/* Roxo */
+
+.dept-geral {
+    background-color: #64748b;
+    color: white;
+}
+
+
+/* Cinza */
+
+
+/* --- MELHORIA DE RESPONSIVIDADE --- */
+
+@media (max-width: 900px) {
+    /* Ajuste do Grid do Calendário no Mobile */
+    .day {
+        font-size: 0.8rem;
+        height: 40px;
+        /* Altura fixa para não ficar muito grande */
+    }
+    .event-item {
+        flex-direction: column;
+        /* Eventos empilhados no mobile */
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .date-badge {
+        flex-direction: row;
+        width: 100%;
+        height: 40px;
+        gap: 10px;
+        justify-content: flex-start;
+        padding-left: 15px;
+    }
+    .date-badge .d-num {
+        font-size: 1.2rem;
+    }
+    .date-badge .d-month {
+        margin-top: 0;
+    }
+    .btn-delete-event {
+        width: 100%;
+        text-align: right;
+        background: #fff1f2 !important;
+        margin-top: 5px;
+        border-radius: 8px;
+    }
+    /* Ajuste dos Filtros no Mobile */
+    .filters-bar {
+        padding: 15px;
+        gap: 10px;
+    }
+    .filter-group {
+        width: 100%;
+        /* "Filtrar por" ocupa linha inteira */
+        margin-bottom: 5px;
+    }
 }

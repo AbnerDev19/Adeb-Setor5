@@ -1,0 +1,319 @@
+/* css/jovens-adolescentes.css */
+
+
+/* Sistema de Abas */
+
+.tabs-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+.tab-btn {
+    background: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+.tab-btn:hover {
+    background: #f1f5f9;
+    color: var(--accent-color);
+}
+
+.tab-btn.active {
+    background: var(--accent-color);
+    color: white;
+    box-shadow: 0 5px 15px rgba(15, 76, 129, 0.3);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Tabelas Bonitas */
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.data-table th,
+.data-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.data-table th {
+    background-color: #f8fafc;
+    color: var(--accent-color);
+    font-weight: 700;
+    border-radius: 8px 8px 0 0;
+}
+
+.data-table tr:hover {
+    background-color: #f1f5f9;
+}
+
+
+/* Status Badges */
+
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-ativo {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-inativo {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+
+/* Botões de Ação na Tabela */
+
+.action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 1rem;
+    transition: 0.2s;
+}
+
+.btn-edit {
+    color: #3b82f6;
+}
+
+.btn-delete {
+    color: #ef4444;
+}
+
+
+/* Checkbox Grande para Chamada */
+
+.check-presence {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--accent-color);
+}
+
+
+/* css/jovens-adolescentes.css */
+
+
+/* ... (Mantenha o CSS anterior de abas e tabelas) ... */
+
+
+/* Sistema de Abas e Tabelas (Código anterior...) */
+
+.tabs-container {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    background: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #64748b;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: 0.2s;
+}
+
+.tab-btn.active {
+    background: var(--accent-color);
+    color: white;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    margin-top: 15px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: left;
+}
+
+.data-table th {
+    background: #f8fafc;
+    color: var(--accent-color);
+}
+
+.btn-add {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.admin-form {
+    margin-top: 15px;
+}
+
+
+/* --- NOVO: GRID DE EVENTOS DO DEPARTAMENTO --- */
+
+.events-grid-dept {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.event-card-dept {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    transition: 0.2s;
+}
+
+.event-card-dept:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-color);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.dept-tag-local {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #2563eb;
+    /* Azul forte */
+    color: white;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+}
+
+.dept-tag-outra {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #64748b;
+    /* Cinza */
+    color: white;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.dept-tag-setorial {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #9333ea;
+    /* Roxo */
+    color: white;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.ev-date-big {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--accent-color);
+    line-height: 1;
+}
+
+.ev-month-small {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.ev-title {
+    font-size: 1.1rem;
+    margin: 10px 0;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.ev-btn-insc {
+    width: 100%;
+    margin-top: 15px;
+    padding: 8px;
+    border: 1px solid var(--accent-color);
+    background: white;
+    color: var(--accent-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.ev-btn-insc:hover {
+    background: var(--accent-color);
+    color: white;
+}
