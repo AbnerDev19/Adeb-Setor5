@@ -1,7 +1,7 @@
 import { db, collection, onSnapshot, query, orderBy } from './firebase-config.js';
 
 let eventsData = [];
-let filteredData = []; // Dados filtrados para exibição
+let filteredData = [];
 let currentDate = new Date();
 
 // Elementos DOM
@@ -11,9 +11,9 @@ const eventsListEl = document.getElementById('eventsList');
 const filterDept = document.getElementById('filterDept');
 const filterIgreja = document.getElementById('filterIgreja');
 const btnClear = document.getElementById('btnClearFilters');
+const btnToggleSidebar = document.getElementById('btnToggleSidebar'); // Botão sidebar
 
-// ... (código inicial de imports e variáveis mantido)
-
+// --- INICIALIZAÇÃO ---
 function initRealtimeListener() {
     const q = query(collection(db, "eventos"), orderBy("date"));
 
@@ -26,7 +26,6 @@ function initRealtimeListener() {
                 ...data,
                 _searchTitle: (data.title || "").toLowerCase(),
                 _searchLoc: (data.location || "").toLowerCase(),
-                // Usa o campo oficial ou tenta detectar (versão limpa)
                 _dept: (data.departamento || detectDepartment(data.title)).toLowerCase()
             });
         });
@@ -34,56 +33,31 @@ function initRealtimeListener() {
     });
 }
 
-// --- ATUALIZADO: REMOVIDO ALFA E CÁLAMO ---
 function detectDepartment(title) {
     if (!title) return "geral";
     const t = title.toLowerCase();
-
-    // Palavras-chave genéricas apenas
     if (t.includes("jovem") || t.includes("jovens")) return "Jovens";
     if (t.includes("adolescente") || t.includes("adolescentes")) return "Adolescentes";
     if (t.includes("varões") || t.includes("homens")) return "Varões";
     if (t.includes("irmãs") || t.includes("mulher") || t.includes("senhoras") || t.includes("círculo")) return "Irmãs";
-    if (t.includes("criança") || t.includes("infantil")) return "Crianças";
-
-    return "Geral";
-}
-
-// ... (restante do código: applyFilters, renderCalendar, renderListHTML mantido igual)
-
-// --- FUNÇÃO AUXILIAR: Detectar Departamento pelo Título ---
-// (Útil enquanto não atualizamos o banco de dados com o campo oficial)
-function detectDepartment(title) {
-    if (!title) return "geral";
-    const t = title.toLowerCase();
-    if (t.includes("jovem") || t.includes("jovens") || t.includes("alfa")) return "Jovens";
-    if (t.includes("adolescente") || t.includes("cálamo")) return "Adolescentes";
-    if (t.includes("varões") || t.includes("homens")) return "Varões";
-    if (t.includes("irmãs") || t.includes("mulher") || t.includes("círculo") || t.includes("senhoras")) return "Irmãs";
     if (t.includes("criança") || t.includes("infantil")) return "Crianças";
     return "Geral";
 }
 
 // --- LÓGICA DE FILTROS ---
 function applyFilters() {
-    const deptValue = filterDept.value.toLowerCase();
-    const locValue = filterIgreja.value.toLowerCase();
+    const deptValue = filterDept ? filterDept.value.toLowerCase() : "";
+    const locValue = filterIgreja ? filterIgreja.value.toLowerCase() : "";
 
-    // Filtra o array principal
     filteredData = eventsData.filter(ev => {
-        // 1. Filtro de Departamento (verifica campo 'departamento' ou tenta achar no título)
         const matchDept = deptValue === "" || ev._dept.includes(deptValue) || ev._searchTitle.includes(deptValue);
-
-        // 2. Filtro de Local (verifica se o texto da igreja está contido no local do evento)
         const matchLoc = locValue === "" || ev._searchLoc.includes(locValue);
-
         return matchDept && matchLoc;
     });
 
     updateInterface();
 }
 
-// Event Listeners dos Filtros
 if (filterDept) filterDept.addEventListener('change', applyFilters);
 if (filterIgreja) filterIgreja.addEventListener('change', applyFilters);
 if (btnClear) {
@@ -99,7 +73,7 @@ function updateInterface() {
     renderEventsForCurrentMonth();
 }
 
-// --- CALENDÁRIO ---
+// --- CALENDÁRIO (CORRIGIDO) ---
 function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -110,16 +84,18 @@ function renderCalendar() {
     if (monthYearEl) monthYearEl.innerText = `${monthNames[month]} ${year}`;
 
     if (daysContainer) {
-        daysContainer.innerHTML = "";
+        daysContainer.innerHTML = ""; // Limpa tudo
 
+        // Dias vazios (padding)
         for (let i = 0; i < firstDay; i++) {
-            daysContainer.innerHTML += `<div class="day empty"></div>`;
+            const emptyDiv = document.createElement('div');
+            emptyDiv.className = "day empty";
+            daysContainer.appendChild(emptyDiv);
         }
 
+        // Dias do mês
         for (let i = 1; i <= lastDate; i++) {
             const checkDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-
-            // Verifica se tem evento NOS DADOS FILTRADOS
             const eventObj = filteredData.find(e => e.date === checkDate);
             const hasEvent = !!eventObj;
 
@@ -145,12 +121,10 @@ function renderCalendar() {
 // --- LISTAGEM DE EVENTOS ---
 function renderEventsForCurrentMonth() {
     if (!eventsListEl) return;
-    eventsListEl.innerHTML = "";
 
     const viewYear = currentDate.getFullYear();
     const viewMonth = currentDate.getMonth();
 
-    // Filtra apenas eventos do mês atual BASEADO NOS DADOS JÁ FILTRADOS PELO USUÁRIO
     const list = filteredData.filter(ev => {
         const [ano, mes, dia] = ev.date.split('-').map(Number);
         return ano === viewYear && (mes - 1) === viewMonth;
@@ -160,7 +134,6 @@ function renderEventsForCurrentMonth() {
 }
 
 function renderEventsByDay(dateString) {
-    // Busca no filteredData para respeitar os filtros ativos
     const list = filteredData.filter(e => e.date === dateString);
     const [ano, mes, dia] = dateString.split('-');
     renderListHTML(list, `Eventos do dia ${dia}/${mes}`);
@@ -172,7 +145,7 @@ function renderListHTML(list, titleOverride = null) {
     if (cardTitle && titleOverride) cardTitle.innerText = titleOverride;
 
     if (list.length === 0) {
-        eventsListEl.innerHTML = `<div style="text-align:center; padding: 30px; color: var(--text-secondary); font-style: italic;">Nenhum evento encontrado com estes filtros.</div>`;
+        eventsListEl.innerHTML = `<div style="text-align:center; padding: 30px; color: var(--text-secondary); font-style: italic;">Nenhum evento encontrado.</div>`;
         return;
     }
 
@@ -181,14 +154,10 @@ function renderListHTML(list, titleOverride = null) {
                 const dateObj = new Date(ano, mes - 1, dia);
                 const monthShort = dateObj.toLocaleString('pt-BR', { month: 'short' }).replace('.', '');
 
-                // Lógica de Classes CSS para Tags
                 const typeClass = ev.type ? `tag-${ev.type}` : 'tag-outra';
                 const typeLabel = ev.type ? ev.type.charAt(0).toUpperCase() + ev.type.slice(1) : '';
-
-                // Lógica para Tag de Departamento (Visual)
-                // Usa o campo 'departamento' se existir, ou a função detectDepartment
                 const deptName = ev.departamento || detectDepartment(ev.title);
-                const deptClass = `dept-${deptName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`; // Ex: remove acento de 'irmãs' -> 'irmas'
+                const deptClass = `dept-${deptName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`;
 
                 eventsListEl.innerHTML += `
             <div class="event-item" data-id="${ev.id}">
@@ -199,12 +168,9 @@ function renderListHTML(list, titleOverride = null) {
                 <div class="event-info">
                     <div style="display:flex; flex-wrap:wrap; align-items:center; gap:5px; margin-bottom:6px;">
                         ${ev.type ? `<span class="badge-admin ${typeClass}" style="font-size:0.7rem; padding:2px 8px; border-radius:4px;">${typeLabel}</span>` : ''}
-                        
                         <span class="tag-dept ${deptClass}">${deptName}</span>
                     </div>
-
                     <h4 style="margin:0; line-height:1.2;">${ev.title}</h4>
-                    
                     <div class="event-meta" style="margin-top: 5px;">
                         <span><i class="far fa-clock"></i> ${ev.time || '--:--'}</span>
                         <span><i class="fas fa-map-marker-alt"></i> ${ev.location || 'Sede'}</span>
@@ -220,7 +186,7 @@ function renderListHTML(list, titleOverride = null) {
     });
 }
 
-// Navegação do Calendário
+// --- NAVEGAÇÃO E SIDEBAR ---
 const btnPrev = document.getElementById('prevMonth');
 const btnNext = document.getElementById('nextMonth');
 
@@ -234,9 +200,13 @@ if(btnNext) btnNext.addEventListener('click', () => {
     updateInterface(); 
 });
 
-window.toggleSidebar = function() {
-    const sidebar = document.querySelector('.sidebar');
-    if(sidebar) sidebar.classList.toggle('open');
+// Sidebar Toggle (Corrigido)
+if (btnToggleSidebar) {
+    btnToggleSidebar.addEventListener('click', () => {
+        const sidebar = document.querySelector('.sidebar');
+        if(sidebar) sidebar.classList.toggle('open');
+    });
 }
 
+// Inicializa
 initRealtimeListener();
