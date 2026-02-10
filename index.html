@@ -26,7 +26,6 @@
 </head>
 
 <body>
-
     <button class="mobile-toggle" onclick="toggleSidebar()">
         <i class="fas fa-bars"></i>
     </button>
@@ -41,7 +40,7 @@
             <a href="#" class="nav-item active">
                 <i class="fas fa-calendar-alt"></i> Calendário
             </a>
-            <a href="jovens-adolescentes.html" class="nav-item">
+            <a href="jovens-adolescentes.html" class="nav-item" id="linkJovens" style="display: none;">
                 <i class="fas fa-users"></i> Jovens e Adolescentes
             </a>
         </nav>
@@ -62,7 +61,6 @@
                 <i class="fas fa-filter"></i>
                 <span>Filtrar por:</span>
             </div>
-
             <select id="filterDept" class="filter-select">
                 <option value="">Todos os Departamentos</option>
                 <option value="Jovens">Jovens</option>
@@ -72,7 +70,6 @@
                 <option value="Crianças">Crianças</option>
                 <option value="Geral">Geral / Família</option>
             </select>
-
             <select id="filterIgreja" class="filter-select">
                 <option value="">Todas as Igrejas</option>
                 <option value="Sede">Sede do Setor 05</option>
@@ -85,7 +82,6 @@
                 <option value="VEREDA GRANDE">VEREDA GRANDE</option>
                 <option value="CANDANGOLÂNDIA">CANDANGOLÂNDIA</option>
             </select>
-
             <button id="btnClearFilters" class="btn-clear">
                 <i class="fas fa-times"></i> Limpar
             </button>
@@ -117,12 +113,10 @@
         </div>
 
         <section id="admin-section">
-
             <div id="login-form-container">
                 <div class="admin-header">
                     <h3><i class="fas fa-lock"></i> Acesso Restrito</h3>
                 </div>
-
                 <div class="admin-form">
                     <div class="input-group">
                         <label>E-mail</label>
@@ -133,15 +127,12 @@
                         <input type="password" id="loginPass" placeholder="******">
                     </div>
                     <button class="btn-add" id="btnLoginPass">Entrar</button>
-
                     <p id="loginError" style="color: #ff3b30; font-size: 0.8rem; display: none;"></p>
-
                     <div class="login-separator">
                         <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
                         <span>OU</span>
                         <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
                     </div>
-
                     <button id="btnLoginGoogle" class="btn-add btn-google">
                         <img src="fotos/logo2.png" alt="G">
                         Entrar com Google
@@ -159,7 +150,6 @@
                 </div>
 
                 <div class="admin-form">
-
                     <div class="input-group">
                         <label for="evtDept">Departamento Responsável:</label>
                         <select id="evtDept">
@@ -171,7 +161,6 @@
                             <option value="Crianças">Crianças</option>
                         </select>
                     </div>
-
                     <div class="input-group">
                         <label for="tipoEvento">Tipo de Evento:</label>
                         <select id="tipoEvento"> 
@@ -181,7 +170,6 @@
                             <option value="outra">Outra</option>
                         </select>
                     </div>
-
                     <div class="input-group" id="divSelectIgreja">
                         <label for="selectIgreja">Local (Igreja):</label>
                         <select id="selectIgreja">
@@ -197,22 +185,18 @@
                             <option value="CANDANGOLÂNDIA - QD 05">CANDANGOLÂNDIA - QD 05</option>
                         </select>
                     </div>
-
                     <div class="input-group">
                         <label>Título do Evento</label>
                         <input type="text" id="evtTitle" placeholder="Ex: Santa Ceia">
                     </div>
-
                     <div class="input-group">
                         <label>Data</label>
                         <input type="date" id="evtDate">
                     </div>
-
                     <div class="input-group">
                         <label>Local / Horário (Final)</label>
                         <input type="text" id="evtLoc" placeholder="Digite o local e horário...">
                     </div>
-
                     <button class="btn-add" id="btnSaveEvent">Salvar Evento</button>
                 </div>
             </div>
@@ -226,6 +210,7 @@
     <script type="module" src="js/script.js"></script>
 
     <script>
+        // Scripts simples de UI (não módulos)
         const selectTipo = document.getElementById('tipoEvento');
         const divIgreja = document.getElementById('divSelectIgreja');
         const selectIgreja = document.getElementById('selectIgreja');

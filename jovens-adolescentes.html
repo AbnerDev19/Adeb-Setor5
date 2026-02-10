@@ -11,6 +11,11 @@
 </head>
 
 <body style="display:none;" id="bodyPage">
+
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <aside class="sidebar">
         <div class="logo-area">
             <img src="fotos/logo1.png" alt="Logo" class="sidebar-logo">
@@ -39,10 +44,10 @@
         </div>
 
         <div class="tabs-container">
-            <button class="tab-btn active" onclick="openTab('membros')"><i class="fas fa-user-plus"></i> Membros</button>
-            <button class="tab-btn" onclick="openTab('chamada')"><i class="fas fa-clipboard-check"></i> Chamada</button>
-            <button class="tab-btn" onclick="openTab('escalas')"><i class="fas fa-tasks"></i> Escalas</button>
-            <button class="tab-btn" onclick="openTab('eventos')"><i class="fas fa-ticket-alt"></i> Eventos & Inscrições</button>
+            <button class="tab-btn active" onclick="openTab(event, 'membros')"><i class="fas fa-user-plus"></i> Membros</button>
+            <button class="tab-btn" onclick="openTab(event, 'chamada')"><i class="fas fa-clipboard-check"></i> Chamada</button>
+            <button class="tab-btn" onclick="openTab(event, 'escalas')"><i class="fas fa-tasks"></i> Escalas</button>
+            <button class="tab-btn" onclick="openTab(event, 'eventos')"><i class="fas fa-ticket-alt"></i> Eventos & Inscrições</button>
         </div>
 
         <div id="membros" class="tab-content active">
@@ -221,18 +226,22 @@
     </main>
 
     <script>
-        function openTab(tabName) {
+        // 4. FUNÇÕES GLOBAIS PARA MÓDULOS
+        window.openTab = function(evt, tabName) {
             document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
             document.getElementById(tabName).classList.add('active');
-            event.currentTarget.classList.add('active');
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.classList.add('active');
+            }
         }
 
-        function toggleForm(id) {
+        window.toggleForm = function(id) {
             const el = document.getElementById(id);
             el.style.display = el.style.display === 'none' ? 'block' : 'none';
         }
     </script>
+
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/jovens-adolescentes.js"></script>
 </body>

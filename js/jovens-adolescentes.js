@@ -1,5 +1,11 @@
 import { db, collection, addDoc, onSnapshot, query, orderBy, where, deleteDoc, doc, auth, onAuthStateChanged } from './firebase-config.js';
 
+// --- 3. FUNÇÃO GLOBAL DA SIDEBAR PARA ESTA PÁGINA ---
+window.toggleSidebar = function() {
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar) sidebar.classList.toggle('open');
+}
+
 // 1. SEGURANÇA (Redireciona para index se não logado)
 onAuthStateChanged(auth, (user) => {
     if (!user) {
@@ -27,7 +33,9 @@ if (btnSaveMember) {
         const nome = document.getElementById('memNome').value;
         const depto = document.getElementById('memDept').value;
         const igreja = document.getElementById('memIgreja').value;
-        // ... pegar outros inputs ...
+        const nasc = document.getElementById('memNasc').value;
+        const contato = document.getElementById('memContato').value;
+        const resp = document.getElementById('memResp').value;
 
         if (!nome) return alert("Nome obrigatório");
 
@@ -36,11 +44,15 @@ if (btnSaveMember) {
                 nome,
                 departamento: depto,
                 congregacao: igreja,
+                nascimento: nasc,
+                contato: contato,
+                responsavel: resp,
                 status: 'Ativo',
                 createdAt: new Date()
             });
             alert("Membro Salvo!");
             document.getElementById('memNome').value = "";
+            document.getElementById('memContato').value = "";
         } catch (e) { console.error(e); }
     });
 }
@@ -54,13 +66,24 @@ function initMembersListener() {
             listaMembros.innerHTML += `
                 <tr>
                     <td>${m.nome}</td>
-                    <td>-</td>
+                    <td>${m.nascimento ? calcularIdade(m.nascimento) : '-'}</td>
                     <td><span class="tag-dept dept-${m.departamento.toLowerCase()}">${m.departamento}</span></td>
                     <td>${m.status}</td>
                     <td><button onclick="window.delItem('membros_dept','${d.id}')" style="color:red;border:none;cursor:pointer;"><i class="fas fa-trash"></i></button></td>
                 </tr>`;
         });
     });
+}
+
+function calcularIdade(dataString) {
+    const hoje = new Date();
+    const nasc = new Date(dataString);
+    let idade = hoje.getFullYear() - nasc.getFullYear();
+    const m = hoje.getMonth() - nasc.getMonth();
+    if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) {
+        idade--;
+    }
+    return idade;
 }
 
 // 3. ESCALAS
@@ -119,14 +142,13 @@ function initEventosDeptListener() {
         snap.forEach(docSnap => {
             const ev = docSnap.data();
 
-            // FILTRO GENÉRICO: Busca por 'jovens' ou 'adolescentes' no departamento ou título
+            // FILTRO GENÉRICO
             const deptLower = (ev.departamento || ev.title).toLowerCase();
             const ehJovens = deptLower.includes('jovem') || deptLower.includes('jovens');
             const ehAdol = deptLower.includes('adolescente');
 
             if ((ehJovens || ehAdol) && ev.date >= hoje) {
 
-                // TAGS LIMPAS (Sem nomes de conjunto)
                 let tagHTML = "";
                 const typeLower = (ev.type || "").toLowerCase();
                 const locLower = (ev.location || "").toLowerCase();
@@ -136,7 +158,6 @@ function initEventosDeptListener() {
                 } else if (typeLower === 'geral') {
                     tagHTML = `<span class="dept-tag-outra">GERAL</span>`;
                 } else {
-                    // Se for Local
                     if (locLower.includes('candangolândia')) {
                         tagHTML = `<span class="dept-tag-local">LOCAL (CANDANGOLÂNDIA)</span>`;
                     } else {
@@ -168,7 +189,7 @@ function initEventosDeptListener() {
     });
 }
 
-// Função Genérica de Exclusão
+// Função Genérica de Exclusão - GLOBAL
 window.delItem = async(col, id) => {
     if (confirm("Deseja excluir?")) await deleteDoc(doc(db, col, id));
 }

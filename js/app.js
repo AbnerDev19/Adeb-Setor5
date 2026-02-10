@@ -1,7 +1,7 @@
 import { db, collection, onSnapshot, query, orderBy } from './firebase-config.js';
 
 let eventsData = [];
-let filteredData = [];
+let filteredData = []; // Dados filtrados para exibição
 let currentDate = new Date();
 
 // Elementos DOM
@@ -11,9 +11,13 @@ const eventsListEl = document.getElementById('eventsList');
 const filterDept = document.getElementById('filterDept');
 const filterIgreja = document.getElementById('filterIgreja');
 const btnClear = document.getElementById('btnClearFilters');
-const btnToggleSidebar = document.getElementById('btnToggleSidebar'); // Botão sidebar
 
-// --- INICIALIZAÇÃO ---
+// --- 3. FUNÇÃO GLOBAL DA SIDEBAR (Adicionada) ---
+window.toggleSidebar = function() {
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar) sidebar.classList.toggle('open');
+}
+
 function initRealtimeListener() {
     const q = query(collection(db, "eventos"), orderBy("date"));
 
@@ -23,7 +27,7 @@ function initRealtimeListener() {
             const data = doc.data();
             eventsData.push({
                 id: doc.id,
-                ...data,
+                ...data, // --- 1. CORREÇÃO DE SINTAXE (Spread Operator) ---
                 _searchTitle: (data.title || "").toLowerCase(),
                 _searchLoc: (data.location || "").toLowerCase(),
                 _dept: (data.departamento || detectDepartment(data.title)).toLowerCase()
@@ -33,14 +37,17 @@ function initRealtimeListener() {
     });
 }
 
+// --- FUNÇÃO AUXILIAR: Detectar Departamento pelo Título ---
 function detectDepartment(title) {
     if (!title) return "geral";
     const t = title.toLowerCase();
+
     if (t.includes("jovem") || t.includes("jovens")) return "Jovens";
     if (t.includes("adolescente") || t.includes("adolescentes")) return "Adolescentes";
     if (t.includes("varões") || t.includes("homens")) return "Varões";
     if (t.includes("irmãs") || t.includes("mulher") || t.includes("senhoras") || t.includes("círculo")) return "Irmãs";
     if (t.includes("criança") || t.includes("infantil")) return "Crianças";
+
     return "Geral";
 }
 
@@ -58,6 +65,7 @@ function applyFilters() {
     updateInterface();
 }
 
+// Event Listeners dos Filtros
 if (filterDept) filterDept.addEventListener('change', applyFilters);
 if (filterIgreja) filterIgreja.addEventListener('change', applyFilters);
 if (btnClear) {
@@ -73,7 +81,7 @@ function updateInterface() {
     renderEventsForCurrentMonth();
 }
 
-// --- CALENDÁRIO (CORRIGIDO) ---
+// --- CALENDÁRIO ---
 function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -84,16 +92,12 @@ function renderCalendar() {
     if (monthYearEl) monthYearEl.innerText = `${monthNames[month]} ${year}`;
 
     if (daysContainer) {
-        daysContainer.innerHTML = ""; // Limpa tudo
+        daysContainer.innerHTML = "";
 
-        // Dias vazios (padding)
         for (let i = 0; i < firstDay; i++) {
-            const emptyDiv = document.createElement('div');
-            emptyDiv.className = "day empty";
-            daysContainer.appendChild(emptyDiv);
+            daysContainer.innerHTML += `<div class="day empty"></div>`;
         }
 
-        // Dias do mês
         for (let i = 1; i <= lastDate; i++) {
             const checkDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
             const eventObj = filteredData.find(e => e.date === checkDate);
@@ -121,6 +125,7 @@ function renderCalendar() {
 // --- LISTAGEM DE EVENTOS ---
 function renderEventsForCurrentMonth() {
     if (!eventsListEl) return;
+    eventsListEl.innerHTML = "";
 
     const viewYear = currentDate.getFullYear();
     const viewMonth = currentDate.getMonth();
@@ -145,7 +150,7 @@ function renderListHTML(list, titleOverride = null) {
     if (cardTitle && titleOverride) cardTitle.innerText = titleOverride;
 
     if (list.length === 0) {
-        eventsListEl.innerHTML = `<div style="text-align:center; padding: 30px; color: var(--text-secondary); font-style: italic;">Nenhum evento encontrado.</div>`;
+        eventsListEl.innerHTML = `<div style="text-align:center; padding: 30px; color: var(--text-secondary); font-style: italic;">Nenhum evento encontrado com estes filtros.</div>`;
         return;
     }
 
@@ -153,7 +158,6 @@ function renderListHTML(list, titleOverride = null) {
                 const [ano, mes, dia] = ev.date.split('-');
                 const dateObj = new Date(ano, mes - 1, dia);
                 const monthShort = dateObj.toLocaleString('pt-BR', { month: 'short' }).replace('.', '');
-
                 const typeClass = ev.type ? `tag-${ev.type}` : 'tag-outra';
                 const typeLabel = ev.type ? ev.type.charAt(0).toUpperCase() + ev.type.slice(1) : '';
                 const deptName = ev.departamento || detectDepartment(ev.title);
@@ -186,7 +190,7 @@ function renderListHTML(list, titleOverride = null) {
     });
 }
 
-// --- NAVEGAÇÃO E SIDEBAR ---
+// Navegação do Calendário
 const btnPrev = document.getElementById('prevMonth');
 const btnNext = document.getElementById('nextMonth');
 
@@ -200,13 +204,4 @@ if(btnNext) btnNext.addEventListener('click', () => {
     updateInterface(); 
 });
 
-// Sidebar Toggle (Corrigido)
-if (btnToggleSidebar) {
-    btnToggleSidebar.addEventListener('click', () => {
-        const sidebar = document.querySelector('.sidebar');
-        if(sidebar) sidebar.classList.toggle('open');
-    });
-}
-
-// Inicializa
 initRealtimeListener();
