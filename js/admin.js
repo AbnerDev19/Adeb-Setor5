@@ -1,10 +1,12 @@
 import { db, collection, addDoc, deleteDoc, doc, auth, provider, signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged } from './firebase-config.js';
 
-// --- 1. SEGURANÇA (WHITELIST) ---
-// Adicione os emails dos líderes aqui
-const GMAIL_PERMITIDOS = [
+// --- 1. SEGURANÇA (WHITELIST DE ADMINS GERAIS) ---
+// Estes usuários podem criar/excluir eventos globais no index.html
+const GMAIL_ADMINS = [
     "abneroliveira19072004@gmail.com",
-    "geo.eraldo@gmail.com"
+    "geo.eraldo@gmail.com",
+    "alenenogueira99@gmail.com"
+    // Adicione outros emails de administradores gerais aqui se necessário
 ];
 
 // Elementos
@@ -14,39 +16,53 @@ const loginText = document.getElementById('loginText');
 const loginContainer = document.getElementById('login-form-container');
 const eventContainer = document.getElementById('event-form-container');
 const loginError = document.getElementById('loginError');
-const linkJovens = document.getElementById('linkJovens'); // NOVO
+const linkJovens = document.getElementById('linkJovens'); // O botão que estava sumindo
 
 // --- 2. MONITOR DE LOGIN ---
 onAuthStateChanged(auth, async(user) => {
     if (user) {
+        // --- USUÁRIO LOGADO ---
+
+        // 1. Mostrar o botão da Área de Jovens (Disponível para QUALQUER logado)
+        if (linkJovens) linkJovens.style.display = "flex";
+
+        // 2. Verificar se é Admin Geral (Para o painel de adicionar eventos)
         let isGoogle = false;
         if (user.providerData && user.providerData.length > 0) {
             isGoogle = user.providerData.some(p => p.providerId === 'google.com');
         }
 
-        // Verifica se está na lista permitida
-        const isAllowed = !isGoogle || GMAIL_PERMITIDOS.includes(user.email);
+        // Regra: Se logou com Google e não está na lista, não é admin (mas continua logado)
+        // Se logou com email/senha (login do sistema), assumimos que é admin
+        const isAdmin = !isGoogle || GMAIL_ADMINS.includes(user.email);
 
-        if (!isAllowed) {
-            alert(`ACESSO NEGADO: O e-mail ${user.email} não tem permissão.`);
-            await signOut(auth);
-            return;
-        }
-
-        // --- LÍDER AUTENTICADO ---
-        if (loginContainer) loginContainer.style.display = "none";
-        if (eventContainer) eventContainer.style.display = "block";
-        if (loginText) loginText.innerText = "Painel (Logado)";
-
-        // MOSTRA O BOTÃO DE JOVENS
-        if (linkJovens) linkJovens.style.display = "flex";
-
-        // Estilo botão excluir
-        if (!document.getElementById('admin-styles')) {
-            const style = document.createElement('style');
-            style.id = 'admin-styles';
-            style.innerHTML = `.btn-delete-event { display: block !important; }`;
-            document.head.appendChild(style);
+        if (isAdmin) {
+            // É ADMIN: Mostra painel de eventos
+            if (loginContainer) loginContainer.style.display = "none";
+            if (eventContainer) eventContainer.style.display = "block";
+            if (loginText) loginText.innerText = "Painel (Admin)";
+            
+            // Ativa botão de excluir
+            if (!document.getElementById('admin-styles')) {
+                const style = document.createElement('style');
+                style.id = 'admin-styles';
+                style.innerHTML = `.btn-delete-event { display: block !important; }`;
+                document.head.appendChild(style);
+            }
+        } else {
+            // NÃO É ADMIN (É apenas um Líder de Depto): 
+            // Não desloga! Apenas esconde o painel de criar eventos globais.
+            if (loginContainer) loginContainer.style.display = "none"; // Esconde form de login pois já está logado
+            if (eventContainer) {
+                eventContainer.style.display = "none"; // Esconde painel de admin
+                // Opcional: Mostrar mensagem de boas vindas simples no lugar
+                // eventContainer.innerHTML = "<p>Bem-vindo, líder! Acesse sua área no menu.</p>"; 
+            }
+            if (loginText) loginText.innerText = "Líder Logado";
+            
+            // Remove botão de excluir eventos globais se estiver visível
+            const style = document.getElementById('admin-styles');
+            if (style) style.remove();
         }
 
     } else {
@@ -63,14 +79,18 @@ onAuthStateChanged(auth, async(user) => {
     }
 });
 
-// --- 3. INTERFACE ---
+// --- 3. INTERFACE (O restante do código permanece igual) ---
 
-// Toggle do Painel Admin
+// Toggle do Painel Admin (Botão da Sidebar)
 if (btnLoginToggle) {
     btnLoginToggle.addEventListener('click', () => {
-        const isHidden = window.getComputedStyle(adminSection).display === "none";
-        adminSection.style.display = isHidden ? "block" : "none";
-        if (isHidden) setTimeout(() => adminSection.scrollIntoView({ behavior: 'smooth' }), 100);
+        // Se já estiver na página de Jovens, talvez queira redirecionar?
+        // Por enquanto, apenas abre/fecha o painel no index
+        if(adminSection) {
+            const isHidden = window.getComputedStyle(adminSection).display === "none";
+            adminSection.style.display = isHidden ? "block" : "none";
+            if (isHidden) setTimeout(() => adminSection.scrollIntoView({ behavior: 'smooth' }), 100);
+        }
     });
 }
 
@@ -111,7 +131,7 @@ if (btnLogout) {
     btnLogout.addEventListener('click', async() => await signOut(auth));
 }
 
-// --- SALVAR EVENTO ---
+// --- SALVAR EVENTO (Lógica de Admin) ---
 const btnSave = document.getElementById('btnSaveEvent');
 if (btnSave) {
     btnSave.addEventListener('click', async() => {
@@ -119,10 +139,20 @@ if (btnSave) {
         const date = document.getElementById('evtDate').value;
         const loc = document.getElementById('evtLoc').value;
         const type = document.getElementById('tipoEvento').value;
-        const dept = document.getElementById('evtDept').value; // Pegando Depto
+        const dept = document.getElementById('evtDept').value; 
 
         if (!title || !date) return alert('Preencha título e data.');
         if (!auth.currentUser) return alert("Erro: Não logado.");
+
+        // Verificação dupla de segurança no clique
+        const user = auth.currentUser;
+        let isGoogle = false;
+        if (user.providerData && user.providerData.length > 0) {
+            isGoogle = user.providerData.some(p => p.providerId === 'google.com');
+        }
+        if (isGoogle && !GMAIL_ADMINS.includes(user.email)) {
+            return alert("Você não tem permissão para criar eventos na agenda geral.");
+        }
 
         btnSave.innerText = "Salvando...";
         try {
@@ -131,7 +161,7 @@ if (btnSave) {
                 date: date,
                 location: loc,
                 type: type,
-                departamento: dept, // Salvando depto
+                departamento: dept,
                 time: '19:30',
                 createdAt: new Date(),
                 createdBy: auth.currentUser.email
@@ -148,9 +178,20 @@ if (btnSave) {
     });
 }
 
-// Função Global para Excluir (necessária pois o onclick está no HTML gerado dinamicamente)
+// Função Global para Excluir
 window.deleteEvent = async function(id) {
     if (!auth.currentUser) return alert("Você precisa estar logado.");
+    
+    // Verificação de permissão também ao excluir
+    const user = auth.currentUser;
+    let isGoogle = false;
+    if (user.providerData && user.providerData.length > 0) {
+        isGoogle = user.providerData.some(p => p.providerId === 'google.com');
+    }
+    if (isGoogle && !GMAIL_ADMINS.includes(user.email)) {
+        return alert("Você não tem permissão para excluir eventos.");
+    }
+
     if (!confirm("Tem certeza que deseja EXCLUIR este evento?")) return;
     try {
         await deleteDoc(doc(db, "eventos", id));
