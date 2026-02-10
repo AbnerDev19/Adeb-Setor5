@@ -317,3 +317,114 @@
     background: var(--accent-color);
     color: white;
 }
+/* =========================================
+   RESPONSIVIDADE E CORREÇÕES MOBILE
+   (Adicione ao final de css/jovens-adolescentes.css)
+   ========================================= */
+
+@media (max-width: 900px) {
+
+    /* 1. AJUSTES GERAIS DE LAYOUT */
+    .main-content {
+        padding: 80px 15px 30px 15px; /* Mais espaço no topo p/ botão do menu, menos nas laterais */
+        width: 100%;
+    }
+
+    .header-title h1 {
+        font-size: 1.5rem; /* Título menor */
+    }
+
+    .header-title p {
+        font-size: 0.9rem;
+    }
+
+    /* 2. FORMULÁRIOS EMPILHADOS (Stack) */
+    /* Transforma o grid de 2 colunas em 1 coluna única */
+    .dashboard-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .input-group {
+        width: 100%; /* Garante que o input ocupe a largura toda */
+    }
+
+    .input-group input,
+    .input-group select {
+        font-size: 16px; /* Evita zoom automático no iPhone ao clicar */
+        padding: 12px;
+    }
+
+    /* 3. SISTEMA DE ABAS (Scroll Horizontal Melhorado) */
+    .tabs-container {
+        gap: 10px;
+        padding-bottom: 10px;
+        /* Esconde a barra de rolagem feia mas mantém a função */
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+    }
+    .tabs-container::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
+    }
+
+    .tab-btn {
+        padding: 10px 15px;
+        font-size: 0.85rem;
+        flex-shrink: 0; /* Impede o botão de esmagar */
+    }
+
+    /* 4. TABELAS (Melhoria de Visualização) */
+    /* Garante que a tabela não quebre o layout, permitindo scroll */
+    .table-responsive {
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        border: 1px solid #e2e8f0;
+        margin-top: 15px;
+    }
+    
+    .data-table th, 
+    .data-table td {
+        white-space: nowrap; /* Impede que o texto quebre e fique vertical */
+        padding: 12px 10px;
+        font-size: 0.85rem;
+    }
+
+    /* 5. FILTROS (Barra de Filtros) */
+    .filters-bar {
+        flex-direction: column;
+        align-items: stretch; /* Estica os botões */
+        gap: 10px;
+        padding: 15px;
+    }
+    
+    .filter-group {
+        margin-bottom: 5px;
+    }
+
+    /* Botões grandes para toque */
+    .btn-add, .btn-clear {
+        width: 100%;
+        padding: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* 6. GRID DE EVENTOS (Ajuste para telas pequenas) */
+    .events-grid-dept {
+        /* Força 1 coluna em telas muito pequenas ou 2 em telas médias */
+        grid-template-columns: 1fr; 
+    }
+    
+    .event-card-dept {
+        margin-bottom: 10px;
+    }
+
+    /* 7. MODAL (Pop-up) */
+    #modalInscricao > div {
+        width: 95% !important; /* Ocupa quase toda a tela */
+        padding: 20px !important;
+        max-height: 85vh;
+    }
+}
