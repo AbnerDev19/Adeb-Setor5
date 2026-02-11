@@ -1,186 +1,214 @@
-// js/carga-dados.js
-import { db, collection, addDoc } from './firebase-config.js';
+import { db, collection, addDoc, getDocs, deleteDoc, writeBatch, doc } from './firebase-config.js';
 
-// --- CONFIGURAÇÃO ---
-const ANO = 2026;
-
-// =========================================================================
-// 1. AGENDA GERAL (Antiga - Eventos da Sede/Convenção)
-// Cor: AMARELO/OURO (type: 'geral')
-// =========================================================================
-const eventosGerais = [
+// ==========================================
+// 1. DADOS DA AGENDA DO SETOR (DO PDF)
+// ==========================================
+const eventosPDF = [
     // JANEIRO
-    { title: "Reunião Geral de Obreiros", date: "2026-01-03", time: "09:00", location: "Templo Sede", type: "geral" },
-    { title: "Aniversário Irmã Dianna", date: "2026-01-08", time: "19:30", location: "Sede Taguatinga", type: "geral" },
-    // FEVEREIRO
-    { title: "Congresso UMADEB", date: "2026-02-14", time: "19:00", location: "Pavilhão de Exposições", type: "geral" }, 
-    // MARÇO
-    // (Adicione aqui se houver eventos gerais em Março na lista antiga)
-    // ABRIL
-    { title: "AGO - Assembleia Geral", date: "2026-04-04", time: "09:00", location: "Templo Sede", type: "geral" },
-    { title: "EBOM - Escola Bíblica", date: "2026-04-17", time: "19:00", location: "Igreja Sede", type: "geral" },
-    // MAIO
-    { title: "Reunião Geral de Obreiros", date: "2026-05-02", time: "09:00", location: "Igreja Sede", type: "geral" },
-    { title: "Seminário Harpa Cristã", date: "2026-05-01", time: "19:00", location: "Igreja Sede", type: "geral" },
-    // JUNHO
-    { title: "Congresso UNAADEB", date: "2026-06-04", time: "19:00", location: "A definir", type: "geral" },
-    { title: "Batismo Geral", date: "2026-06-21", time: "14:00", location: "Setores", type: "geral" },
-    // JULHO
-    { title: "Reunião Geral de Obreiros", date: "2026-07-04", time: "09:00", location: "Igreja Sede", type: "geral" },
-    // AGOSTO
-    { title: "Conferência Missionária", date: "2026-08-14", time: "19:00", location: "Igreja Sede", type: "geral" },
-    // SETEMBRO
-    { title: "Reunião Geral de Obreiros", date: "2026-09-05", time: "09:00", location: "Igreja Sede", type: "geral" },
-    { title: "Congresso UFADEB", date: "2026-09-19", time: "19:00", location: "Arena Hall", type: "geral" },
-    // OUTUBRO
-    { title: "AGO - COMADEBG", date: "2026-10-16", time: "19:00", location: "Templo Sede", type: "geral" },
-    // NOVEMBRO
-    { title: "Congresso UDVADEB", date: "2026-11-06", time: "19:00", location: "Igreja Sede", type: "geral" },
-    // DEZEMBRO
-    { title: "Reunião Geral de Obreiros", date: "2026-12-05", time: "09:00", location: "Igreja Sede", type: "geral" }
-];
-
-// =========================================================================
-// 2. AGENDA SETORIAL (Nova - PDF Setor 05)
-// Cor: ROXO (type: 'setorial')
-// =========================================================================
-const eventosSetor05 = [
-    // --- JANEIRO ---
-    { title: "Aniversário Pr. Eraldo", date: "2026-01-19", time: "19:30", location: "Candangolândia", type: "setorial" },
+    { date: '2026-01-19', title: 'Aniversário Pr. Eraldo', loc: 'Candangolândia', type: 'setorial', dept: 'Geral' },
     
-    // --- FEVEREIRO ---
-    { title: "Aniversário Pr. Orcival Pereira", date: "2026-02-21", time: "19:30", location: "A definir", type: "setorial" },
+    // FEVEREIRO
+    { date: '2026-02-21', title: 'Aniversário Pr. Orcival Pereira Xavier', loc: 'Sede', type: 'geral', dept: 'Geral' },
+    
+    // MARÇO
+    { date: '2026-03-07', title: 'Dia Internacional da Mulher', loc: 'Guará I', type: 'setorial', dept: 'Irmãs' },
+    { date: '2026-03-08', title: 'Aniversário Pr. Francisco', loc: 'Vereda Grande', type: 'setorial', dept: 'Geral' },
+    { date: '2026-03-14', title: 'Festival Primavera', loc: 'Núcleo Bandeirante', type: 'setorial', dept: 'Geral' },
+    { date: '2026-03-15', title: 'Festival Primavera (Enc)', loc: 'Núcleo Bandeirante', type: 'setorial', dept: 'Geral' },
+    { date: '2026-03-26', title: 'Festividade Adolescentes (Cj. Cálamo)', loc: 'Núcleo Bandeirante', type: 'setorial', dept: 'Adolescentes' },
+    { date: '2026-03-27', title: 'Festividade Jovens (Cj. Alfa)', loc: 'Núcleo Bandeirante', type: 'setorial', dept: 'Jovens' },
+    { date: '2026-03-28', title: 'Festividade Irmãs (Louvor Celeste)', loc: 'Núcleo Bandeirante', type: 'setorial', dept: 'Irmãs' },
 
-    // --- MARÇO ---
-    { title: "Dia Internacional da Mulher", date: "2026-03-07", time: "19:00", location: "Guará I", type: "setorial" },
-    { title: "Aniversário Pr. Francisco", date: "2026-03-08", time: "19:30", location: "Vereda Grande", type: "setorial" },
-    { title: "Festival Primavera (Abertura)", date: "2026-03-14", time: "19:00", location: "Núcleo Bandeirante (Sede)", type: "setorial" },
-    { title: "Festival Primavera (Encerramento)", date: "2026-03-15", time: "18:00", location: "Núcleo Bandeirante (Sede)", type: "setorial" },
-    { title: "Festividade Conjunto Cálamo (Adolescentes)", date: "2026-03-26", time: "19:30", location: "Núcleo Bandeirante", type: "setorial" },
-    { title: "Festividade Conjunto Alfa (Jovens)", date: "2026-03-27", time: "19:30", location: "Núcleo Bandeirante", type: "setorial" },
-    { title: "Festividade Círculo de Oração (Irmãs)", date: "2026-03-28", time: "19:00", location: "Núcleo Bandeirante", type: "setorial" },
+    // MAIO
+    { date: '2026-05-01', title: 'Evangelismo', loc: 'Vargem Bonita', type: 'setorial', dept: 'Geral' },
+    { date: '2026-05-09', title: 'Festividade UCADEB', loc: 'Lúcio Costa', type: 'setorial', dept: 'Crianças' },
+    { date: '2026-05-16', title: 'Pré-Congresso UNAADEB', loc: 'Sede', type: 'geral', dept: 'Adolescentes' },
+    { date: '2026-05-17', title: 'Aniversário Pb. Ivanilton', loc: 'Park Way', type: 'setorial', dept: 'Geral' },
+    { date: '2026-05-18', title: 'Aniversário Pb. Luis Carlos', loc: 'Vila Cahuy', type: 'setorial', dept: 'Geral' },
+    { date: '2026-05-22', title: 'Festividade Adolescentes', loc: 'Guará I', type: 'setorial', dept: 'Adolescentes' },
+    { date: '2026-05-23', title: 'Festividade Adolescentes (Enc)', loc: 'Guará I', type: 'setorial', dept: 'Adolescentes' },
+    { date: '2026-05-30', title: 'Aniversário Coral Maranata', loc: 'Sede', type: 'setorial', dept: 'Geral' },
 
-    // --- MAIO ---
-    { title: "Evangelismo", date: "2026-05-01", time: "09:00", location: "Vargem Bonita", type: "setorial" },
-    { title: "Festividade UCADEB", date: "2026-05-09", time: "19:00", location: "Lúcio Costa", type: "setorial" },
-    { title: "Pré-Congresso UNAADEB", date: "2026-05-16", time: "19:00", location: "A definir", type: "setorial" },
-    { title: "Aniversário Pb. Ivanilton", date: "2026-05-17", time: "19:30", location: "Park Way", type: "setorial" },
-    { title: "Aniversário Pb. Luis Carlos", date: "2026-05-18", time: "19:30", location: "Vila Cahuy", type: "setorial" },
-    { title: "Festividade Adolescentes", date: "2026-05-22", time: "19:30", location: "Guará I", type: "setorial" },
-    { title: "Festividade Adolescentes (Encerramento)", date: "2026-05-23", time: "19:00", location: "Guará I", type: "setorial" },
-    { title: "Aniversário Coral Maranata", date: "2026-05-30", time: "19:00", location: "A definir", type: "setorial" },
+    // JUNHO
+    { date: '2026-06-14', title: 'Aniversário Pr. Carlos Alencar', loc: 'Guará II', type: 'setorial', dept: 'Geral' },
+    { date: '2026-06-18', title: 'Festividade Varões', loc: 'Lúcio Costa', type: 'setorial', dept: 'Varões' },
+    { date: '2026-06-19', title: 'Festividade Jovens e Adolescentes', loc: 'Lúcio Costa', type: 'setorial', dept: 'Jovens' },
+    { date: '2026-06-20', title: 'Festividade Irmãs', loc: 'Lúcio Costa', type: 'setorial', dept: 'Irmãs' },
+    { date: '2026-06-27', title: 'Festa dos Estados', loc: 'Guará I', type: 'setorial', dept: 'Geral' },
+    { date: '2026-06-28', title: 'Festa dos Estados (Enc)', loc: 'Guará I', type: 'setorial', dept: 'Geral' },
 
-    // --- JUNHO ---
-    { title: "Aniversário Pr. Carlos Alencar", date: "2026-06-14", time: "19:30", location: "Guará II", type: "setorial" },
-    { title: "Festividade Varões", date: "2026-06-18", time: "19:30", location: "Lúcio Costa", type: "setorial" },
-    { title: "Festividade Jovens e Adolescentes", date: "2026-06-19", time: "19:30", location: "Lúcio Costa", type: "setorial" },
-    { title: "Festividade Irmãs", date: "2026-06-20", time: "19:00", location: "Lúcio Costa", type: "setorial" },
-    { title: "Festa dos Estados", date: "2026-06-27", time: "19:00", location: "Guará I", type: "setorial" },
-    { title: "Festa dos Estados (Encerramento)", date: "2026-06-28", time: "18:00", location: "Guará I", type: "setorial" },
+    // JULHO
+    { date: '2026-07-04', title: 'Pré-Congresso UFADEB', loc: 'Sede', type: 'geral', dept: 'Irmãs' },
+    { date: '2026-07-09', title: 'Aniversário Pr. Silva', loc: 'Guará I', type: 'setorial', dept: 'Geral' },
+    { date: '2026-07-12', title: 'Aniversário Pr. Izacc', loc: 'Paraíba', type: 'setorial', dept: 'Geral' },
+    { date: '2026-07-17', title: 'Retiro UMADEB (Início)', loc: 'Externo', type: 'geral', dept: 'Jovens' },
+    { date: '2026-07-25', title: 'Festividade UCADEB', loc: 'Candangolândia', type: 'setorial', dept: 'Crianças' },
+    { date: '2026-07-25', title: 'Aniversário Pr. Saul Tavares (Coord)', loc: 'Candangolândia', type: 'setorial', dept: 'Geral' },
 
-    // --- JULHO ---
-    { title: "Pré-Congresso UFADEB", date: "2026-07-04", time: "19:00", location: "A definir", type: "setorial" },
-    { title: "Aniversário Pr. Silva", date: "2026-07-09", time: "19:30", location: "Guará I", type: "setorial" },
-    { title: "Aniversário Pr. Izacc", date: "2026-07-12", time: "19:30", location: "Paraíba", type: "setorial" },
-    { title: "Retiro UMADEB", date: "2026-07-17", time: "19:00", location: "Local de Retiros", type: "setorial" },
-    { title: "Festividade UCADEB", date: "2026-07-25", time: "19:00", location: "Candangolândia", type: "setorial" },
-    { title: "Aniversário Pr. Saul Tavares (Coord.)", date: "2026-07-25", time: "19:30", location: "Sede Setorial", type: "setorial" },
+    // AGOSTO
+    { date: '2026-08-01', title: 'Festividade Jovens e Adolescentes', loc: 'Candangolândia', type: 'setorial', dept: 'Jovens' },
+    { date: '2026-08-15', title: 'Festividade Adolescentes', loc: 'Vila Cahuy', type: 'setorial', dept: 'Adolescentes' },
+    { date: '2026-08-21', title: 'Evento Pérolas Setorial', loc: 'Sede', type: 'setorial', dept: 'Irmãs' },
+    { date: '2026-08-22', title: 'Evento Pérolas Setorial (Enc)', loc: 'Sede', type: 'setorial', dept: 'Irmãs' },
+    { date: '2026-08-28', title: 'Festividade Varões', loc: 'Guará I', type: 'setorial', dept: 'Varões' },
+    { date: '2026-08-29', title: 'Festividade Irmãs', loc: 'Guará I', type: 'setorial', dept: 'Irmãs' },
+    { date: '2026-08-30', title: 'Festividade Irmãs (Enc)', loc: 'Guará I', type: 'setorial', dept: 'Irmãs' },
+    { date: '2026-08-31', title: 'Aniversário Pr. Walber', loc: 'Vargem Bonita', type: 'setorial', dept: 'Geral' },
 
-    // --- AGOSTO ---
-    { title: "Festividade Jovens e Adolescentes", date: "2026-08-01", time: "19:00", location: "Candangolândia", type: "setorial" },
-    { title: "Festividade Adolescentes", date: "2026-08-15", time: "19:00", location: "Vila Cahuy", type: "setorial" },
-    { title: "Evento Pérolas Setorial", date: "2026-08-21", time: "19:30", location: "Sede Setorial", type: "setorial" },
-    { title: "Evento Pérolas Setorial (Encerramento)", date: "2026-08-22", time: "19:00", location: "Sede Setorial", type: "setorial" },
-    { title: "Festividade de Varões", date: "2026-08-28", time: "19:30", location: "Guará I", type: "setorial" },
-    { title: "Festividade de Irmãs", date: "2026-08-29", time: "19:00", location: "Guará I", type: "setorial" },
-    { title: "Festividade de Irmãs (Encerramento)", date: "2026-08-30", time: "18:00", location: "Guará I", type: "setorial" },
-    { title: "Aniversário Pr. Walber", date: "2026-08-31", time: "19:30", location: "Vargem Bonita", type: "setorial" },
+    // SETEMBRO
+    { date: '2026-09-03', title: 'Festividade Varões', loc: 'Guará II', type: 'setorial', dept: 'Varões' },
+    { date: '2026-09-04', title: 'Festividade Irmãs', loc: 'Guará II', type: 'setorial', dept: 'Irmãs' },
+    { date: '2026-09-05', title: 'Festividade Jovens', loc: 'Guará II', type: 'setorial', dept: 'Jovens' },
+    { date: '2026-09-11', title: 'Festividade Primavera', loc: 'Núcleo Bandeirante', type: 'setorial', dept: 'Geral' },
+    { date: '2026-09-12', title: 'Festividade Primavera (Enc)', loc: 'Núcleo Bandeirante', type: 'setorial', dept: 'Geral' },
+    { date: '2026-09-25', title: 'Festividade Departamentos', loc: 'Vereda Grande', type: 'setorial', dept: 'Geral' },
+    { date: '2026-09-26', title: 'Festividade Departamentos', loc: 'Park Way', type: 'setorial', dept: 'Geral' },
 
-    // --- SETEMBRO ---
-    { title: "Festividade Varões", date: "2026-09-03", time: "19:30", location: "Guará II", type: "setorial" },
-    { title: "Festividade Irmãs", date: "2026-09-04", time: "19:30", location: "Guará II", type: "setorial" },
-    { title: "Festividade Jovens", date: "2026-09-05", time: "19:00", location: "Guará II", type: "setorial" },
-    { title: "Festividade Primavera", date: "2026-09-11", time: "19:30", location: "Núcleo Bandeirante", type: "setorial" },
-    { title: "Festividade Primavera (Encerramento)", date: "2026-09-12", time: "19:00", location: "Núcleo Bandeirante", type: "setorial" },
-    { title: "Festividade Departamentos", date: "2026-09-25", time: "19:30", location: "Vereda Grande", type: "setorial" },
-    { title: "Festividade Departamentos", date: "2026-09-26", time: "19:00", location: "Park Way", type: "setorial" },
+    // OUTUBRO
+    { date: '2026-10-01', title: 'Aniversário Irmã Dinalziza', loc: 'Núcleo Bandeirante', type: 'setorial', dept: 'Irmãs' },
+    { date: '2026-10-03', title: 'Pré-Congresso UDVADEB', loc: 'Sede', type: 'geral', dept: 'Varões' },
+    { date: '2026-10-10', title: 'Congresso Setorial UCADEB', loc: 'Sede', type: 'setorial', dept: 'Crianças' },
+    { date: '2026-10-17', title: 'Festividade UCADEB', loc: 'Guará II', type: 'setorial', dept: 'Crianças' },
+    { date: '2026-10-24', title: 'SEMADEB Setorial (Cruzada)', loc: 'Sede', type: 'setorial', dept: 'Geral' },
+    { date: '2026-10-27', title: 'Aniversário Pr. William', loc: 'Lúcio Costa', type: 'setorial', dept: 'Geral' },
+    { date: '2026-10-30', title: 'Festividade Jovens', loc: 'Guará I', type: 'setorial', dept: 'Jovens' },
+    { date: '2026-10-31', title: 'Festividade Jovens (Enc)', loc: 'Guará I', type: 'setorial', dept: 'Jovens' },
 
-    // --- OUTUBRO ---
-    { title: "Aniversário Irmã Dinalziza", date: "2026-10-01", time: "19:30", location: "Núcleo Bandeirante", type: "setorial" },
-    { title: "Pré-Congresso UDVADEB", date: "2026-10-03", time: "19:00", location: "A definir", type: "setorial" },
-    { title: "Congresso Setorial UCADEB", date: "2026-10-10", time: "09:00", location: "Sede Setorial", type: "setorial" },
-    { title: "Festividade da UCADEB", date: "2026-10-17", time: "19:00", location: "Guará II", type: "setorial" },
-    { title: "SEMADEB Setorial (Cruzada)", date: "2026-10-24", time: "19:00", location: "Sede Setorial", type: "setorial" },
-    { title: "Aniversário Pr. William", date: "2026-10-27", time: "19:30", location: "Lúcio Costa", type: "setorial" },
-    { title: "Festividade de Jovens", date: "2026-10-30", time: "19:30", location: "Guará I", type: "setorial" },
-    { title: "Festividade de Jovens (Encerramento)", date: "2026-10-31", time: "19:00", location: "Guará I", type: "setorial" },
-
-    // --- NOVEMBRO ---
-    { title: "Festividade de Varões", date: "2026-11-20", time: "19:30", location: "Candangolândia", type: "setorial" },
-    { title: "Festividade UCADEB", date: "2026-11-21", time: "09:00", location: "Guará I", type: "setorial" },
-    { title: "Festividade de Irmãs", date: "2026-11-21", time: "19:00", location: "Candangolândia", type: "setorial" },
-    { title: "Pré-Congresso UMADEB", date: "2026-11-28", time: "19:00", location: "A definir", type: "setorial" }
+    // NOVEMBRO
+    { date: '2026-11-20', title: 'Festividade Varões', loc: 'Candangolândia', type: 'setorial', dept: 'Varões' },
+    { date: '2026-11-21', title: 'Festividade UCADEB (Manhã/Tarde)', loc: 'Guará I', type: 'setorial', dept: 'Crianças' },
+    { date: '2026-11-21', title: 'Festividade Irmãs', loc: 'Candangolândia', type: 'setorial', dept: 'Irmãs' },
+    { date: '2026-11-28', title: 'Pré-Congresso UMADEB', loc: 'Sede', type: 'geral', dept: 'Jovens' }
 ];
 
-// =========================================================================
-// 3. RECORRENTES (Santa Ceia)
-// =========================================================================
-function gerarRecorrentes() {
+// ==========================================
+// 2. FUNÇÃO GERADORA DE RECORRENTES (LOCAL)
+// ==========================================
+function gerarEventosRecorrentes() {
     const eventos = [];
-    const dataInicial = new Date(ANO, 0, 1);
-    const dataFinal = new Date(ANO, 11, 31);
+    const inicio = new Date('2026-01-01');
+    const fim = new Date('2026-12-31');
+    const atual = new Date(inicio);
 
-    for (let d = new Date(dataInicial); d <= dataFinal; d.setDate(d.getDate() + 1)) {
-        const diaSemana = d.getDay(); // 0=Dom, 6=Sab
-        const dataFormatada = d.toISOString().split('T')[0];
-        const diaMes = d.getDate();
-        
-        // Regra Santa Ceia: 2º Sábado do mês
-        const ehSegundoSabado = (diaSemana === 6 && diaMes >= 8 && diaMes <= 14);
+    while (atual <= fim) {
+        const diaSemana = atual.getDay(); // 0=Dom, 1=Seg, 2=Ter...
+        const diaMes = atual.getDate();
+        const dataStr = atual.toISOString().split('T')[0];
 
-        if (ehSegundoSabado) {
+        // Regra do 2º Sábado (Santa Ceia)
+        // O 2º sábado sempre cai entre os dias 8 e 14
+        const isSegundoSabado = (diaSemana === 6 && diaMes >= 8 && diaMes <= 14);
+
+        if (isSegundoSabado) {
             eventos.push({
-                title: "Santa Ceia",
-                date: dataFormatada,
-                time: "19:30",
-                location: "Igreja Sede",
-                type: "geral" // Mantendo como Geral para destaque
+                date: dataStr,
+                title: 'Santa Ceia',
+                loc: 'Candangolândia',
+                type: 'local', // AZUL
+                dept: 'Geral',
+                time: '19:30'
             });
         }
+        else if (diaSemana === 0) { // Domingo
+            eventos.push({
+                date: dataStr,
+                title: 'Culto da Família',
+                loc: 'Candangolândia',
+                type: 'local',
+                dept: 'Geral',
+                time: '18:30'
+            });
+        }
+        else if (diaSemana === 2) { // Terça
+            eventos.push({
+                date: dataStr,
+                title: 'Culto de Ensino',
+                loc: 'Candangolândia',
+                type: 'local',
+                dept: 'Geral',
+                time: '19:30'
+            });
+        }
+        else if (diaSemana === 4) { // Quinta
+            eventos.push({
+                date: dataStr,
+                title: 'Culto de Libertação',
+                loc: 'Candangolândia',
+                type: 'local',
+                dept: 'Geral',
+                time: '19:30'
+            });
+        }
+
+        atual.setDate(atual.getDate() + 1); // Próximo dia
     }
     return eventos;
 }
 
-// =========================================================================
-// 4. FUNÇÃO DE CARGA (Disparo)
-// =========================================================================
-window.rodarCarga = async function() {
-    const senha = prompt("Digite a senha de admin para confirmar a carga:");
-    if(senha !== "1234") return alert("Senha incorreta. Operação cancelada.");
+// ==========================================
+// 3. FUNÇÃO PRINCIPAL DE CARGA
+// ==========================================
+window.carregarDados = async function() {
+    const senha = prompt("Senha de Admin:");
+    if (senha !== "1234") return alert("Senha incorreta!");
 
-    if(!confirm("Isso vai adicionar eventos GERAIS e SETORIAIS. Deseja continuar?")) return;
+    if (!confirm("ISSO APAGARÁ TODOS OS EVENTOS EXISTENTES E RECRIARÁ O BANCO. TEM CERTEZA?")) return;
 
-    console.log("Iniciando carga completa...");
-    
-    // Mescla todas as listas
-    const recorrentes = gerarRecorrentes();
-    const todos = [...eventosGerais, ...eventosSetor05, ...recorrentes];
-
-    let contador = 0;
     try {
-        for (const ev of todos) {
-            await addDoc(collection(db, "eventos"), {
-                ...ev,
-                createdAt: new Date(),
-                createdBy: "Script Automático (Merge Geral + Setorial)"
+        console.log("Iniciando limpeza...");
+        
+        // 1. Limpar Coleção 'eventos'
+        const snapshot = await getDocs(collection(db, "eventos"));
+        const deleteBatch = writeBatch(db);
+        let countDel = 0;
+        
+        snapshot.forEach((doc) => {
+            deleteBatch.delete(doc.ref);
+            countDel++;
+        });
+        await deleteBatch.commit();
+        console.log(`${countDel} eventos apagados.`);
+
+        // 2. Preparar Novos Dados
+        const recorrentes = gerarEventosRecorrentes();
+        const todosEventos = [...eventosPDF, ...recorrentes];
+        
+        console.log(`Criando ${todosEventos.length} novos eventos...`);
+
+        // 3. Inserir em Lotes (Batches de 500)
+        const total = todosEventos.length;
+        let batch = writeBatch(db);
+        let count = 0;
+
+        for (let i = 0; i < total; i++) {
+            const ev = todosEventos[i];
+            const ref = doc(collection(db, "eventos")); // ID Automático
+            
+            batch.set(ref, {
+                title: ev.title,
+                date: ev.date,
+                location: ev.loc,
+                type: ev.type, // local, setorial, geral
+                departamento: ev.dept,
+                time: ev.time || '19:30',
+                createdAt: new Date()
             });
-            contador++;
-            console.log(`[${contador}] Adicionado: ${ev.title} (${ev.type})`);
+
+            count++;
+            // Firebase limite de 500 writes por batch
+            if (count >= 400 || i === total - 1) {
+                await batch.commit();
+                batch = writeBatch(db); // Novo batch
+                count = 0;
+                console.log(`Processados: ${i + 1}/${total}`);
+            }
         }
-        alert(`Sucesso! ${contador} eventos adicionados (Gerais + Setoriais).`);
-        location.reload(); 
-    } catch (error) {
-        console.error("Erro na carga:", error);
-        alert("Erro ao adicionar eventos. Veja o console.");
+
+        alert("Banco de dados recriado com sucesso!");
+        window.location.reload();
+
+    } catch (e) {
+        console.error("Erro fatal:", e);
+        alert("Erro ao processar. Verifique o console.");
     }
-}
+};
