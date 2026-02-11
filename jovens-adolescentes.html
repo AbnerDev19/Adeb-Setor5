@@ -4,350 +4,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão Jovens e Adolescentes - ADEB</title>
-    
+    <title>Jovens e Adolescentes - ADEB</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/jovens-adolescentes.css">
     <link rel="icon" type="image/png" href="fotos/logo1.png" />
-    
-    <style>
-        /* =========================================
-           ESTILOS DO NOVO MENU (CardNav)
-           ========================================= */
-        .card-nav-container {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 800px;
-            z-index: 1000;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-
-        .card-nav {
-            display: block;
-            height: 60px;
-            background-color: white;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card-nav-top {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            z-index: 2;
-            background: white;
-        }
-
-        .hamburger-menu {
-            height: 100%;
-            width: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            gap: 6px;
-        }
-
-        .hamburger-line {
-            width: 24px;
-            height: 2px;
-            background-color: #1e293b;
-            transition: transform 0.25s ease, opacity 0.2s ease;
-        }
-
-        .hamburger-menu.open .hamburger-line:first-child {
-            transform: translateY(4px) rotate(45deg);
-        }
-
-        .hamburger-menu.open .hamburger-line:last-child {
-            transform: translateY(-4px) rotate(-45deg);
-        }
-
-        .logo {
-            height: 32px;
-            object-fit: contain;
-        }
-
-        /* Botão de Sair (Vermelho suave) */
-        .card-nav-cta-button {
-            background-color: #fee2e2;
-            color: #ef4444;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .card-nav-cta-button:hover {
-            background-color: #fecaca;
-        }
-
-        .card-nav-content {
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 60px;
-            padding: 10px;
-            display: flex;
-            gap: 10px;
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .nav-card {
-            flex: 1;
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            min-height: 200px;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        .nav-card-label {
-            font-size: 1.4rem;
-            font-weight: 600;
-            opacity: 0.95;
-            letter-spacing: -0.5px;
-        }
-
-        .nav-card-links {
-            margin-top: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .nav-card-link {
-            color: inherit;
-            text-decoration: none;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            opacity: 0.8;
-            transition: 0.2s;
-            padding: 5px 0;
-            cursor: pointer; /* Importante para os links de ação JS */
-        }
-
-        .nav-card-link:hover {
-            opacity: 1;
-            transform: translateX(5px);
-        }
-
-        /* =========================================
-           OVERRIDES & LOADING SCREEN
-           ========================================= */
-        
-        /* Ajuste do Main Content para o menu fixo */
-        .main-content {
-            margin-left: 0 !important;
-            width: 100% !important;
-            padding-top: 110px !important; /* Mais espaço no topo */
-            padding-left: 20px !important;
-            padding-right: 20px !important;
-        }
-
-        /* Esconde sidebar antiga */
-        .sidebar, .mobile-toggle {
-            display: none !important;
-        }
-
-        /* Loading Screen */
-        #loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #f0f2f5;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            color: #0f4c81;
-            font-family: sans-serif;
-        }
-        .loader {
-            border: 5px solid #e2e8f0;
-            border-top: 5px solid #0f4c81;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .card-nav-container {
-                width: 95%;
-                top: 15px;
-            }
-            .card-nav-cta-button {
-                display: flex; /* Mantive visível para poder fazer Logout no mobile */
-                padding: 8px 15px;
-                font-size: 0.8rem;
-            }
-            .card-nav-content {
-                flex-direction: column;
-                position: relative;
-                top: 0;
-                margin-top: 60px;
-            }
-            .nav-card {
-                min-height: 120px;
-            }
-        }
-    </style>
 </head>
 
 <body>
-
     <div id="loading-screen">
         <div class="loader"></div>
-        <h3>Verificando permissão...</h3>
-        <p>Aguarde um momento.</p>
+        <h3>Verificando acesso...</h3>
     </div>
 
     <div id="app-content" style="display: none;">
-
         <div class="card-nav-container">
             <nav class="card-nav">
                 <div class="card-nav-top">
-                    <div class="hamburger-menu" role="button" tabindex="0" aria-label="Toggle menu">
+                    <div class="hamburger-menu" role="button" tabindex="0">
                         <div class="hamburger-line"></div>
                         <div class="hamburger-line"></div>
                     </div>
-
                     <div class="logo-container">
-                        <img src="fotos/logo1.png" alt="ADEB Gestão" class="logo">
+                        <img src="fotos/logo1.png" alt="ADEB" class="logo">
                     </div>
-
-                    <button type="button" class="card-nav-cta-button" id="btnHeaderLogout">
+                    <button type="button" class="card-nav-cta-button" id="btnHeaderLogout"
+                        style="background: #fee2e2; color: #ef4444;">
                         <i class="fas fa-sign-out-alt"></i> Sair
                     </button>
                 </div>
 
                 <div class="card-nav-content">
-                    
                     <div class="nav-card" style="background-color: #0f4c81; color: #fff;">
                         <div class="nav-card-label">Navegação</div>
                         <div class="nav-card-links">
-                            <a href="index.html" class="nav-card-link">
-                                <i class="fas fa-arrow-left"></i> Voltar ao Calendário
-                            </a>
-                            <span class="nav-card-link" style="opacity: 1; font-weight: bold; cursor: default;">
-                                <i class="fas fa-users"></i> Gestão Atual
-                            </span>
+                            <a href="index.html" class="nav-card-link"><i class="fas fa-arrow-left"></i> Voltar</a>
+                            <span class="nav-card-link" style="opacity:1; font-weight:bold;"><i
+                                    class="fas fa-users"></i> Gestão Atual</span>
                         </div>
                     </div>
-
                     <div class="nav-card" style="background-color: #1e293b; color: #fff;">
-                        <div class="nav-card-label">Ações Rápidas</div>
+                        <div class="nav-card-label">Ações</div>
                         <div class="nav-card-links">
-                            <a onclick="ativarAbaEAcao('membros', 'formMember')" class="nav-card-link">
-                                <i class="fas fa-user-plus"></i> Novo Membro
-                            </a>
-                            <a onclick="ativarAbaEAcao('chamada', null)" class="nav-card-link">
-                                <i class="fas fa-clipboard-check"></i> Fazer Chamada
-                            </a>
-                            <a onclick="ativarAbaEAcao('escalas', 'formEscala')" class="nav-card-link">
-                                <i class="fas fa-tasks"></i> Criar Escala
-                            </a>
+                            <a onclick="ativarAbaEAcao('membros', 'formMember')" class="nav-card-link">Novo Membro</a>
+                            <a onclick="ativarAbaEAcao('chamada', null)" class="nav-card-link">Chamada</a>
+                            <a onclick="ativarAbaEAcao('escalas', 'formEscala')" class="nav-card-link">Escala</a>
                         </div>
                     </div>
-
                 </div>
             </nav>
         </div>
+
         <main class="main-content">
             <div class="header-title">
                 <h1>Área de Liderança</h1>
-                <p>Gestão de Departamentos: Jovens e Adolescentes</p>
-                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 5px;">
-                    <i class="fas fa-user-circle"></i> Logado como: <span id="userEmailDisplay" style="font-weight: 600;">...</span>
-                </p>
+                <p>Jovens e Adolescentes</p>
+                <p style="font-size:0.8rem; margin-top:5px; color:var(--text-secondary);">Logado: <span
+                        id="userEmailDisplay" style="font-weight:600;">...</span></p>
             </div>
 
             <div class="tabs-container">
-                <button class="tab-btn active" onclick="openTab(event, 'membros')"><i class="fas fa-user-plus"></i> Membros</button>
-                <button class="tab-btn" onclick="openTab(event, 'chamada')"><i class="fas fa-clipboard-check"></i> Chamada</button>
-                <button class="tab-btn" onclick="openTab(event, 'escalas')"><i class="fas fa-tasks"></i> Escalas</button>
-                <button class="tab-btn" onclick="openTab(event, 'eventos')"><i class="fas fa-ticket-alt"></i> Eventos & Inscrições</button>
+                <button class="tab-btn active" onclick="openTab(event, 'membros')"><i class="fas fa-user-plus"></i>
+                    Membros</button>
+                <button class="tab-btn" onclick="openTab(event, 'chamada')"><i class="fas fa-clipboard-check"></i>
+                    Chamada</button>
+                <button class="tab-btn" onclick="openTab(event, 'escalas')"><i class="fas fa-tasks"></i>
+                    Escalas</button>
+                <button class="tab-btn" onclick="openTab(event, 'eventos')"><i class="fas fa-ticket-alt"></i>
+                    Eventos</button>
             </div>
 
             <div id="membros" class="tab-content active">
                 <div class="card">
-                    <div class="admin-header">
-                        <h3>Cadastro de Membros</h3>
-                        <button class="btn-add" onclick="toggleForm('formMember')"><i class="fas fa-plus"></i> Novo Membro</button>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                        <h3 class="card-title" style="margin:0;">Membros</h3>
+                        <button class="btn-add" onclick="toggleForm('formMember')"
+                            style="background:var(--accent-color); color:white;">+ Novo</button>
                     </div>
 
-                    <div id="formMember" class="admin-form" style="display:none; margin-bottom: 20px; background:#f8fafc; padding:20px; border-radius:15px;">
+                    <div id="formMember"
+                        style="display:none; background:#f8fafc; padding:20px; border-radius:12px; margin-bottom:20px;">
                         <div class="dashboard-grid">
-                            <div class="input-group">
-                                <label>Nome Completo</label>
-                                <input type="text" id="memNome">
-                            </div>
-                            <div class="input-group">
-                                <label>Data Nascimento</label>
-                                <input type="date" id="memNasc">
-                            </div>
-                            <div class="input-group">
-                                <label>Contato (WhatsApp)</label>
-                                <input type="text" id="memContato" placeholder="(61) 9...">
-                            </div>
-                            <div class="input-group">
-                                <label>Departamento</label>
+                            <div class="input-group"><label>Nome</label><input type="text" id="memNome"></div>
+                            <div class="input-group"><label>Nascimento</label><input type="date" id="memNasc"></div>
+                            <div class="input-group"><label>Contato</label><input type="text" id="memContato"></div>
+                            <div class="input-group"><label>Depto</label>
                                 <select id="memDept">
                                     <option value="Jovens">Jovens</option>
                                     <option value="Adolescentes">Adolescentes</option>
                                 </select>
                             </div>
-                            <div class="input-group">
-                                <label>Congregação</label>
+                            <div class="input-group"><label>Congregação</label>
                                 <select id="memIgreja">
-                                    <option value="Sede Setor 05">Sede Setor 05</option>
-                                    <option value="Candangolândia">Candangolândia</option>
-                                    <option value="Guará I">Guará I</option>
+                                    <option value="Sede Setor 05">Sede</option>
                                     <option value="Guará II">Guará II</option>
-                                    <option value="Outra">Outra</option>
                                 </select>
                             </div>
-                            <div class="input-group">
-                                <label>Responsável (Se menor)</label>
-                                <input type="text" id="memResp">
-                            </div>
                         </div>
-                        <button class="btn-add" id="btnSaveMember" style="margin-top: 15px;">Salvar Membro</button>
+                        <button class="btn-add" id="btnSaveMember"
+                            style="margin-top:10px; width:100%; background:var(--success-color); color:white;">Salvar</button>
                     </div>
 
                     <div class="table-responsive">
@@ -357,7 +116,6 @@
                                     <th>Nome</th>
                                     <th>Idade</th>
                                     <th>Depto</th>
-                                    <th>Status</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
@@ -369,80 +127,62 @@
 
             <div id="chamada" class="tab-content">
                 <div class="card">
-                    <h3>Controle de Presença</h3>
-                    <div class="filters-bar" style="margin-top: 15px;">
-                        <div class="input-group">
-                            <label>Data</label>
-                            <input type="date" id="chamadaData">
-                        </div>
-                        <div class="input-group">
-                            <label>Tipo de Evento</label>
-                            <select id="chamadaTipo">
-                                <option value="EBD">EBD</option>
-                                <option value="Culto">Culto</option>
-                                <option value="Ensaio">Ensaio</option>
-                                <option value="Evento">Evento Extra</option>
-                            </select>
-                        </div>
-                        <button class="btn-add" id="btnLoadChamada">Carregar Lista</button>
+                    <h3 class="card-title">Chamada</h3>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:15px;">
+                        <input type="date" id="chamadaData"
+                            style="padding:10px; border-radius:8px; border:1px solid #ccc;">
+                        <select id="chamadaTipo" style="padding:10px; border-radius:8px; border:1px solid #ccc;">
+                            <option>EBD</option>
+                            <option>Culto</option>
+                        </select>
+                        <button class="btn-add" id="btnLoadChamada"
+                            style="background:var(--accent-color); color:white;">Carregar</button>
                     </div>
-
-                    <div id="chamadaArea" style="margin-top: 20px; display:none;">
+                    <div id="chamadaArea" style="display:none;">
                         <div class="table-responsive">
                             <table class="data-table">
                                 <thead>
                                     <tr>
                                         <th>Nome</th>
-                                        <th>Status</th>
                                         <th>Presença</th>
                                     </tr>
                                 </thead>
                                 <tbody id="listaChamada"></tbody>
                             </table>
                         </div>
-                        <button class="btn-add" id="btnSaveChamada" style="margin-top: 20px; background-color: #16a34a;">Salvar Chamada</button>
+                        <button class="btn-add" id="btnSaveChamada"
+                            style="margin-top:15px; width:100%; background:var(--success-color); color:white;">Salvar</button>
                     </div>
                 </div>
             </div>
 
             <div id="escalas" class="tab-content">
                 <div class="card">
-                    <div class="admin-header">
-                        <h3>Escalas de Culto</h3>
-                        <button class="btn-add" onclick="toggleForm('formEscala')"><i class="fas fa-plus"></i> Nova Escala</button>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                        <h3 class="card-title">Escalas</h3>
+                        <button class="btn-add" onclick="toggleForm('formEscala')"
+                            style="background:var(--accent-color); color:white;">+ Nova</button>
                     </div>
-
-                    <div id="formEscala" class="admin-form" style="display:none; background:#f8fafc; padding:20px; border-radius:15px; margin-bottom:20px;">
+                    <div id="formEscala"
+                        style="display:none; background:#f8fafc; padding:20px; margin-bottom:20px; border-radius:12px;">
                         <div class="dashboard-grid">
-                            <div class="input-group">
-                                <label>Data</label>
-                                <input type="date" id="escData">
-                            </div>
-                            <div class="input-group">
-                                <label>Função</label>
-                                <select id="escFuncao">
-                                    <option value="Louvor">Louvor</option>
-                                    <option value="Recepção">Recepção</option>
-                                    <option value="Mídia">Mídia / Projetor</option>
-                                    <option value="Palavra">Palavra / Oportunidade</option>
-                                    <option value="Oração">Oração</option>
-                                </select>
-                            </div>
-                            <div class="input-group" style="grid-column: span 2;">
-                                <label>Responsáveis (Nomes)</label>
-                                <input type="text" id="escNomes" placeholder="Ex: João, Maria...">
-                            </div>
+                            <div class="input-group"><label>Data</label><input type="date" id="escData"></div>
+                            <div class="input-group"><label>Função</label><select id="escFuncao">
+                                    <option>Louvor</option>
+                                    <option>Recepção</option>
+                                </select></div>
+                            <div class="input-group" style="grid-column: span 2;"><label>Nomes</label><input type="text"
+                                    id="escNomes"></div>
                         </div>
-                        <button class="btn-add" id="btnSaveEscala" style="margin-top:15px;">Salvar Escala</button>
+                        <button class="btn-add" id="btnSaveEscala" style="margin-top:10px; width:100%;">Salvar</button>
                     </div>
-
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
                                 <tr>
                                     <th>Data</th>
                                     <th>Função</th>
-                                    <th>Responsáveis</th>
+                                    <th>Resp.</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
@@ -454,164 +194,76 @@
 
             <div id="eventos" class="tab-content">
                 <div class="card">
-                    <h3>Próximos Eventos</h3>
-                    <p style="color:var(--text-secondary); margin-bottom:20px;">Eventos de Jovens e Adolescentes.</p>
-
-                    <div id="listaEventosDept" class="events-grid-dept">
-                    </div>
+                    <h3 class="card-title">Eventos Depto.</h3>
+                    <div id="listaEventosDept" class="events-grid-dept"></div>
                 </div>
             </div>
-
-            <div id="modalInscricao" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
-                <div style="background:white; padding:30px; border-radius:15px; width:90%; max-width:500px; max-height:80vh; overflow-y:auto;">
-                    <h3 id="modalTitle">Inscrições</h3>
-                    <p id="modalSub" style="color:gray; margin-bottom:15px;"></p>
-                    <div style="margin-top:15px;">
-                        <table class="data-table">
-                            <tbody id="listaInscricaoModal"></tbody>
-                        </table>
-                    </div>
-                    <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:10px;">
-                        <button onclick="document.getElementById('modalInscricao').style.display='none'" style="padding:10px 20px; border:none; background:#e2e8f0; border-radius:8px; cursor:pointer;">Fechar</button>
-                    </div>
-                </div>
-            </div>
-
         </main>
     </div>
 
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/jovens-adolescentes.js"></script>
-
     <script type="module">
         import { auth, signOut } from './js/firebase-config.js';
-
-        // Lógica de Logout do botão do Menu
         const btnLogout = document.getElementById('btnHeaderLogout');
-        if(btnLogout) {
-            btnLogout.addEventListener('click', async () => {
-                if(confirm("Deseja realmente sair?")) {
-                    await signOut(auth);
-                    window.location.href = "index.html";
-                }
-            });
-        }
+        if (btnLogout) btnLogout.addEventListener('click', async () => { if (confirm("Sair?")) { await signOut(auth); window.location.href = "index.html"; } });
     </script>
 
     <script>
-        // --- FUNÇÕES DE INTERFACE DO MENU --- //
-
-        // Função para ativar aba via atalho do Menu
-        window.ativarAbaEAcao = function(tabName, formId) {
-            // Fecha o menu (simula clique no hamburger se estiver aberto)
-            const hamburger = document.querySelector('.hamburger-menu');
-            if(hamburger && hamburger.classList.contains('open')) {
-                hamburger.click();
-            }
-
-            // Ativa a aba
-            openTab(null, tabName);
-
-            // Abre o formulário se solicitado e se estiver fechado
-            if(formId) {
-                const form = document.getElementById(formId);
-                if(form && form.style.display === 'none') {
-                    form.style.display = 'block';
-                    // Scroll até o form
-                    setTimeout(() => form.scrollIntoView({behavior: 'smooth', block: 'center'}), 300);
-                }
-            }
-        }
-
-        // Funções Originais de UI
-        window.openTab = function(evt, tabName) {
+        window.openTab = (e, name) => {
             document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
-            
-            document.getElementById(tabName).classList.add('active');
-            
-            // Ativa o botão correspondente
-            const btn = document.querySelector(`button[onclick="openTab(event, '${tabName}')"]`);
-            if(btn) btn.classList.add('active');
-        }
-
-        window.toggleForm = function(id) {
+            document.getElementById(name).classList.add('active');
+            if (e && e.currentTarget) e.currentTarget.classList.add('active');
+        };
+        window.toggleForm = (id) => {
             const el = document.getElementById(id);
             el.style.display = el.style.display === 'none' ? 'block' : 'none';
-        }
+        };
+        window.ativarAbaEAcao = (tab, formId) => {
+            const menu = document.querySelector('.hamburger-menu');
+            if (menu && menu.classList.contains('open')) menu.click();
+            openTab(null, tab);
+            const btn = document.querySelector(`button[onclick="openTab(event, '${tab}')"]`);
+            if (btn) btn.classList.add('active');
+            if (formId) setTimeout(() => {
+                const f = document.getElementById(formId);
+                if (f) { f.style.display = 'block'; f.scrollIntoView({ behavior: 'smooth' }); }
+            }, 300);
+        };
 
-        // --- ANIMAÇÃO DO MENU (GSAP) --- //
+        // Animação do Menu GSAP
         document.addEventListener("DOMContentLoaded", () => {
-            const navContainer = document.querySelector('.card-nav');
-            const hamburger = document.querySelector('.hamburger-menu');
+            const nav = document.querySelector('.card-nav');
+            const burger = document.querySelector('.hamburger-menu');
             const content = document.querySelector('.card-nav-content');
             const cards = document.querySelectorAll('.nav-card');
-            
-            let isExpanded = false;
-            let animationTween = null;
+            let isOpen = false;
+            let tl = gsap.timeline({ paused: true });
 
-            function calculateHeight() {
-                const baseHeight = 60;
-                const prevVisibility = content.style.visibility;
-                
-                content.style.visibility = 'hidden';
+            function updateTL() {
+                const prev = content.style.display;
                 content.style.display = 'flex';
-                
-                const contentHeight = content.scrollHeight + 20;
-                
-                content.style.display = ''; 
-                content.style.visibility = prevVisibility;
+                content.style.visibility = 'hidden';
+                const h = content.scrollHeight + 20;
+                content.style.display = prev;
+                content.style.visibility = '';
 
-                return baseHeight + contentHeight;
+                tl.clear()
+                    .to(nav, { height: 60 + h, duration: 0.4, ease: "power3.out" })
+                    .set(content, { visibility: 'visible', opacity: 1 }, "<")
+                    .fromTo(cards, { y: 20, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1 }, "-=0.2");
             }
 
-            function createAnimation() {
-                if (animationTween) animationTween.kill();
-                const fullHeight = calculateHeight();
-                const tl = gsap.timeline({ paused: true });
-
-                tl.to(navContainer, {
-                    height: fullHeight,
-                    duration: 0.4,
-                    ease: "power3.out"
-                });
-
-                tl.set(content, { visibility: 'visible', opacity: 1 }, "<");
-
-                tl.to(cards, {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.4,
-                    stagger: 0.1,
-                    ease: "power3.out"
-                }, "-=0.2");
-
-                return tl;
-            }
-
-            let tl = createAnimation();
-
-            if(hamburger) {
-                hamburger.addEventListener('click', () => {
-                    if (!isExpanded) {
-                        hamburger.classList.add('open');
-                        tl = createAnimation(); 
-                        tl.play();
-                    } else {
-                        hamburger.classList.remove('open');
-                        tl.reverse();
-                    }
-                    isExpanded = !isExpanded;
+            if (burger) {
+                burger.addEventListener('click', () => {
+                    if (!isOpen) { updateTL(); tl.play(); burger.classList.add('open'); }
+                    else { tl.reverse(); burger.classList.remove('open'); }
+                    isOpen = !isOpen;
                 });
             }
-
-            window.addEventListener('resize', () => {
-                if (isExpanded) {
-                    const newHeight = calculateHeight();
-                    gsap.set(navContainer, { height: newHeight });
-                }
-            });
         });
     </script>
 </body>
+
 </html>

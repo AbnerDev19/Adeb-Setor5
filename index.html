@@ -5,210 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda ADEB Missão</title>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    
+
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="fotos/logo1.png" />
-
-    <style>
-        /* =========================================
-           CSS DO NOVO MENU (CardNav)
-           ========================================= */
-        .card-nav-container {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 800px;
-            z-index: 1000;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-
-        .card-nav {
-            display: block;
-            height: 60px;
-            background-color: white;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card-nav-top {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            z-index: 2;
-            background: white;
-        }
-
-        .hamburger-menu {
-            height: 100%;
-            width: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            gap: 6px;
-        }
-
-        .hamburger-line {
-            width: 24px;
-            height: 2px;
-            background-color: #1e293b;
-            transition: transform 0.25s ease, opacity 0.2s ease;
-        }
-
-        .hamburger-menu.open .hamburger-line:first-child {
-            transform: translateY(4px) rotate(45deg);
-        }
-
-        .hamburger-menu.open .hamburger-line:last-child {
-            transform: translateY(-4px) rotate(-45deg);
-        }
-
-        .logo {
-            height: 32px;
-            object-fit: contain;
-        }
-
-        .card-nav-cta-button {
-            background-color: #0f4c81; /* Tua cor accent */
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .card-nav-cta-button:hover {
-            background-color: #0a3d6b;
-        }
-
-        .card-nav-content {
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 60px;
-            padding: 10px;
-            display: flex;
-            gap: 10px;
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .nav-card {
-            flex: 1; /* Divide espaço igualmente (2 cards = 50% cada) */
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            min-height: 200px;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        .nav-card-label {
-            font-size: 1.4rem;
-            font-weight: 600;
-            opacity: 0.95;
-            letter-spacing: -0.5px;
-        }
-
-        .nav-card-links {
-            margin-top: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .nav-card-link {
-            color: inherit;
-            text-decoration: none;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            opacity: 0.8;
-            transition: 0.2s;
-            padding: 5px 0;
-        }
-
-        .nav-card-link:hover {
-            opacity: 1;
-            transform: translateX(5px);
-        }
-
-        /* =========================================
-           OVERRIDES (Ajustes no layout antigo)
-           ========================================= */
-        
-        /* Removemos a margem da sidebar antiga e ajustamos o topo */
-        .main-content {
-            margin-left: 0 !important;
-            width: 100% !important;
-            padding-top: 100px !important; /* Espaço para o menu fixo */
-        }
-
-        /* Esconde elementos antigos que não usamos mais */
-        .sidebar, .mobile-toggle {
-            display: none !important;
-        }
-
-        /* Ajuste do select para combinar */
-        .input-group select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            outline: none;
-            background-color: white;
-            font-family: inherit;
-            color: #1e293b;
-        }
-
-        /* Responsividade do Menu */
-        @media (max-width: 768px) {
-            .card-nav-container {
-                width: 95%;
-                top: 15px;
-            }
-            .card-nav-cta-button {
-                display: none; /* Esconde botão no mobile, ou ajusta se preferir */
-            }
-            .logo-container {
-                margin-left: auto; /* Logo vai pra direita se botão sumir */
-                padding-right: 15px;
-            }
-            .card-nav-content {
-                flex-direction: column;
-                position: relative;
-                top: 0;
-                margin-top: 60px;
-            }
-            .nav-card {
-                min-height: 120px;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -226,12 +28,11 @@
                 </div>
 
                 <button type="button" class="card-nav-cta-button" id="btnLogin">
-                    <i class="fas fa-user-shield"></i> <span id="loginText">Área do Líder</span>
+                    <i class="fas fa-user-shield"></i> <span id="loginText">Líder</span>
                 </button>
             </div>
 
             <div class="card-nav-content">
-                
                 <div class="nav-card" style="background-color: #0f4c81; color: #fff;">
                     <div class="nav-card-label">Navegação</div>
                     <div class="nav-card-links">
@@ -241,13 +42,17 @@
                         <a href="jovens-adolescentes.html" class="nav-card-link" id="linkJovens" style="display: none;">
                             <i class="fas fa-users"></i> Jovens e Adolescentes
                         </a>
+                        <a href="escola-biblica.html" class="nav-card-link" id="linkEBD" style="display: none;">
+                            <i class="fas fa-book-open"></i> Escola Bíblica
+                        </a>
                     </div>
                 </div>
 
                 <div class="nav-card" style="background-color: #1e293b; color: #fff;">
                     <div class="nav-card-label">Atalhos</div>
                     <div class="nav-card-links">
-                        <a href="#" class="nav-card-link" onclick="document.querySelector('.filters-bar').scrollIntoView({behavior: 'smooth'})">
+                        <a href="#" class="nav-card-link"
+                            onclick="document.querySelector('.filters-bar').scrollIntoView({behavior: 'smooth'})">
                             <i class="fas fa-filter"></i> Filtrar Eventos
                         </a>
                         <a href="#" class="nav-card-link">
@@ -255,35 +60,36 @@
                         </a>
                     </div>
                 </div>
-
             </div>
         </nav>
     </div>
+
     <main class="main-content">
         <div class="header-title">
             <h1>Agenda 2026</h1>
             <p>Acompanhe os próximos cultos e eventos do ministério.</p>
         </div>
 
-        <div class="filters-bar">
-            <div class="filter-group">
+        <div class="filters-bar"
+            style="background: white; padding: 20px; border-radius: 16px; display: flex; gap: 15px; box-shadow: var(--shadow-sm);">
+            <div style="display: flex; align-items: center; gap: 10px; color: var(--text-secondary); font-weight: 600;">
                 <i class="fas fa-filter"></i>
-                <span>Filtrar por:</span>
+                <span>Filtrar:</span>
             </div>
-            <select id="filterDept" class="filter-select">
+            <select id="filterDept" class="filter-select" style="flex:1;">
                 <option value="">Todos os Departamentos</option>
                 <option value="Jovens">Jovens</option>
                 <option value="Adolescentes">Adolescentes</option>
                 <option value="Varões">Varões</option>
-                <option value="Irmãs">Irmãs (Círculo de Oração)</option>
+                <option value="Irmãs">Irmãs</option>
                 <option value="Crianças">Crianças</option>
                 <option value="Geral">Geral / Família</option>
             </select>
-            <select id="filterIgreja" class="filter-select">
+            <select id="filterIgreja" class="filter-select" style="flex:1;">
                 <option value="">Todas as Igrejas</option>
                 <option value="Sede">Sede do Setor 05</option>
-                <option value="GUARÁ II">GUARÁ II - QE 40</option>
-                <option value="GUARÁ I">GUARÁ I - QE 11</option>
+                <option value="GUARÁ II">GUARÁ II</option>
+                <option value="GUARÁ I">GUARÁ I</option>
                 <option value="LÚCIO COSTA">LÚCIO COSTA</option>
                 <option value="VILA CAHUY">VILA CAHUY</option>
                 <option value="VARGEM BONITA">VARGEM BONITA</option>
@@ -291,8 +97,8 @@
                 <option value="VEREDA GRANDE">VEREDA GRANDE</option>
                 <option value="CANDANGOLÂNDIA">CANDANGOLÂNDIA</option>
             </select>
-            <button id="btnClearFilters" class="btn-clear">
-                <i class="fas fa-times"></i> Limpar
+            <button id="btnClearFilters" class="btn-clear" style="background: #fee2e2; color: #ef4444;">
+                <i class="fas fa-times"></i>
             </button>
         </div>
 
@@ -300,10 +106,11 @@
             <div class="card">
                 <div class="calendar-header">
                     <button class="nav-arrow" id="prevMonth"><i class="fas fa-chevron-left"></i></button>
-                    <h2 id="monthYear">Janeiro 2026</h2>
+                    <h2 id="monthYear">Carregando...</h2>
                     <button class="nav-arrow" id="nextMonth"><i class="fas fa-chevron-right"></i></button>
                 </div>
-                <div class="weekdays">
+                <div class="weekdays"
+                    style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: 600; color: var(--text-secondary); margin-bottom: 10px; font-size: 0.8rem;">
                     <div>D</div>
                     <div>S</div>
                     <div>T</div>
@@ -316,17 +123,19 @@
             </div>
 
             <div class="card">
-                <h3 class="card-title">Próximos Eventos</h3>
+                <h3 class="card-title" style="color: var(--accent-color); margin-bottom: 20px;">Próximos Eventos</h3>
                 <div id="eventsList" class="events-container"></div>
             </div>
         </div>
 
-        <section id="admin-section">
+        <section id="admin-section"
+            style="display: none; background: white; padding: 30px; border-radius: 16px; margin-top: 30px; box-shadow: var(--shadow-lg);">
             <div id="login-form-container">
-                <div class="admin-header">
+                <div class="admin-header" style="text-align: center; margin-bottom: 20px;">
                     <h3><i class="fas fa-lock"></i> Acesso Restrito</h3>
                 </div>
-                <div class="admin-form">
+                <div class="admin-form"
+                    style="max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
                     <div class="input-group">
                         <label>E-mail</label>
                         <input type="email" id="loginEmail" placeholder="admin@adeb.com">
@@ -335,80 +144,76 @@
                         <label>Senha</label>
                         <input type="password" id="loginPass" placeholder="******">
                     </div>
-                    <button class="btn-add" id="btnLoginPass">Entrar</button>
-                    <p id="loginError" style="color: #ff3b30; font-size: 0.8rem; display: none;"></p>
-                    <div class="login-separator">
-                        <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
-                        <span>OU</span>
+                    <button class="btn-add" id="btnLoginPass"
+                        style="background: var(--accent-color); color: white;">Entrar</button>
+                    <p id="loginError" style="color: #ff3b30; font-size: 0.8rem; display: none; text-align: center;">
+                    </p>
+
+                    <div style="display: flex; align-items: center; gap: 10px; color: #cbd5e1; margin: 10px 0;">
+                        <div style="flex: 1; height: 1px; background: #e2e8f0;"></div><span>OU</span>
                         <div style="flex: 1; height: 1px; background: #e2e8f0;"></div>
                     </div>
-                    <button id="btnLoginGoogle" class="btn-add btn-google">
-                        <img src="fotos/logo2.png" alt="G">
-                        Entrar com Google
+
+                    <button id="btnLoginGoogle" class="btn-add"
+                        style="background: white; color: #333; border: 1px solid #e2e8f0;">
+                        <img src="fotos/logo2.png" alt="G" style="width: 18px;"> Entrar com Google
                     </button>
                 </div>
             </div>
 
             <div id="event-form-container" style="display: none;">
-                <div class="admin-header">
-                    <h3><i class="fas fa-plus-circle"></i> Adicionar Novo Evento</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3><i class="fas fa-plus-circle"></i> Novo Evento</h3>
                     <div style="display: flex; gap: 10px; align-items: center;">
-                        <span class="badge-admin" style="background: #dcfce7; color: #166534;">Logado</span>
+                        <span
+                            style="font-size: 0.75rem; background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 12px;">Logado</span>
                         <button id="btnLogout"
-                            style="background:none; border:none; color: #ef4444; cursor:pointer; font-size: 0.85rem; font-weight: 600;">Sair</button>
+                            style="background:none; border:none; color: #ef4444; cursor:pointer; font-weight: 600;">Sair</button>
                     </div>
                 </div>
 
-                <div class="admin-form">
+                <div class="admin-form dashboard-grid">
                     <div class="input-group">
-                        <label for="evtDept">Departamento Responsável:</label>
+                        <label>Departamento</label>
                         <select id="evtDept">
                             <option value="Geral">Geral / Família</option>
                             <option value="Jovens">Jovens</option>
                             <option value="Adolescentes">Adolescentes</option>
                             <option value="Varões">Varões</option>
-                            <option value="Irmãs">Irmãs (Círculo de Oração)</option>
+                            <option value="Irmãs">Irmãs</option>
                             <option value="Crianças">Crianças</option>
                         </select>
                     </div>
                     <div class="input-group">
-                        <label for="tipoEvento">Tipo de Evento:</label>
+                        <label>Tipo</label>
                         <select id="tipoEvento">
-                            <option value="local">Local (Igreja Local)</option>
-                            <option value="setorial">Setorial (Setor 05)</option>
+                            <option value="local">Local</option>
+                            <option value="setorial">Setorial</option>
                             <option value="geral">Geral</option>
-                            <option value="outra">Outra</option>
                         </select>
                     </div>
                     <div class="input-group" id="divSelectIgreja">
-                        <label for="selectIgreja">Local (Igreja):</label>
+                        <label>Igreja</label>
                         <select id="selectIgreja">
-                            <option value="">Selecione a Igreja...</option>
-                            <option value="Sede do Setor 05">Sede do Setor 05 (Núcleo Bandeirante)</option>
-                            <option value="GUARÁ II - QE 40">GUARÁ II - QE 40</option>
-                            <option value="GUARÁ I - QE 11">GUARÁ I - QE 11</option>
-                            <option value="LÚCIO COSTA">LÚCIO COSTA</option>
-                            <option value="VILA CAHUY">VILA CAHUY</option>
-                            <option value="VARGEM BONITA - PARK WAY">VARGEM BONITA - PARK WAY</option>
-                            <option value="QUADRA 13 - PARK WAY">QUADRA 13 - PARK WAY</option>
-                            <option value="VEREDA GRANDE">VEREDA GRANDE</option>
-                            <option value="CANDANGOLÂNDIA - QD 05">CANDANGOLÂNDIA - QD 05</option>
+                            <option value="">Selecione...</option>
                         </select>
                     </div>
                     <div class="input-group">
-                        <label>Título do Evento</label>
-                        <input type="text" id="evtTitle" placeholder="Ex: Santa Ceia">
+                        <label>Título</label>
+                        <input type="text" id="evtTitle" placeholder="Ex: Culto de Missões">
                     </div>
                     <div class="input-group">
                         <label>Data</label>
                         <input type="date" id="evtDate">
                     </div>
                     <div class="input-group">
-                        <label>Local / Horário (Final)</label>
-                        <input type="text" id="evtLoc" placeholder="Digite o local e horário...">
+                        <label>Detalhes (Horário/Local)</label>
+                        <input type="text" id="evtLoc" placeholder="19h30 - Templo Principal">
                     </div>
-                    <button class="btn-add" id="btnSaveEvent">Salvar Evento</button>
                 </div>
+                <button class="btn-add" id="btnSaveEvent"
+                    style="width: 100%; margin-top: 20px; background: var(--accent-color); color: white;">Salvar
+                    Evento</button>
             </div>
         </section>
     </main>
@@ -425,106 +230,68 @@
             const hamburger = document.querySelector('.hamburger-menu');
             const content = document.querySelector('.card-nav-content');
             const cards = document.querySelectorAll('.nav-card');
-            
             let isExpanded = false;
-            let animationTween = null;
 
-            function calculateHeight() {
+            // GSAP Timeline
+            let tl = gsap.timeline({ paused: true });
+
+            function updateTimeline() {
                 const isMobile = window.matchMedia('(max-width: 768px)').matches;
                 const baseHeight = 60;
-                
-                const prevVisibility = content.style.visibility;
-                
-                content.style.visibility = 'hidden';
+                // Truque para calcular altura do conteudo oculto
+                const prev = content.style.display;
                 content.style.display = 'flex';
-                
-                // +20 padding extra
-                const contentHeight = content.scrollHeight + 20;
-                
-                content.style.display = ''; 
-                content.style.visibility = prevVisibility;
+                content.style.visibility = 'hidden';
+                const contentHeight = content.scrollHeight + 20; // Padding
+                content.style.display = prev;
+                content.style.visibility = '';
 
-                return baseHeight + contentHeight;
-            }
-
-            function createAnimation() {
-                if (animationTween) animationTween.kill();
-                const fullHeight = calculateHeight();
-                const tl = gsap.timeline({ paused: true });
-
+                tl.clear();
                 tl.to(navContainer, {
-                    height: fullHeight,
+                    height: baseHeight + contentHeight,
                     duration: 0.4,
                     ease: "power3.out"
-                });
-
-                tl.set(content, { visibility: 'visible', opacity: 1 }, "<");
-
-                tl.to(cards, {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.4,
-                    stagger: 0.1,
-                    ease: "power3.out"
-                }, "-=0.2");
-
-                return tl;
+                })
+                    .set(content, { visibility: 'visible', opacity: 1 }, "<")
+                    .fromTo(cards, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, stagger: 0.1 }, "-=0.2");
             }
-
-            let tl = createAnimation();
 
             hamburger.addEventListener('click', () => {
                 if (!isExpanded) {
-                    hamburger.classList.add('open');
-                    tl = createAnimation(); 
+                    updateTimeline();
                     tl.play();
+                    hamburger.classList.add('open');
                 } else {
-                    hamburger.classList.remove('open');
                     tl.reverse();
+                    hamburger.classList.remove('open');
                 }
                 isExpanded = !isExpanded;
             });
 
-            window.addEventListener('resize', () => {
-                if (isExpanded) {
-                    const newHeight = calculateHeight();
-                    gsap.set(navContainer, { height: newHeight });
-                }
-            });
-
-            // Lógica antiga (Simples UI)
+            // Lógica antiga de Select UI
             const selectTipo = document.getElementById('tipoEvento');
             const divIgreja = document.getElementById('divSelectIgreja');
             const selectIgreja = document.getElementById('selectIgreja');
             const inputLoc = document.getElementById('evtLoc');
 
-            function verificarTipo() {
-                if(!selectTipo) return;
-                const tipo = selectTipo.value;
-                if (tipo === 'geral' || tipo === 'outra') {
-                    divIgreja.style.display = 'none';
-                    selectIgreja.value = "";
-                    if (tipo === 'geral') inputLoc.placeholder = "Ex: Ginásio, Templo Sede Geral, etc...";
-                } else {
-                    divIgreja.style.display = 'block';
-                    inputLoc.placeholder = "Selecione a igreja acima ou digite...";
-                }
-            }
-
             if (selectTipo) {
-                selectTipo.addEventListener('change', verificarTipo);
-                verificarTipo();
-            }
-
-            if (selectIgreja && inputLoc) {
-                selectIgreja.addEventListener('change', () => {
-                    const igrejaSelecionada = selectIgreja.value;
-                    if (igrejaSelecionada) {
-                        inputLoc.value = `${igrejaSelecionada} às 19h30`;
+                selectTipo.addEventListener('change', () => {
+                    if (selectTipo.value === 'geral') {
+                        divIgreja.style.display = 'none';
+                        inputLoc.placeholder = "Ex: Ginásio, Templo Sede...";
+                    } else {
+                        divIgreja.style.display = 'block';
+                        inputLoc.placeholder = "Selecione a igreja acima...";
                     }
+                });
+            }
+            if (selectIgreja) {
+                selectIgreja.addEventListener('change', () => {
+                    if (selectIgreja.value) inputLoc.value = `${selectIgreja.value} às 19h30`;
                 });
             }
         });
     </script>
 </body>
+
 </html>
