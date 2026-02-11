@@ -1,7 +1,7 @@
 import { db, collection, onSnapshot, query, orderBy } from './firebase-config.js';
 
 let eventsData = [];
-let filteredData = []; // Dados filtrados para exibição
+let filteredData = [];
 let currentDate = new Date();
 
 // Elementos DOM
@@ -12,12 +12,6 @@ const filterDept = document.getElementById('filterDept');
 const filterIgreja = document.getElementById('filterIgreja');
 const btnClear = document.getElementById('btnClearFilters');
 
-// --- 3. FUNÇÃO GLOBAL DA SIDEBAR (Adicionada) ---
-window.toggleSidebar = function() {
-    const sidebar = document.querySelector('.sidebar');
-    if (sidebar) sidebar.classList.toggle('open');
-}
-
 function initRealtimeListener() {
     const q = query(collection(db, "eventos"), orderBy("date"));
 
@@ -27,7 +21,7 @@ function initRealtimeListener() {
             const data = doc.data();
             eventsData.push({
                 id: doc.id,
-                ...data, // --- 1. CORREÇÃO DE SINTAXE (Spread Operator) ---
+                ...data,
                 _searchTitle: (data.title || "").toLowerCase(),
                 _searchLoc: (data.location || "").toLowerCase(),
                 _dept: (data.departamento || detectDepartment(data.title)).toLowerCase()
@@ -37,21 +31,17 @@ function initRealtimeListener() {
     });
 }
 
-// --- FUNÇÃO AUXILIAR: Detectar Departamento pelo Título ---
 function detectDepartment(title) {
-    if (!title) return "geral";
+    if (!title) return "Geral";
     const t = title.toLowerCase();
-
     if (t.includes("jovem") || t.includes("jovens")) return "Jovens";
     if (t.includes("adolescente") || t.includes("adolescentes")) return "Adolescentes";
     if (t.includes("varões") || t.includes("homens")) return "Varões";
     if (t.includes("irmãs") || t.includes("mulher") || t.includes("senhoras") || t.includes("círculo")) return "Irmãs";
     if (t.includes("criança") || t.includes("infantil")) return "Crianças";
-
     return "Geral";
 }
 
-// --- LÓGICA DE FILTROS ---
 function applyFilters() {
     const deptValue = filterDept ? filterDept.value.toLowerCase() : "";
     const locValue = filterIgreja ? filterIgreja.value.toLowerCase() : "";
@@ -65,7 +55,6 @@ function applyFilters() {
     updateInterface();
 }
 
-// Event Listeners dos Filtros
 if (filterDept) filterDept.addEventListener('change', applyFilters);
 if (filterIgreja) filterIgreja.addEventListener('change', applyFilters);
 if (btnClear) {
@@ -81,7 +70,7 @@ function updateInterface() {
     renderEventsForCurrentMonth();
 }
 
-// --- CALENDÁRIO ---
+// --- RENDERIZAR CALENDÁRIO COM CORES ---
 function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -93,7 +82,6 @@ function renderCalendar() {
 
     if (daysContainer) {
         daysContainer.innerHTML = "";
-
         for (let i = 0; i < firstDay; i++) {
             daysContainer.innerHTML += `<div class="day empty"></div>`;
         }
@@ -102,14 +90,17 @@ function renderCalendar() {
             const checkDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
             const eventObj = filteredData.find(e => e.date === checkDate);
             const hasEvent = !!eventObj;
-
-            let typeClass = '';
-            if (hasEvent && eventObj.type) {
-                typeClass = `type-${eventObj.type}`;
+            
+            // Lógica de Cor da Bolinha (Prioridade: Local > Setorial > Geral)
+            let colorClass = '';
+            if (hasEvent) {
+                // Normaliza o tipo para minúsculo para bater com o CSS
+                const tipo = (eventObj.type || 'outra').toLowerCase();
+                colorClass = `type-${tipo}`; // ex: type-local (Azul), type-setorial (Roxo)
             }
 
             const div = document.createElement('div');
-            div.className = `day ${hasEvent ? 'has-event' : ''} ${typeClass}`;
+            div.className = `day ${hasEvent ? 'has-event' : ''} ${colorClass}`;
             div.innerText = i;
 
             div.addEventListener('click', () => {
@@ -122,11 +113,9 @@ function renderCalendar() {
     }
 }
 
-// --- LISTAGEM DE EVENTOS ---
 function renderEventsForCurrentMonth() {
     if (!eventsListEl) return;
     eventsListEl.innerHTML = "";
-
     const viewYear = currentDate.getFullYear();
     const viewMonth = currentDate.getMonth();
 
@@ -134,7 +123,6 @@ function renderEventsForCurrentMonth() {
         const [ano, mes, dia] = ev.date.split('-').map(Number);
         return ano === viewYear && (mes - 1) === viewMonth;
     });
-
     renderListHTML(list, `Eventos de ${monthYearEl.innerText}`);
 }
 
@@ -144,38 +132,51 @@ function renderEventsByDay(dateString) {
     renderListHTML(list, `Eventos do dia ${dia}/${mes}`);
 }
 
+// --- RENDERIZAR LISTA COM TAGS INTELIGENTES ---
 function renderListHTML(list, titleOverride = null) {
     eventsListEl.innerHTML = "";
     const cardTitle = document.querySelector('.card-title');
     if (cardTitle && titleOverride) cardTitle.innerText = titleOverride;
 
     if (list.length === 0) {
-        eventsListEl.innerHTML = `<div style="text-align:center; padding: 30px; color: var(--text-secondary); font-style: italic;">Nenhum evento encontrado com estes filtros.</div>`;
+        eventsListEl.innerHTML = `<div style="text-align:center; padding: 30px; color: var(--text-secondary); font-style: italic;">Nenhum evento encontrado.</div>`;
         return;
     }
 
     list.forEach(ev => {
-                const [ano, mes, dia] = ev.date.split('-');
-                const dateObj = new Date(ano, mes - 1, dia);
-                const monthShort = dateObj.toLocaleString('pt-BR', { month: 'short' }).replace('.', '');
-                const typeClass = ev.type ? `tag-${ev.type}` : 'tag-outra';
-                const typeLabel = ev.type ? ev.type.charAt(0).toUpperCase() + ev.type.slice(1) : '';
-                const deptName = ev.departamento || detectDepartment(ev.title);
-                const deptClass = `dept-${deptName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`;
+        const [ano, mes, dia] = ev.date.split('-');
+        const dateObj = new Date(ano, mes - 1, dia);
+        const monthShort = dateObj.toLocaleString('pt-BR', { month: 'short' }).replace('.', '');
+        
+        // 1. Tag de TIPO (Principal: Local = Azul, Setorial = Roxo)
+        const typeRaw = ev.type ? ev.type.toLowerCase() : 'outra';
+        const typeLabel = typeRaw.charAt(0).toUpperCase() + typeRaw.slice(1); // Capitalize
+        const typeClass = `tag-${typeRaw}`;
 
-                eventsListEl.innerHTML += `
+        // 2. Tag de DEPARTAMENTO (Secundária)
+        const deptName = ev.departamento || detectDepartment(ev.title);
+        // Só mostra se NÃO for "Geral"
+        const showDeptTag = deptName.toLowerCase() !== 'geral';
+        const deptClass = `dept-${deptName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`;
+
+        // Montagem do HTML
+        let tagsHTML = `<span class="badge ${typeClass}">${typeLabel}</span>`;
+        if (showDeptTag) {
+            tagsHTML += `<span class="badge ${deptClass}">${deptName}</span>`;
+        }
+
+        eventsListEl.innerHTML += `
             <div class="event-item" data-id="${ev.id}">
                 <div class="date-badge">
                     <span class="d-num">${dia}</span>
                     <span class="d-month">${monthShort}</span>
                 </div>
                 <div class="event-info">
-                    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:5px; margin-bottom:6px;">
-                        ${ev.type ? `<span class="badge-admin ${typeClass}" style="font-size:0.7rem; padding:2px 8px; border-radius:4px;">${typeLabel}</span>` : ''}
-                        <span class="tag-dept ${deptClass}">${deptName}</span>
+                    <div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:6px;">
+                        ${tagsHTML}
                     </div>
-                    <h4 style="margin:0; line-height:1.2;">${ev.title}</h4>
-                    <div class="event-meta" style="margin-top: 5px;">
+                    <h4>${ev.title}</h4>
+                    <div class="event-meta">
                         <span><i class="far fa-clock"></i> ${ev.time || '--:--'}</span>
                         <span><i class="fas fa-map-marker-alt"></i> ${ev.location || 'Sede'}</span>
                     </div>
@@ -190,18 +191,9 @@ function renderListHTML(list, titleOverride = null) {
     });
 }
 
-// Navegação do Calendário
 const btnPrev = document.getElementById('prevMonth');
 const btnNext = document.getElementById('nextMonth');
-
-if(btnPrev) btnPrev.addEventListener('click', () => {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    updateInterface(); 
-});
-
-if(btnNext) btnNext.addEventListener('click', () => {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    updateInterface(); 
-});
+if(btnPrev) btnPrev.addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() - 1); updateInterface(); });
+if(btnNext) btnNext.addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() + 1); updateInterface(); });
 
 initRealtimeListener();

@@ -1,25 +1,25 @@
+/* css/style.css */
+
 :root {
-    /* Paleta Institucional */
     --bg-body: #f1f5f9;
-    /* Cinza muito suave para o fundo (menos cansativo que branco puro) */
     --card-bg: #ffffff;
     --text-primary: #0f172a;
     --text-secondary: #64748b;
     --accent-color: #0f4c81;
-    /* Azul da Identidade */
-    --accent-hover: #0a3d6b;
-    --danger-color: #ef4444;
-    --success-color: #10b981;
 
-    /* Layout */
+    /* Cores das Tags (Definidas aqui para consistência) */
+    --color-local: #2563eb;
+    /* Azul Real (Pedido) */
+    --color-setorial: #7c3aed;
+    /* Roxo Vibrante */
+    --color-geral: #f59e0b;
+    /* Laranja/Dourado */
+    --color-outra: #64748b;
+    /* Cinza */
+
     --radius: 16px;
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --nav-height: 80px;
-    /* Espaço reservado para o menu fixo */
 }
 
 * {
@@ -34,12 +34,10 @@ body {
     color: var(--text-primary);
     min-height: 100vh;
     overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    /* Texto mais nítido */
 }
 
 /* =========================================
-   NOVO MENU FLUTUANTE (CardNav) - Centralizado
+   MENU FLUTUANTE (CardNav)
    ========================================= */
 .card-nav-container {
     position: fixed;
@@ -49,23 +47,19 @@ body {
     width: 95%;
     max-width: 800px;
     z-index: 1000;
-    font-family: var(--font-family);
 }
 
 .card-nav {
     display: block;
     height: 60px;
     background-color: rgba(255, 255, 255, 0.95);
-    /* Leve transparência */
     backdrop-filter: blur(10px);
-    /* Efeito de vidro */
     border: 1px solid rgba(255, 255, 255, 1);
     border-radius: 16px;
     box-shadow: var(--shadow-lg);
     position: relative;
     overflow: hidden;
     transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    /* Animação super fluida */
 }
 
 .card-nav-top {
@@ -76,11 +70,27 @@ body {
     height: 60px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; REMOVIDO para controle manual */
     padding: 0 20px;
     z-index: 2;
 }
 
+/* LOGO CENTRALIZADA (Correção Definitiva) */
+.logo-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    /* Fica abaixo dos botões se colidirem */
+}
+
+.logo-container img {
+    height: 32px;
+    object-fit: contain;
+}
+
+/* Hamburger (Esquerda) */
 .hamburger-menu {
     height: 100%;
     width: 40px;
@@ -90,6 +100,9 @@ body {
     justify-content: center;
     cursor: pointer;
     gap: 5px;
+    z-index: 5;
+    margin-right: auto;
+    /* Empurra para esquerda */
 }
 
 .hamburger-line {
@@ -97,7 +110,7 @@ body {
     height: 2px;
     background-color: var(--text-primary);
     border-radius: 2px;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition: 0.3s;
 }
 
 .hamburger-menu.open .hamburger-line:first-child {
@@ -108,11 +121,7 @@ body {
     transform: translateY(-3.5px) rotate(-45deg);
 }
 
-.logo-container img {
-    height: 32px;
-    object-fit: contain;
-}
-
+/* Botão Líder (Direita) */
 .card-nav-cta-button {
     background-color: var(--accent-color);
     color: white;
@@ -120,20 +129,13 @@ body {
     border-radius: 8px;
     padding: 8px 16px;
     font-weight: 600;
-    font-size: 0.9rem;
     cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    z-index: 5;
+    margin-left: auto;
+    /* Empurra para direita */
 }
 
-.card-nav-cta-button:hover {
-    background-color: var(--accent-hover);
-    transform: translateY(-1px);
-}
-
-/* Conteúdo Expandido do Menu */
+/* Conteúdo do Menu */
 .card-nav-content {
     position: absolute;
     left: 0;
@@ -144,7 +146,6 @@ body {
     gap: 10px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease;
 }
 
 .nav-card {
@@ -155,14 +156,13 @@ body {
     flex-direction: column;
     gap: 15px;
     min-height: 180px;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 
 .nav-card-label {
     font-size: 1.2rem;
     font-weight: 700;
     opacity: 0.9;
-    letter-spacing: -0.02em;
 }
 
 .nav-card-links {
@@ -176,32 +176,28 @@ body {
     color: inherit;
     text-decoration: none;
     font-size: 0.9rem;
-    font-weight: 500;
     display: flex;
     align-items: center;
     gap: 10px;
     opacity: 0.8;
-    transition: 0.2s;
     padding: 6px 8px;
     border-radius: 6px;
+    transition: 0.2s;
 }
 
 .nav-card-link:hover {
     opacity: 1;
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateX(3px);
+    background: rgba(0, 0, 0, 0.05);
 }
 
 /* =========================================
-   LAYOUT PRINCIPAL
+   LAYOUT GERAL
    ========================================= */
 .main-content {
     width: 100%;
     max-width: 1200px;
-    /* Limita largura em telas grandes */
     margin: 0 auto;
     padding: 100px 20px 40px 20px;
-    /* Topo compensa o menu fixo */
     display: flex;
     flex-direction: column;
     gap: 25px;
@@ -209,12 +205,10 @@ body {
 
 .header-title {
     text-align: center;
-    margin-bottom: 10px;
 }
 
 .header-title h1 {
     font-size: 1.8rem;
-    letter-spacing: -0.03em;
     margin-bottom: 5px;
 }
 
@@ -223,117 +217,23 @@ body {
     font-size: 0.95rem;
 }
 
-/* Cards Globais */
-.card {
-    background: var(--card-bg);
-    border-radius: var(--radius);
-    padding: 25px;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid #e2e8f0;
-    transition: box-shadow 0.3s ease;
-}
-
-.card:hover {
-    box-shadow: var(--shadow-md);
-}
-
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    /* Responsivo automático */
     gap: 25px;
     align-items: start;
 }
 
-/* =========================================
-   ELEMENTOS DE UI (Inputs, Botões, Tabelas)
-   ========================================= */
-.input-group {
-    margin-bottom: 15px;
-}
-
-.input-group label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: var(--text-secondary);
-}
-
-.input-group input,
-.input-group select {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #cbd5e1;
-    border-radius: 10px;
-    outline: none;
-    font-size: 1rem;
-    /* Evita zoom no iPhone */
-    transition: border-color 0.2s, box-shadow 0.2s;
-    background: #fff;
-}
-
-.input-group input:focus,
-.input-group select:focus {
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.1);
-}
-
-.btn-add,
-.btn-clear {
-    border: none;
-    padding: 12px 24px;
-    border-radius: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.1s, opacity 0.2s;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.btn-add:active {
-    transform: scale(0.98);
-}
-
-/* Loading Screen */
-#loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--bg-body);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-}
-
-.loader {
-    border: 4px solid #e2e8f0;
-    border-top: 4px solid var(--accent-color);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 0.8s linear infinite;
-    margin-bottom: 15px;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
+.card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 25px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
 }
 
 /* =========================================
-   CALENDÁRIO & EVENTOS
+   CALENDÁRIO (Cores das Bolinhas)
    ========================================= */
 .calendar-header {
     display: flex;
@@ -349,10 +249,6 @@ body {
     height: 36px;
     border-radius: 50%;
     cursor: pointer;
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     transition: 0.2s;
 }
 
@@ -376,7 +272,6 @@ body {
     font-size: 0.9rem;
     cursor: pointer;
     position: relative;
-    transition: 0.2s;
     font-weight: 500;
 }
 
@@ -387,25 +282,42 @@ body {
 .day.active {
     background-color: var(--accent-color);
     color: white;
-    box-shadow: 0 4px 10px rgba(15, 76, 129, 0.3);
 }
 
-/* Pontinhos de Eventos */
+/* PONTO PADRÃO */
 .day.has-event::after {
     content: '';
     position: absolute;
     bottom: 5px;
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    background-color: var(--accent-color);
+    background-color: var(--color-outra);
+    /* Cor default */
 }
 
+/* CORES ESPECÍFICAS NO CALENDÁRIO */
+.day.type-local:not(.active)::after {
+    background-color: var(--color-local);
+}
+
+.day.type-setorial:not(.active)::after {
+    background-color: var(--color-setorial);
+}
+
+.day.type-geral:not(.active)::after {
+    background-color: var(--color-geral);
+}
+
+/* Se estiver selecionado, bolinha branca */
 .day.active.has-event::after {
-    background-color: white;
+    background-color: white !important;
 }
 
-/* Lista de Eventos */
+
+/* =========================================
+   LISTA DE EVENTOS E TAGS
+   ========================================= */
 .events-container {
     max-height: 450px;
     overflow-y: auto;
@@ -421,6 +333,7 @@ body {
     border-radius: 12px;
     margin-bottom: 10px;
     transition: 0.2s;
+    position: relative;
 }
 
 .event-item:hover {
@@ -433,18 +346,110 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 50px;
-    height: 50px;
+    width: 55px;
+    height: 55px;
     background: #f0f9ff;
     color: var(--accent-color);
-    border-radius: 10px;
+    border-radius: 12px;
     flex-shrink: 0;
     font-weight: 700;
 }
 
-/* =========================================
-   RESPONSIVIDADE MOBILE
-   ========================================= */
+.event-info h4 {
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+    color: var(--text-primary);
+    line-height: 1.3;
+}
+
+.event-meta {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    display: flex;
+    gap: 15px;
+}
+
+/* TAGS */
+.badge {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+    letter-spacing: 0.5px;
+}
+
+/* Classes de Cores */
+.tag-local {
+    background-color: var(--color-local);
+    color: white;
+}
+
+.tag-setorial {
+    background-color: var(--color-setorial);
+    color: white;
+}
+
+.tag-geral {
+    background-color: var(--color-geral);
+    color: white;
+}
+
+.tag-outra {
+    background-color: var(--color-outra);
+    color: white;
+}
+
+.dept-jovens {
+    background-color: #ea580c;
+    color: white;
+}
+
+.dept-adolescentes {
+    background-color: #0d9488;
+    color: white;
+}
+
+.dept-varoes {
+    background-color: #1e40af;
+    color: white;
+}
+
+.dept-irmas {
+    background-color: #db2777;
+    color: white;
+}
+
+.dept-criancas {
+    background-color: #8b5cf6;
+    color: white;
+}
+
+.dept-geral {
+    display: none;
+}
+
+/* Esconde tag Geral de Depto via CSS também por segurança */
+
+/* UI Elements */
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+}
+
+.btn-add {
+    background: var(--accent-color);
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
 @media (max-width: 768px) {
     .card-nav-container {
         top: 10px;
@@ -455,27 +460,11 @@ body {
         flex-direction: column;
     }
 
-    /* Cards um embaixo do outro no menu */
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
 
-    /* 1 coluna */
-    .main-content {
-        padding-top: 90px;
-    }
-
-    .filters-bar {
-        flex-direction: column;
-    }
-
-    .filter-select {
-        width: 100%;
-    }
-
-    .date-badge {
-        width: 45px;
-        height: 45px;
-        font-size: 0.9rem;
+    .card-nav-cta-button span {
+        display: none;
     }
 }
