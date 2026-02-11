@@ -94,14 +94,19 @@
                             <div class="input-group"><label>Contato</label><input type="text" id="memContato"></div>
                             <div class="input-group"><label>Depto</label>
                                 <select id="memDept">
+                                    <option value="" disabled selected>Selecione...</option>
                                     <option value="Jovens">Jovens</option>
                                     <option value="Adolescentes">Adolescentes</option>
                                 </select>
                             </div>
                             <div class="input-group"><label>Congregação</label>
                                 <select id="memIgreja">
-                                    <option value="Sede Setor 05">Sede</option>
+                                    <option value="" disabled selected>Selecione...</option>
+                                    <option value="Sede Setor 05">Sede Setor 05</option>
+                                    <option value="Candangolândia">Candangolândia</option>
+                                    <option value="Guará I">Guará I</option>
                                     <option value="Guará II">Guará II</option>
+                                    <option value="Outra">Outra</option>
                                 </select>
                             </div>
                         </div>
@@ -132,6 +137,7 @@
                         <input type="date" id="chamadaData"
                             style="padding:10px; border-radius:8px; border:1px solid #ccc;">
                         <select id="chamadaTipo" style="padding:10px; border-radius:8px; border:1px solid #ccc;">
+                            <option value="" disabled selected>Selecione...</option>
                             <option>EBD</option>
                             <option>Culto</option>
                         </select>
@@ -167,10 +173,15 @@
                         style="display:none; background:#f8fafc; padding:20px; margin-bottom:20px; border-radius:12px;">
                         <div class="dashboard-grid">
                             <div class="input-group"><label>Data</label><input type="date" id="escData"></div>
-                            <div class="input-group"><label>Função</label><select id="escFuncao">
+                            <div class="input-group"><label>Função</label>
+                                <select id="escFuncao">
+                                    <option value="" disabled selected>Selecione...</option>
                                     <option>Louvor</option>
                                     <option>Recepção</option>
-                                </select></div>
+                                    <option>Mídia</option>
+                                    <option>Palavra</option>
+                                </select>
+                            </div>
                             <div class="input-group" style="grid-column: span 2;"><label>Nomes</label><input type="text"
                                     id="escNomes"></div>
                         </div>

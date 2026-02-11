@@ -77,7 +77,7 @@
                 <span>Filtrar:</span>
             </div>
             <select id="filterDept" class="input-group" style="flex:1; margin:0;">
-                <option value="">Todos os Departamentos</option>
+                <option value="" selected>Todos os Departamentos</option>
                 <option value="Jovens">Jovens</option>
                 <option value="Adolescentes">Adolescentes</option>
                 <option value="Varões">Varões</option>
@@ -86,7 +86,7 @@
                 <option value="Geral">Geral / Família</option>
             </select>
             <select id="filterIgreja" class="input-group" style="flex:1; margin:0;">
-                <option value="">Todas as Igrejas</option>
+                <option value="" selected>Todas as Igrejas</option>
                 <option value="Sede">Sede do Setor 05</option>
                 <option value="GUARÁ II">GUARÁ II</option>
                 <option value="GUARÁ I">GUARÁ I</option>
@@ -176,6 +176,7 @@
                     <div class="input-group">
                         <label>Departamento</label>
                         <select id="evtDept">
+                            <option value="" disabled selected>Selecione...</option>
                             <option value="Geral">Geral / Família</option>
                             <option value="Jovens">Jovens</option>
                             <option value="Adolescentes">Adolescentes</option>
@@ -187,6 +188,7 @@
                     <div class="input-group">
                         <label>Tipo</label>
                         <select id="tipoEvento">
+                            <option value="" disabled selected>Selecione...</option>
                             <option value="local">Local</option>
                             <option value="setorial">Setorial</option>
                             <option value="geral">Geral</option>
@@ -195,7 +197,16 @@
                     <div class="input-group" id="divSelectIgreja">
                         <label>Igreja</label>
                         <select id="selectIgreja">
-                            <option value="">Selecione...</option>
+                            <option value="" disabled selected>Selecione...</option>
+                            <option value="Sede do Setor 05">Sede do Setor 05</option>
+                            <option value="GUARÁ II">GUARÁ II</option>
+                            <option value="GUARÁ I">GUARÁ I</option>
+                            <option value="LÚCIO COSTA">LÚCIO COSTA</option>
+                            <option value="VILA CAHUY">VILA CAHUY</option>
+                            <option value="VARGEM BONITA">VARGEM BONITA</option>
+                            <option value="QUADRA 13">QUADRA 13</option>
+                            <option value="VEREDA GRANDE">VEREDA GRANDE</option>
+                            <option value="CANDANGOLÂNDIA">CANDANGOLÂNDIA</option>
                         </select>
                     </div>
                     <div class="input-group">
@@ -231,24 +242,19 @@
             const content = document.querySelector('.card-nav-content');
             const cards = document.querySelectorAll('.nav-card');
             let isExpanded = false;
-
-            // GSAP Timeline
             let tl = gsap.timeline({ paused: true });
 
             function updateTimeline() {
-                const isMobile = window.matchMedia('(max-width: 768px)').matches;
-                const baseHeight = 60;
-                // Truque para calcular altura do conteudo oculto
                 const prev = content.style.display;
                 content.style.display = 'flex';
                 content.style.visibility = 'hidden';
-                const contentHeight = content.scrollHeight + 20; // Padding
+                const contentHeight = content.scrollHeight + 20;
                 content.style.display = prev;
                 content.style.visibility = '';
 
                 tl.clear();
                 tl.to(navContainer, {
-                    height: baseHeight + contentHeight,
+                    height: 60 + contentHeight,
                     duration: 0.4,
                     ease: "power3.out"
                 })
@@ -268,7 +274,7 @@
                 isExpanded = !isExpanded;
             });
 
-            // Lógica antiga de Select UI
+            // Lógica UI Selects
             const selectTipo = document.getElementById('tipoEvento');
             const divIgreja = document.getElementById('divSelectIgreja');
             const selectIgreja = document.getElementById('selectIgreja');

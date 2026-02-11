@@ -5,43 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão EBD - ADEB</title>
-    
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/escola-biblica.css"> <link rel="icon" type="image/png" href="fotos/logo1.png" />
-    
-    <style>
-        /* CSS DO CARDNAV (Mesmo do Jovens) */
-        .card-nav-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 800px; z-index: 1000; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        .card-nav { display: block; height: 60px; background-color: white; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); position: relative; overflow: hidden; }
-        .card-nav-top { position: absolute; top: 0; left: 0; right: 0; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 2; background: white; }
-        .hamburger-menu { height: 100%; width: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; gap: 6px; }
-        .hamburger-line { width: 24px; height: 2px; background-color: #1e293b; transition: transform 0.25s ease, opacity 0.2s ease; }
-        .hamburger-menu.open .hamburger-line:first-child { transform: translateY(4px) rotate(45deg); }
-        .hamburger-menu.open .hamburger-line:last-child { transform: translateY(-4px) rotate(-45deg); }
-        .logo { height: 32px; object-fit: contain; }
-        .card-nav-cta-button { background-color: #fee2e2; color: #ef4444; border: none; border-radius: 10px; padding: 10px 20px; font-weight: 600; cursor: pointer; transition: background-color 0.3s; display: flex; align-items: center; gap: 8px; }
-        .card-nav-cta-button:hover { background-color: #fecaca; }
-        .card-nav-content { position: absolute; left: 0; right: 0; top: 60px; padding: 10px; display: flex; gap: 10px; opacity: 0; visibility: hidden; }
-        .nav-card { flex: 1; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 15px; min-height: 200px; opacity: 0; transform: translateY(20px); }
-        .nav-card-label { font-size: 1.4rem; font-weight: 600; opacity: 0.95; letter-spacing: -0.5px; }
-        .nav-card-links { margin-top: auto; display: flex; flex-direction: column; gap: 10px; }
-        .nav-card-link { color: inherit; text-decoration: none; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; opacity: 0.8; transition: 0.2s; padding: 5px 0; cursor: pointer; }
-        .nav-card-link:hover { opacity: 1; transform: translateX(5px); }
-        
-        .main-content { margin-left: 0 !important; width: 100% !important; padding-top: 110px !important; padding-left: 20px !important; padding-right: 20px !important; }
-        #loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f0f2f5; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; color: #0f4c81; font-family: sans-serif; }
-        .loader { border: 5px solid #e2e8f0; border-top: 5px solid #0f4c81; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        @media (max-width: 768px) {
-            .card-nav-container { width: 95%; top: 15px; }
-            .card-nav-content { flex-direction: column; position: relative; top: 0; margin-top: 60px; }
-            .nav-card { min-height: 120px; }
-        }
-    </style>
+    <link rel="stylesheet" href="css/escola-biblica.css">
+    <link rel="icon" type="image/png" href="fotos/logo1.png" />
 </head>
 
 <body>
@@ -83,9 +53,12 @@
                     <div class="nav-card" style="background-color: #1e293b; color: #fff;">
                         <div class="nav-card-label">Ações EBD</div>
                         <div class="nav-card-links">
-                            <a onclick="ativarAbaEAcao('professores', 'formProf')" class="nav-card-link"><i class="fas fa-chalkboard-teacher"></i> Novo Professor</a>
-                            <a onclick="ativarAbaEAcao('turmas', 'formTurma')" class="nav-card-link"><i class="fas fa-layer-group"></i> Nova Turma</a>
-                            <a onclick="ativarAbaEAcao('presenca', null)" class="nav-card-link"><i class="fas fa-check-double"></i> Chamada</a>
+                            <a onclick="ativarAbaEAcao('professores', 'formProf')" class="nav-card-link"><i
+                                    class="fas fa-chalkboard-teacher"></i> Novo Professor</a>
+                            <a onclick="ativarAbaEAcao('turmas', 'formTurma')" class="nav-card-link"><i
+                                    class="fas fa-layer-group"></i> Nova Turma</a>
+                            <a onclick="ativarAbaEAcao('presenca', null)" class="nav-card-link"><i
+                                    class="fas fa-check-double"></i> Chamada</a>
                         </div>
                     </div>
                 </div>
@@ -96,31 +69,41 @@
             <div class="header-title">
                 <h1>Escola Bíblica Dominical</h1>
                 <p>Gestão de Professores, Alunos e Chamadas.</p>
-                <p style="font-size: 0.8rem; color: #64748b; margin-top:5px;">Logado como: <span id="userEmailDisplay" style="font-weight:bold;">...</span></p>
+                <p style="font-size: 0.8rem; color: #64748b; margin-top:5px;">Logado como: <span id="userEmailDisplay"
+                        style="font-weight:bold;">...</span></p>
             </div>
 
             <div class="tabs-container">
-                <button class="tab-btn active" onclick="openTab(event, 'professores')"><i class="fas fa-chalkboard-teacher"></i> Professores</button>
-                <button class="tab-btn" onclick="openTab(event, 'turmas')"><i class="fas fa-layer-group"></i> Turmas</button>
-                <button class="tab-btn" onclick="openTab(event, 'alunos')"><i class="fas fa-user-graduate"></i> Alunos</button>
-                <button class="tab-btn" onclick="openTab(event, 'presenca')"><i class="fas fa-clipboard-list"></i> Presença</button>
-                <button class="tab-btn" onclick="openTab(event, 'relatorios')"><i class="fas fa-chart-pie"></i> Relatórios</button>
+                <button class="tab-btn active" onclick="openTab(event, 'professores')"><i
+                        class="fas fa-chalkboard-teacher"></i> Professores</button>
+                <button class="tab-btn" onclick="openTab(event, 'turmas')"><i class="fas fa-layer-group"></i>
+                    Turmas</button>
+                <button class="tab-btn" onclick="openTab(event, 'alunos')"><i class="fas fa-user-graduate"></i>
+                    Alunos</button>
+                <button class="tab-btn" onclick="openTab(event, 'presenca')"><i class="fas fa-clipboard-list"></i>
+                    Presença</button>
+                <button class="tab-btn" onclick="openTab(event, 'relatorios')"><i class="fas fa-chart-pie"></i>
+                    Relatórios</button>
             </div>
 
             <div id="professores" class="tab-content active">
                 <div class="card">
                     <div class="admin-header">
                         <h3>Professores</h3>
-                        <button class="btn-add" onclick="toggleForm('formProf')"><i class="fas fa-plus"></i> Novo</button>
+                        <button class="btn-add" onclick="toggleForm('formProf')"><i class="fas fa-plus"></i>
+                            Novo</button>
                     </div>
-                    <div id="formProf" class="admin-form" style="display:none; background:#f8fafc; padding:20px; border-radius:15px; margin-bottom:20px;">
+                    <div id="formProf" class="admin-form"
+                        style="display:none; background:#f8fafc; padding:20px; border-radius:15px; margin-bottom:20px;">
                         <div class="dashboard-grid">
                             <div class="input-group"><label>Nome</label><input type="text" id="profNome"></div>
-                            <div class="input-group"><label>Classe/Turma</label><input type="text" id="profClasse" placeholder="Ex: Adultos"></div>
+                            <div class="input-group"><label>Classe/Turma</label><input type="text" id="profClasse"
+                                    placeholder="Ex: Adultos"></div>
                             <div class="input-group"><label>Telefone</label><input type="text" id="profTel"></div>
                             <div class="input-group">
                                 <label>Congregação</label>
                                 <select id="profCongregacao">
+                                    <option value="" disabled selected>Selecione...</option>
                                     <option value="Sede Setor 05">Sede Setor 05</option>
                                     <option value="Candangolândia">Candangolândia</option>
                                     <option value="Guará I">Guará I</option>
@@ -132,7 +115,14 @@
                     </div>
                     <div class="table-responsive">
                         <table class="data-table">
-                            <thead><tr><th>Nome</th><th>Classe</th><th>Congregação</th><th>Ações</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Classe</th>
+                                    <th>Congregação</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
                             <tbody id="listaProfessores"></tbody>
                         </table>
                     </div>
@@ -143,15 +133,21 @@
                 <div class="card">
                     <div class="admin-header">
                         <h3>Turmas</h3>
-                        <button class="btn-add" onclick="toggleForm('formTurma')"><i class="fas fa-plus"></i> Nova Turma</button>
+                        <button class="btn-add" onclick="toggleForm('formTurma')"><i class="fas fa-plus"></i> Nova
+                            Turma</button>
                     </div>
-                    <div id="formTurma" class="admin-form" style="display:none; background:#f8fafc; padding:20px; border-radius:15px; margin-bottom:20px;">
+                    <div id="formTurma" class="admin-form"
+                        style="display:none; background:#f8fafc; padding:20px; border-radius:15px; margin-bottom:20px;">
                         <div class="dashboard-grid">
-                            <div class="input-group"><label>Nome da Turma</label><input type="text" id="turmaNome" placeholder="Ex: Jardim de Infância"></div>
-                            <div class="input-group"><label>Faixa Etária</label><input type="text" id="turmaIdade" placeholder="Ex: 4 a 6 anos"></div>
-                            <div class="input-group"><label>Professor Responsável</label><input type="text" id="turmaProf"></div>
+                            <div class="input-group"><label>Nome da Turma</label><input type="text" id="turmaNome"
+                                    placeholder="Ex: Jardim de Infância"></div>
+                            <div class="input-group"><label>Faixa Etária</label><input type="text" id="turmaIdade"
+                                    placeholder="Ex: 4 a 6 anos"></div>
+                            <div class="input-group"><label>Professor Responsável</label><input type="text"
+                                    id="turmaProf"></div>
                             <div class="input-group"><label>Congregação</label>
                                 <select id="turmaCongregacao">
+                                    <option value="" disabled selected>Selecione...</option>
                                     <option value="Sede Setor 05">Sede Setor 05</option>
                                     <option value="Geral">Geral</option>
                                 </select>
@@ -161,7 +157,14 @@
                     </div>
                     <div class="table-responsive">
                         <table class="data-table">
-                            <thead><tr><th>Turma</th><th>Idade</th><th>Professor</th><th>Ações</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Turma</th>
+                                    <th>Idade</th>
+                                    <th>Professor</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
                             <tbody id="listaTurmas"></tbody>
                         </table>
                     </div>
@@ -172,22 +175,36 @@
                 <div class="card">
                     <div class="admin-header">
                         <h3>Alunos Matriculados</h3>
-                        <button class="btn-add" onclick="toggleForm('formAluno')"><i class="fas fa-plus"></i> Novo Aluno</button>
+                        <button class="btn-add" onclick="toggleForm('formAluno')"><i class="fas fa-plus"></i> Novo
+                            Aluno</button>
                     </div>
-                    <div id="formAluno" class="admin-form" style="display:none; background:#f8fafc; padding:20px; border-radius:15px; margin-bottom:20px;">
+                    <div id="formAluno" class="admin-form"
+                        style="display:none; background:#f8fafc; padding:20px; border-radius:15px; margin-bottom:20px;">
                         <div class="dashboard-grid">
-                            <div class="input-group"><label>Nome Completo</label><input type="text" id="alunoNome"></div>
-                            <div class="input-group"><label>Data Nascimento</label><input type="date" id="alunoNasc"></div>
-                            <div class="input-group"><label>Turma</label>
-                                <select id="alunoTurmaSelect"><option value="">Carregando turmas...</option></select>
+                            <div class="input-group"><label>Nome Completo</label><input type="text" id="alunoNome">
                             </div>
-                            <div class="input-group"><label>Responsável (Se menor)</label><input type="text" id="alunoResp"></div>
+                            <div class="input-group"><label>Data Nascimento</label><input type="date" id="alunoNasc">
+                            </div>
+                            <div class="input-group"><label>Turma</label>
+                                <select id="alunoTurmaSelect">
+                                    <option value="">Carregando turmas...</option>
+                                </select>
+                            </div>
+                            <div class="input-group"><label>Responsável (Se menor)</label><input type="text"
+                                    id="alunoResp"></div>
                         </div>
                         <button class="btn-add" id="btnSaveAluno" style="margin-top:15px;">Matricular Aluno</button>
                     </div>
                     <div class="table-responsive">
                         <table class="data-table">
-                            <thead><tr><th>Nome</th><th>Idade</th><th>Turma</th><th>Ações</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Idade</th>
+                                    <th>Turma</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
                             <tbody id="listaAlunos"></tbody>
                         </table>
                     </div>
@@ -204,7 +221,9 @@
                         </div>
                         <div class="input-group">
                             <label>Selecionar Turma</label>
-                            <select id="chamadaTurmaSelect"><option value="">Selecione...</option></select>
+                            <select id="chamadaTurmaSelect">
+                                <option value="">Selecione...</option>
+                            </select>
                         </div>
                         <button class="btn-add" id="btnCarregarChamada">Listar Alunos</button>
                     </div>
@@ -231,7 +250,8 @@
                                 <label>Oferta (R$)</label>
                                 <input type="number" id="valorOferta" value="0.00" step="0.10">
                             </div>
-                            <button class="btn-add" id="btnSalvarChamadaFim" style="background:#16a34a; height: 48px; margin-top: auto;">Salvar Chamada</button>
+                            <button class="btn-add" id="btnSalvarChamadaFim"
+                                style="background:#16a34a; height: 48px; margin-top: auto;">Salvar Chamada</button>
                         </div>
                     </div>
                 </div>
@@ -257,7 +277,15 @@
                     <h3>Histórico de Aulas</h3>
                     <div class="table-responsive">
                         <table class="data-table">
-                            <thead><tr><th>Data</th><th>Turma</th><th>Presentes</th><th>Visitantes</th><th>Oferta</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Turma</th>
+                                    <th>Presentes</th>
+                                    <th>Visitantes</th>
+                                    <th>Oferta</th>
+                                </tr>
+                            </thead>
                             <tbody id="listaHistoricoAulas"></tbody>
                         </table>
                     </div>
@@ -272,31 +300,31 @@
     <script type="module">
         import { auth, signOut } from './js/firebase-config.js';
         const btnLogout = document.getElementById('btnHeaderLogout');
-        if(btnLogout) btnLogout.addEventListener('click', async () => {
-            if(confirm("Sair do sistema?")) { await signOut(auth); window.location.href="index.html"; }
+        if (btnLogout) btnLogout.addEventListener('click', async () => {
+            if (confirm("Sair do sistema?")) { await signOut(auth); window.location.href = "index.html"; }
         });
     </script>
-    
+
     <script>
-        window.openTab = function(evt, tabName) {
+        window.openTab = function (evt, tabName) {
             document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
             document.getElementById(tabName).classList.add('active');
-            if(evt && evt.currentTarget) evt.currentTarget.classList.add('active');
+            if (evt && evt.currentTarget) evt.currentTarget.classList.add('active');
         }
-        window.toggleForm = function(id) {
+        window.toggleForm = function (id) {
             const el = document.getElementById(id);
             el.style.display = el.style.display === 'none' ? 'block' : 'none';
         }
-        window.ativarAbaEAcao = function(tabName, formId) {
+        window.ativarAbaEAcao = function (tabName, formId) {
             const hamburger = document.querySelector('.hamburger-menu');
-            if(hamburger && hamburger.classList.contains('open')) hamburger.click();
+            if (hamburger && hamburger.classList.contains('open')) hamburger.click();
             openTab(null, tabName);
             const btnTab = document.querySelector(`button[onclick="openTab(event, '${tabName}')"]`);
-            if(btnTab) btnTab.classList.add('active');
-            if(formId) {
+            if (btnTab) btnTab.classList.add('active');
+            if (formId) {
                 const form = document.getElementById(formId);
-                if(form) { form.style.display = 'block'; setTimeout(() => form.scrollIntoView({behavior:'smooth'}), 300); }
+                if (form) { form.style.display = 'block'; setTimeout(() => form.scrollIntoView({ behavior: 'smooth' }), 300); }
             }
         }
 
@@ -309,18 +337,27 @@
             let isExpanded = false;
             let tl = gsap.timeline({ paused: true });
 
-            const calcHeight = () => {
-                const isMobile = window.matchMedia('(max-width: 768px)').matches;
-                return isMobile ? (60 + content.scrollHeight + 20) : (60 + content.scrollHeight + 20); 
-            };
+            function updateTL() {
+                const prev = content.style.display;
+                content.style.display = 'flex';
+                content.style.visibility = 'hidden';
+                const contentHeight = content.scrollHeight + 20;
+                content.style.display = prev;
+                content.style.visibility = '';
+
+                tl.clear();
+                tl.to(navContainer, {
+                    height: 60 + contentHeight,
+                    duration: 0.4,
+                    ease: "power3.out"
+                })
+                    .set(content, { visibility: 'visible', opacity: 1 }, "<")
+                    .fromTo(cards, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, stagger: 0.1 }, "-=0.2");
+            }
 
             hamburger.addEventListener('click', () => {
-                if(!isExpanded) {
-                    const h = calcHeight();
-                    tl.clear();
-                    tl.to(navContainer, { height: h, duration: 0.4, ease: "power3.out" })
-                      .set(content, { visibility: 'visible', opacity: 1 }, "<")
-                      .to(cards, { y: 0, opacity: 1, duration: 0.4, stagger: 0.1 }, "-=0.2");
+                if (!isExpanded) {
+                    updateTL();
                     tl.play();
                     hamburger.classList.add('open');
                 } else {
@@ -332,4 +369,5 @@
         });
     </script>
 </body>
+
 </html>
