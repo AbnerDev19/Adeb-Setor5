@@ -5,10 +5,175 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda ADEB Missão</title>
+    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="fotos/logo1.png" />
+
     <style>
+        /* =========================================
+           CSS DO NOVO MENU (CardNav)
+           ========================================= */
+        .card-nav-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 800px;
+            z-index: 1000;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .card-nav {
+            display: block;
+            height: 60px;
+            background-color: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-nav-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 2;
+            background: white;
+        }
+
+        .hamburger-menu {
+            height: 100%;
+            width: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            gap: 6px;
+        }
+
+        .hamburger-line {
+            width: 24px;
+            height: 2px;
+            background-color: #1e293b;
+            transition: transform 0.25s ease, opacity 0.2s ease;
+        }
+
+        .hamburger-menu.open .hamburger-line:first-child {
+            transform: translateY(4px) rotate(45deg);
+        }
+
+        .hamburger-menu.open .hamburger-line:last-child {
+            transform: translateY(-4px) rotate(-45deg);
+        }
+
+        .logo {
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .card-nav-cta-button {
+            background-color: #0f4c81; /* Tua cor accent */
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-nav-cta-button:hover {
+            background-color: #0a3d6b;
+        }
+
+        .card-nav-content {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 60px;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .nav-card {
+            flex: 1; /* Divide espaço igualmente (2 cards = 50% cada) */
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-height: 200px;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .nav-card-label {
+            font-size: 1.4rem;
+            font-weight: 600;
+            opacity: 0.95;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-card-links {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav-card-link {
+            color: inherit;
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0.8;
+            transition: 0.2s;
+            padding: 5px 0;
+        }
+
+        .nav-card-link:hover {
+            opacity: 1;
+            transform: translateX(5px);
+        }
+
+        /* =========================================
+           OVERRIDES (Ajustes no layout antigo)
+           ========================================= */
+        
+        /* Removemos a margem da sidebar antiga e ajustamos o topo */
+        .main-content {
+            margin-left: 0 !important;
+            width: 100% !important;
+            padding-top: 100px !important; /* Espaço para o menu fixo */
+        }
+
+        /* Esconde elementos antigos que não usamos mais */
+        .sidebar, .mobile-toggle {
+            display: none !important;
+        }
+
+        /* Ajuste do select para combinar */
         .input-group select {
             width: 100%;
             padding: 12px 15px;
@@ -20,37 +185,80 @@
             color: #1e293b;
         }
 
-        .input-group select:focus {
-            border-color: var(--accent-color);
+        /* Responsividade do Menu */
+        @media (max-width: 768px) {
+            .card-nav-container {
+                width: 95%;
+                top: 15px;
+            }
+            .card-nav-cta-button {
+                display: none; /* Esconde botão no mobile, ou ajusta se preferir */
+            }
+            .logo-container {
+                margin-left: auto; /* Logo vai pra direita se botão sumir */
+                padding-right: 15px;
+            }
+            .card-nav-content {
+                flex-direction: column;
+                position: relative;
+                top: 0;
+                margin-top: 60px;
+            }
+            .nav-card {
+                min-height: 120px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <button class="mobile-toggle" onclick="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-    </button>
 
-    <aside class="sidebar">
-        <div class="logo-area">
-            <img src="fotos/logo1.png" alt="Logo ADEB" class="sidebar-logo">
-            <span>ADEB MISSÃO</span>
-        </div>
+    <div class="card-nav-container">
+        <nav class="card-nav">
+            <div class="card-nav-top">
+                <div class="hamburger-menu" role="button" tabindex="0" aria-label="Toggle menu">
+                    <div class="hamburger-line"></div>
+                    <div class="hamburger-line"></div>
+                </div>
 
-        <nav class="nav-menu">
-            <a href="#" class="nav-item active">
-                <i class="fas fa-calendar-alt"></i> Calendário
-            </a>
-            <a href="jovens-adolescentes.html" class="nav-item" id="linkJovens" style="display: none;">
-                <i class="fas fa-users"></i> Jovens e Adolescentes
-            </a>
+                <div class="logo-container">
+                    <img src="fotos/logo1.png" alt="ADEB Missão" class="logo">
+                </div>
+
+                <button type="button" class="card-nav-cta-button" id="btnLogin">
+                    <i class="fas fa-user-shield"></i> <span id="loginText">Área do Líder</span>
+                </button>
+            </div>
+
+            <div class="card-nav-content">
+                
+                <div class="nav-card" style="background-color: #0f4c81; color: #fff;">
+                    <div class="nav-card-label">Navegação</div>
+                    <div class="nav-card-links">
+                        <a href="index.html" class="nav-card-link">
+                            <i class="fas fa-calendar-alt"></i> Calendário Geral
+                        </a>
+                        <a href="jovens-adolescentes.html" class="nav-card-link" id="linkJovens" style="display: none;">
+                            <i class="fas fa-users"></i> Jovens e Adolescentes
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-card" style="background-color: #1e293b; color: #fff;">
+                    <div class="nav-card-label">Atalhos</div>
+                    <div class="nav-card-links">
+                        <a href="#" class="nav-card-link" onclick="document.querySelector('.filters-bar').scrollIntoView({behavior: 'smooth'})">
+                            <i class="fas fa-filter"></i> Filtrar Eventos
+                        </a>
+                        <a href="#" class="nav-card-link">
+                            <i class="fas fa-map-marker-alt"></i> Localizar Igrejas
+                        </a>
+                    </div>
+                </div>
+
+            </div>
         </nav>
-
-        <button class="login-btn" id="btnLogin">
-            <i class="fas fa-user-shield"></i> <span id="loginText">Área do Líder</span>
-        </button>
-    </aside>
-
+    </div>
     <main class="main-content">
         <div class="header-title">
             <h1>Agenda 2026</h1>
@@ -212,38 +420,111 @@
     <script type="module" src="js/script.js"></script>
 
     <script>
-        // Scripts simples de UI (não módulos)
-        const selectTipo = document.getElementById('tipoEvento');
-        const divIgreja = document.getElementById('divSelectIgreja');
-        const selectIgreja = document.getElementById('selectIgreja');
-        const inputLoc = document.getElementById('evtLoc');
+        document.addEventListener("DOMContentLoaded", () => {
+            const navContainer = document.querySelector('.card-nav');
+            const hamburger = document.querySelector('.hamburger-menu');
+            const content = document.querySelector('.card-nav-content');
+            const cards = document.querySelectorAll('.nav-card');
+            
+            let isExpanded = false;
+            let animationTween = null;
 
-        function verificarTipo() {
-            const tipo = selectTipo.value;
-            if (tipo === 'geral' || tipo === 'outra') {
-                divIgreja.style.display = 'none';
-                selectIgreja.value = "";
-                if (tipo === 'geral') inputLoc.placeholder = "Ex: Ginásio, Templo Sede Geral, etc...";
-            } else {
-                divIgreja.style.display = 'block';
-                inputLoc.placeholder = "Selecione a igreja acima ou digite...";
+            function calculateHeight() {
+                const isMobile = window.matchMedia('(max-width: 768px)').matches;
+                const baseHeight = 60;
+                
+                const prevVisibility = content.style.visibility;
+                
+                content.style.visibility = 'hidden';
+                content.style.display = 'flex';
+                
+                // +20 padding extra
+                const contentHeight = content.scrollHeight + 20;
+                
+                content.style.display = ''; 
+                content.style.visibility = prevVisibility;
+
+                return baseHeight + contentHeight;
             }
-        }
 
-        if (selectTipo) {
-            selectTipo.addEventListener('change', verificarTipo);
-            verificarTipo();
-        }
+            function createAnimation() {
+                if (animationTween) animationTween.kill();
+                const fullHeight = calculateHeight();
+                const tl = gsap.timeline({ paused: true });
 
-        if (selectIgreja && inputLoc) {
-            selectIgreja.addEventListener('change', () => {
-                const igrejaSelecionada = selectIgreja.value;
-                if (igrejaSelecionada) {
-                    inputLoc.value = `${igrejaSelecionada} às 19h30`;
+                tl.to(navContainer, {
+                    height: fullHeight,
+                    duration: 0.4,
+                    ease: "power3.out"
+                });
+
+                tl.set(content, { visibility: 'visible', opacity: 1 }, "<");
+
+                tl.to(cards, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.4,
+                    stagger: 0.1,
+                    ease: "power3.out"
+                }, "-=0.2");
+
+                return tl;
+            }
+
+            let tl = createAnimation();
+
+            hamburger.addEventListener('click', () => {
+                if (!isExpanded) {
+                    hamburger.classList.add('open');
+                    tl = createAnimation(); 
+                    tl.play();
+                } else {
+                    hamburger.classList.remove('open');
+                    tl.reverse();
+                }
+                isExpanded = !isExpanded;
+            });
+
+            window.addEventListener('resize', () => {
+                if (isExpanded) {
+                    const newHeight = calculateHeight();
+                    gsap.set(navContainer, { height: newHeight });
                 }
             });
-        }
+
+            // Lógica antiga (Simples UI)
+            const selectTipo = document.getElementById('tipoEvento');
+            const divIgreja = document.getElementById('divSelectIgreja');
+            const selectIgreja = document.getElementById('selectIgreja');
+            const inputLoc = document.getElementById('evtLoc');
+
+            function verificarTipo() {
+                if(!selectTipo) return;
+                const tipo = selectTipo.value;
+                if (tipo === 'geral' || tipo === 'outra') {
+                    divIgreja.style.display = 'none';
+                    selectIgreja.value = "";
+                    if (tipo === 'geral') inputLoc.placeholder = "Ex: Ginásio, Templo Sede Geral, etc...";
+                } else {
+                    divIgreja.style.display = 'block';
+                    inputLoc.placeholder = "Selecione a igreja acima ou digite...";
+                }
+            }
+
+            if (selectTipo) {
+                selectTipo.addEventListener('change', verificarTipo);
+                verificarTipo();
+            }
+
+            if (selectIgreja && inputLoc) {
+                selectIgreja.addEventListener('change', () => {
+                    const igrejaSelecionada = selectIgreja.value;
+                    if (igrejaSelecionada) {
+                        inputLoc.value = `${igrejaSelecionada} às 19h30`;
+                    }
+                });
+            }
+        });
     </script>
 </body>
-
 </html>
